@@ -39,7 +39,6 @@ final class ViewModel: ObservableObject {
 // MARK: Control the status bar
 extension ViewModel {
     func ready(message: String? = nil) {
-        print("ViewModel.ready")
         if let message {
             state = .ready(msg: message)
         } else {
@@ -47,7 +46,6 @@ extension ViewModel {
         }
     }
     func busy(message: String? = nil) {
-        print("ViewModel.busy")
         if let message {
             state = .busy(msg: message)
         } else {
@@ -55,7 +53,6 @@ extension ViewModel {
         }
     }
     func streaming(message: String? = nil) {
-        print("ViewModel.streaming")
         if let message {
             state = .streaming(msg: message)
         } else {

@@ -1,5 +1,5 @@
 //
-//  BedrockTypes+extension.swift
+//  BedrockTypesUI.swift
 //  Swift FM Playground
 //
 //  Created by Stormacq, Sebastien on 31/10/2023.
@@ -11,9 +11,8 @@ import Algorithms
 import AWSBedrock
 
 /**
-    A collection of container types to represent bedrock data in the user interface
+    A collection of container types and extensions to represent bedrock data in the user interface
  */
-
 
 struct BedrockModelSummaryUI: Hashable, Identifiable {
     
@@ -58,17 +57,6 @@ enum OutputCapabilities: String {
 }
 
 extension Array<BedrockModelSummaryUI> {
-    
-    /**
-     Return the list of modelName for the given provider
-     */
-//    private func models(for provider: String?) -> [String] {
-//        self.filter {
-//            $0.providerName == provider
-//        }.map {
-//            $0.modelName
-//        }
-//    }
     
     /**
      Return the list of modelId for the given provider
