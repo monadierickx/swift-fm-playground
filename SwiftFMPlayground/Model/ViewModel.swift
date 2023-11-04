@@ -7,6 +7,8 @@
 
 import Foundation
 import Logging
+import OrderedCollections
+import BedrockTypes
 import AWSBedrock
 
 @MainActor
@@ -17,6 +19,8 @@ final class ViewModel: ObservableObject {
     @Published var data : Model
     @Published var state: Status = .ready()
     
+    @Published var selectedModel: BedrockModelIdentifier = ""
+
     init(model: Model = Model()) {
 #if DEBUG
         self.logger.logLevel = .debug
@@ -33,6 +37,21 @@ final class ViewModel: ObservableObject {
             self.data.listFoundationModels = BedrockModelSummaryUI.from(response)
         }
         return self.data.listFoundationModels
+    }
+    
+    func selectedModelParameter() -> OrderedDictionary<String, BedrockModelParameter> {
+        
+        guard let rawParameters = self.data.allModelsParameters[selectedModel] else {
+            return [:]
+        }
+
+        // https://stackoverflow.com/a/68023633/663360
+        let parameters = OrderedDictionary(uniqueKeys: rawParameters.keys, values: rawParameters.values)
+        
+        // TODO: sort the parameters to always display them in the same order in the console
+        // this will require to add a field to the parameter struct
+        
+        return parameters
     }
 }
 

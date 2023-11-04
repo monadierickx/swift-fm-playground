@@ -18,6 +18,10 @@
 		005B5F5F2AD23EAA000EC830 /* Bedrock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005B5F5E2AD23EAA000EC830 /* Bedrock.swift */; };
 		0062C34C2AD44F4900EBCBBB /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062C34B2AD44F4900EBCBBB /* StatusBar.swift */; };
 		00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00808D1C2AF2D29400A576CB /* ModelSelectionView.swift */; };
+		008DFB192AF4A3F700687BB9 /* ParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB182AF4A3F700687BB9 /* ParameterView.swift */; };
+		008DFB1B2AF4A54800687BB9 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB1A2AF4A54800687BB9 /* Parameter.swift */; };
+		008DFB1E2AF4A9A500687BB9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1D2AF4A9A500687BB9 /* Collections */; };
+		008DFB202AF4A9A500687BB9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1F2AF4A9A500687BB9 /* OrderedCollections */; };
 		00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5593A2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift */; };
 		00B5593D2AD0D9D000718090 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5593C2AD0D9D000718090 /* ContentView.swift */; };
 		00B5593F2AD0D9D100718090 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 00B5593E2AD0D9D100718090 /* Assets.xcassets */; };
@@ -43,6 +47,8 @@
 		005B5F5E2AD23EAA000EC830 /* Bedrock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bedrock.swift; sourceTree = "<group>"; };
 		0062C34B2AD44F4900EBCBBB /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		00808D1C2AF2D29400A576CB /* ModelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSelectionView.swift; sourceTree = "<group>"; };
+		008DFB182AF4A3F700687BB9 /* ParameterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterView.swift; sourceTree = "<group>"; };
+		008DFB1A2AF4A54800687BB9 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
 		00B559372AD0D9D000718090 /* Swift FM Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift FM Playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B5593A2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFMPlaygroundApp.swift; sourceTree = "<group>"; };
 		00B5593C2AD0D9D000718090 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -68,10 +74,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				008DFB1E2AF4A9A500687BB9 /* Collections in Frameworks */,
 				002B1AD32AF1D964002F4B77 /* libBedrockTypes.a in Frameworks */,
 				00B559692AD0E28500718090 /* AWSBedrockRuntime in Frameworks */,
 				00B559662AD0E27A00718090 /* Logging in Frameworks */,
 				001B77972AF2E1770013321D /* Algorithms in Frameworks */,
+				008DFB202AF4A9A500687BB9 /* OrderedCollections in Frameworks */,
 				00B5596B2AD0E2B500718090 /* AWSBedrock in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -106,6 +114,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		008DFB172AF4A3DD00687BB9 /* Parameters */ = {
+			isa = PBXGroup;
+			children = (
+				008DFB182AF4A3F700687BB9 /* ParameterView.swift */,
+				008DFB1A2AF4A54800687BB9 /* Parameter.swift */,
+			);
+			path = Parameters;
+			sourceTree = "<group>";
+		};
 		00B5592E2AD0D9D000718090 = {
 			isa = PBXGroup;
 			children = (
@@ -128,6 +145,7 @@
 		00B559392AD0D9D000718090 /* SwiftFMPlayground */ = {
 			isa = PBXGroup;
 			children = (
+				008DFB172AF4A3DD00687BB9 /* Parameters */,
 				00808D1B2AF27A8D00A576CB /* Model */,
 				002B1AD52AF1DF70002F4B77 /* Bedrock */,
 				00B5596F2AD0E6D000718090 /* Playgrounds */,
@@ -218,6 +236,8 @@
 				00B559682AD0E28500718090 /* AWSBedrockRuntime */,
 				00B5596A2AD0E2B500718090 /* AWSBedrock */,
 				001B77962AF2E1770013321D /* Algorithms */,
+				008DFB1D2AF4A9A500687BB9 /* Collections */,
+				008DFB1F2AF4A9A500687BB9 /* OrderedCollections */,
 			);
 			productName = "Swift FM Playground";
 			productReference = 00B559372AD0D9D000718090 /* Swift FM Playground.app */;
@@ -254,6 +274,7 @@
 				00B5594B2AD0E1C300718090 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
 				00B559642AD0E27A00718090 /* XCRemoteSwiftPackageReference "swift-log" */,
 				001B77952AF2E1770013321D /* XCRemoteSwiftPackageReference "swift-algorithms" */,
+				008DFB1C2AF4A9A500687BB9 /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 00B559382AD0D9D000718090 /* Products */;
 			projectDirPath = "";
@@ -292,6 +313,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				002B1AD72AF1DF96002F4B77 /* BedrockTypesUI.swift in Sources */,
+				008DFB192AF4A3F700687BB9 /* ParameterView.swift in Sources */,
 				00B559732AD0E79200718090 /* ListModelsPlayground.swift in Sources */,
 				00B559772AD0E84600718090 /* Playground.swift in Sources */,
 				005B5F5D2AD2393F000EC830 /* ImagePlayground.swift in Sources */,
@@ -301,6 +323,7 @@
 				00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */,
 				005B5F5B2AD23918000EC830 /* VoicePlayground.swift in Sources */,
 				005B5F592AD23900000EC830 /* ChatPlayground.swift in Sources */,
+				008DFB1B2AF4A54800687BB9 /* Parameter.swift in Sources */,
 				00B5594A2AD0E16800718090 /* ViewModel.swift in Sources */,
 				00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */,
 				00B559632AD0E22900718090 /* Model.swift in Sources */,
@@ -560,6 +583,14 @@
 				minimumVersion = 1.1.0;
 			};
 		};
+		008DFB1C2AF4A9A500687BB9 /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.5;
+			};
+		};
 		00B5594B2AD0E1C300718090 /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
@@ -583,6 +614,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 001B77952AF2E1770013321D /* XCRemoteSwiftPackageReference "swift-algorithms" */;
 			productName = Algorithms;
+		};
+		008DFB1D2AF4A9A500687BB9 /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 008DFB1C2AF4A9A500687BB9 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		008DFB1F2AF4A9A500687BB9 /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 008DFB1C2AF4A9A500687BB9 /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
 		};
 		00B559652AD0E27A00718090 /* Logging */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -17,7 +17,8 @@ public enum BedrockModelProvider : String {
     case meta = "Meta"
 }
 
-public enum BedrockClaudeModel : String {
+public typealias BedrockModelIdentifier = String
+public enum BedrockClaudeModel : BedrockModelIdentifier {
     case instant = "anthropic.claude-instant-v1"
     case claudev1 = "anthropic.claude-v1"
     case claudev2 = "anthropic.claude-v2"

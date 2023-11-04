@@ -12,24 +12,56 @@ typealias PlaygroundComponent = View
 // the generic playground view.
 // it is made of a common part and the component specific view
 struct PlaygroundView: View {
+    @EnvironmentObject var viewModel: ViewModel
+    
     let component : Playground
     var showCommon: Bool = true
     var body: some View {
-        VStack {
+        
+        let parameters = viewModel.selectedModelParameter()
+        
+        VStack() {
             if (showCommon) {
                 ModelSelectionView(playground: component,
                                    inputCapability: component.info.supportedInput,
                                    outputCapability: component.info.supportedOutput)
             }
             Spacer()
-            Section {
+            HStack {
+                
                 component.view
+                
+                if (!parameters.isEmpty) {
+                    Divider()
+                    
+                    VStack {
+                        
+                        ForEach(parameters.keys, id: \.self) { key in
+                            
+                            let param = parameters[key]
+                            switch (param) {
+                            case .double(let dp):
+                                NumericalParameter(p: dp)
+                            case .int(let ip):
+                                NumericalParameter(p: ip)
+                            case .string(let sp):
+                                StringParameter(p: sp)
+                            default:
+                                Text(key)
+                            }
+                        }
+                        .padding(.bottom)
+                        Spacer()
+                    }
+                    .padding()
+                }
             }
-            Spacer()
         }
     }
 }
 
+// the type of playground. This enum lists existing playgrounds and
+// provide each of the playground View
 enum Playground: Identifiable, CaseIterable {
     case listModels
     case text
@@ -40,7 +72,7 @@ enum Playground: Identifiable, CaseIterable {
     // to make it Identifiable
     var id: Playground { self }
     
-    var info: (name: String, 
+    var info: (name: String,
                icon: String?,
                supportedInput: InputCapabilities?,
                supportedOutput: OutputCapabilities?,
@@ -48,27 +80,27 @@ enum Playground: Identifiable, CaseIterable {
         get {
             switch self {
             case .listModels:
-                return ("List Foundation Models", 
+                return ("List Foundation Models",
                         "list.bullet",
                         nil, nil,
                         PlaygroundView(component: self, showCommon: false))
             case .text:
-                return ("Text Playground", 
+                return ("Text Playground",
                         "doc",
                         .text, .text,
                         PlaygroundView(component: self))
             case .chat:
-                return ("Chat Playground", 
+                return ("Chat Playground",
                         "ellipsis.bubble",
                         .text, .text,
                         PlaygroundView(component: self))
             case .voice:
-                return ("Voice Chat Playground", 
+                return ("Voice Chat Playground",
                         "message.badge.waveform",
                         .text, .text,
                         PlaygroundView(component: self))
             case .image:
-                return ("Image Playground", 
+                return ("Image Playground",
                         "photo",
                         .text, .image,
                         PlaygroundView(component: self))
@@ -95,6 +127,6 @@ enum Playground: Identifiable, CaseIterable {
     let pg : Playground = .text
     return PlaygroundView(component: pg)
         .environmentObject(ViewModel.mock())
-        .frame(width: 600, height: 400)
+        .frame(width: 800, height: 600)
 }
 
