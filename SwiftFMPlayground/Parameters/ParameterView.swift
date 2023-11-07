@@ -6,16 +6,17 @@
 //
 
 import SwiftUI
+import BedrockTypes
 
-struct NumericalParameter<T: BedrockNumericalValue>: View  {
-    @State var p: BedrockModelParameterNumber<T>
+struct NumericalParameter: View  {
+    @State var p: BedrockModelParameterNumber
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 Text(p.label)
-                Text(p.stringValue)
+                Text(p.stringValue())
             }
-            Slider(value: $p.doubleValue, in:p.minValue...p.maxValue)
+            Slider(value: $p.value, in:p.minValue...p.maxValue)
         }
     }
 }
@@ -67,11 +68,11 @@ struct StringParameter: View {
 
 
 #Preview("All") {
-    let dp = BedrockModelParameterNumber<Double>(value: 0.5,
+    let dp = BedrockModelParameterNumber(value: 0.5,
                                                  label: "Temperature:",
                                                  minValue: 0.0,
                                                  maxValue: 1.0)
-    let ip = BedrockModelParameterNumber<Int>(value: 100,
+    let ip = BedrockModelParameterNumber(value: 100,
                                               label: "Length:",
                                               minValue: 10, maxValue: 256)
     let sp = BedrockModelParameterString(value: ["/n/nHuman"],
@@ -88,7 +89,7 @@ struct StringParameter: View {
 }
 
 #Preview("Double") {
-    let dp = BedrockModelParameterNumber<Double>(value: 0.5,
+    let dp = BedrockModelParameterNumber(value: 0.5,
                                                  label: "Temperature:",
                                                  minValue: 0.0,
                                                  maxValue: 1.0)
@@ -96,7 +97,7 @@ struct StringParameter: View {
 }
 
 #Preview("Int") {
-    let ip = BedrockModelParameterNumber<Int>(value: 100,
+    let ip = BedrockModelParameterNumber(value: 100,
                                               label: "Length:",
                                               minValue: 10, maxValue: 256)
     return NumericalParameter(p: ip)

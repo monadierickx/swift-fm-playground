@@ -10,29 +10,13 @@ import BedrockTypes
 
 struct Model {
 
-    // made statix to be usable in the mock
-    static let claudeParameters: ModelParameters = [
-        "temperature" : .double(BedrockModelParameterNumber<Double>(value: 1, label: "Temperature", minValue: 0.0, maxValue: 1.0)),
-        "topp" : .double(BedrockModelParameterNumber<Double>(value: 0.7, label: "Top P", minValue: 0.0, maxValue: 1.0)),
-        "topk" : .int(BedrockModelParameterNumber<Int>(value: 5, label: "Top K", minValue: 10, maxValue: 500)),
-        "max_token_to_sample" : .int(BedrockModelParameterNumber<Int>(value: 256, label: "Length", minValue: 25, maxValue: 2048)),
-        "stop_sequences" : .string(BedrockModelParameterString(value: ["\n\nHuman:"], label: "Stop sequences", maxValues: 5)) // 5 is an arbitray value
-    ]
-    
-
     var listFoundationModels: [BedrockModelSummaryUI] = []
+    var allModelsParameters: AllModelParameters = [:]
     
-    var allModelsParameters: AllModelParameters // var to be accessible in the mock, let otherwise
-        
     init() {
-        
-        allModelsParameters = [
-            // https://docs.anthropic.com/claude/reference/complete_post
-            BedrockClaudeModel.instant.rawValue : Model.claudeParameters,
-            BedrockClaudeModel.claudev1.rawValue : Model.claudeParameters,
-            BedrockClaudeModel.claudev2.rawValue : Model.claudeParameters
-        ]
+        self.allModelsParameters = BedrockModelParameters.allModelsParameters
     }
+    
 }
 
 
@@ -65,7 +49,7 @@ extension Model {
                                                             providerName: "provider 2",
                                                             responseStreamingSupported: "yes"))
         
-        m.allModelsParameters["id1"] = Model.claudeParameters
+        m.allModelsParameters["id1"] = BedrockClaudeModelParameters.parameters
         return m
     }
 }

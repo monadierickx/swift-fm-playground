@@ -17,9 +17,9 @@
 		005B5F5D2AD2393F000EC830 /* ImagePlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005B5F5C2AD2393F000EC830 /* ImagePlayground.swift */; };
 		005B5F5F2AD23EAA000EC830 /* Bedrock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005B5F5E2AD23EAA000EC830 /* Bedrock.swift */; };
 		0062C34C2AD44F4900EBCBBB /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062C34B2AD44F4900EBCBBB /* StatusBar.swift */; };
+		007F25492AF9B848009DCE14 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB1A2AF4A54800687BB9 /* Parameter.swift */; };
 		00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00808D1C2AF2D29400A576CB /* ModelSelectionView.swift */; };
 		008DFB192AF4A3F700687BB9 /* ParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB182AF4A3F700687BB9 /* ParameterView.swift */; };
-		008DFB1B2AF4A54800687BB9 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB1A2AF4A54800687BB9 /* Parameter.swift */; };
 		008DFB1E2AF4A9A500687BB9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1D2AF4A9A500687BB9 /* Collections */; };
 		008DFB202AF4A9A500687BB9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1F2AF4A9A500687BB9 /* OrderedCollections */; };
 		00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5593A2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift */; };
@@ -90,6 +90,7 @@
 		002B1ACA2AF1D8FC002F4B77 /* BedrockTypes */ = {
 			isa = PBXGroup;
 			children = (
+				008DFB1A2AF4A54800687BB9 /* Parameter.swift */,
 				002B1AB32AF1D7DB002F4B77 /* BedrockTypes.swift */,
 				002B1AD82AF1E0AF002F4B77 /* CommonBehaviour.swift */,
 			);
@@ -118,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				008DFB182AF4A3F700687BB9 /* ParameterView.swift */,
-				008DFB1A2AF4A54800687BB9 /* Parameter.swift */,
 			);
 			path = Parameters;
 			sourceTree = "<group>";
@@ -303,6 +303,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				007F25492AF9B848009DCE14 /* Parameter.swift in Sources */,
 				002B1AD92AF1E0AF002F4B77 /* CommonBehaviour.swift in Sources */,
 				002B1AD22AF1D931002F4B77 /* BedrockTypes.swift in Sources */,
 			);
@@ -323,7 +324,6 @@
 				00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */,
 				005B5F5B2AD23918000EC830 /* VoicePlayground.swift in Sources */,
 				005B5F592AD23900000EC830 /* ChatPlayground.swift in Sources */,
-				008DFB1B2AF4A54800687BB9 /* Parameter.swift in Sources */,
 				00B5594A2AD0E16800718090 /* ViewModel.swift in Sources */,
 				00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */,
 				00B559632AD0E22900718090 /* Model.swift in Sources */,

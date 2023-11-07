@@ -40,10 +40,8 @@ struct PlaygroundView: View {
                             
                             let param = parameters[key]
                             switch (param) {
-                            case .double(let dp):
-                                NumericalParameter(p: dp)
-                            case .int(let ip):
-                                NumericalParameter(p: ip)
+                            case .number(let np):
+                                NumericalParameter(p: np)
                             case .string(let sp):
                                 StringParameter(p: sp)
                             default:
