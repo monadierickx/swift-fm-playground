@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		001B77972AF2E1770013321D /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 001B77962AF2E1770013321D /* Algorithms */; };
+		0026BE1F2AFFBBB000CAEC66 /* CohereTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0026BE1E2AFFBBB000CAEC66 /* CohereTypes.swift */; };
+		0026BE202AFFBBD100CAEC66 /* BedrockModelParameterUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB1A2AF4A54800687BB9 /* BedrockModelParameterUI.swift */; };
+		0026BE232AFFCEAB00CAEC66 /* TitanTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0026BE212AFFCEAB00CAEC66 /* TitanTypes.swift */; };
+		0026BE252AFFCEDB00CAEC66 /* ClaudeTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0026BE242AFFCEDB00CAEC66 /* ClaudeTypes.swift */; };
 		002B1AD22AF1D931002F4B77 /* BedrockTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002B1AB32AF1D7DB002F4B77 /* BedrockTypes.swift */; };
 		002B1AD32AF1D964002F4B77 /* libBedrockTypes.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 002B1AC92AF1D8FC002F4B77 /* libBedrockTypes.a */; };
 		002B1AD72AF1DF96002F4B77 /* BedrockTypesUI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 002B1AD62AF1DF96002F4B77 /* BedrockTypesUI.swift */; };
@@ -17,9 +21,8 @@
 		005B5F5D2AD2393F000EC830 /* ImagePlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005B5F5C2AD2393F000EC830 /* ImagePlayground.swift */; };
 		005B5F5F2AD23EAA000EC830 /* Bedrock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 005B5F5E2AD23EAA000EC830 /* Bedrock.swift */; };
 		0062C34C2AD44F4900EBCBBB /* StatusBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0062C34B2AD44F4900EBCBBB /* StatusBar.swift */; };
-		007F25492AF9B848009DCE14 /* Parameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB1A2AF4A54800687BB9 /* Parameter.swift */; };
 		00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00808D1C2AF2D29400A576CB /* ModelSelectionView.swift */; };
-		008DFB192AF4A3F700687BB9 /* ParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB182AF4A3F700687BB9 /* ParameterView.swift */; };
+		008DFB192AF4A3F700687BB9 /* ModelParameterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 008DFB182AF4A3F700687BB9 /* ModelParameterView.swift */; };
 		008DFB1E2AF4A9A500687BB9 /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1D2AF4A9A500687BB9 /* Collections */; };
 		008DFB202AF4A9A500687BB9 /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 008DFB1F2AF4A9A500687BB9 /* OrderedCollections */; };
 		00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B5593A2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift */; };
@@ -34,9 +37,23 @@
 		00B559732AD0E79200718090 /* ListModelsPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B559722AD0E79200718090 /* ListModelsPlayground.swift */; };
 		00B559752AD0E82500718090 /* TextPlayground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B559742AD0E82500718090 /* TextPlayground.swift */; };
 		00B559772AD0E84600718090 /* Playground.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00B559762AD0E84600718090 /* Playground.swift */; };
+		00C788922AFDBB3A0007B41A /* BedrockTypesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C788912AFDBB3A0007B41A /* BedrockTypesTests.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		00C788932AFDBB3A0007B41A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 00B5592F2AD0D9D000718090 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 00B559362AD0D9D000718090;
+			remoteInfo = "Swift FM Playground";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0026BE1E2AFFBBB000CAEC66 /* CohereTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CohereTypes.swift; sourceTree = "<group>"; };
+		0026BE212AFFCEAB00CAEC66 /* TitanTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitanTypes.swift; sourceTree = "<group>"; };
+		0026BE242AFFCEDB00CAEC66 /* ClaudeTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeTypes.swift; sourceTree = "<group>"; };
 		002B1AB32AF1D7DB002F4B77 /* BedrockTypes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockTypes.swift; sourceTree = "<group>"; };
 		002B1AC92AF1D8FC002F4B77 /* libBedrockTypes.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBedrockTypes.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		002B1AD62AF1DF96002F4B77 /* BedrockTypesUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockTypesUI.swift; sourceTree = "<group>"; };
@@ -47,8 +64,8 @@
 		005B5F5E2AD23EAA000EC830 /* Bedrock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bedrock.swift; sourceTree = "<group>"; };
 		0062C34B2AD44F4900EBCBBB /* StatusBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBar.swift; sourceTree = "<group>"; };
 		00808D1C2AF2D29400A576CB /* ModelSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelSelectionView.swift; sourceTree = "<group>"; };
-		008DFB182AF4A3F700687BB9 /* ParameterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParameterView.swift; sourceTree = "<group>"; };
-		008DFB1A2AF4A54800687BB9 /* Parameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parameter.swift; sourceTree = "<group>"; };
+		008DFB182AF4A3F700687BB9 /* ModelParameterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelParameterView.swift; sourceTree = "<group>"; };
+		008DFB1A2AF4A54800687BB9 /* BedrockModelParameterUI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockModelParameterUI.swift; sourceTree = "<group>"; };
 		00B559372AD0D9D000718090 /* Swift FM Playground.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Swift FM Playground.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		00B5593A2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFMPlaygroundApp.swift; sourceTree = "<group>"; };
 		00B5593C2AD0D9D000718090 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -60,6 +77,8 @@
 		00B559722AD0E79200718090 /* ListModelsPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListModelsPlayground.swift; sourceTree = "<group>"; };
 		00B559742AD0E82500718090 /* TextPlayground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextPlayground.swift; sourceTree = "<group>"; };
 		00B559762AD0E84600718090 /* Playground.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Playground.swift; sourceTree = "<group>"; };
+		00C7888F2AFDBB3A0007B41A /* BedrockTypesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BedrockTypesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00C788912AFDBB3A0007B41A /* BedrockTypesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BedrockTypesTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,14 +103,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00C7888C2AFDBB3A0007B41A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		002B1ACA2AF1D8FC002F4B77 /* BedrockTypes */ = {
 			isa = PBXGroup;
 			children = (
-				008DFB1A2AF4A54800687BB9 /* Parameter.swift */,
 				002B1AB32AF1D7DB002F4B77 /* BedrockTypes.swift */,
+				0026BE242AFFCEDB00CAEC66 /* ClaudeTypes.swift */,
+				0026BE212AFFCEAB00CAEC66 /* TitanTypes.swift */,
+				0026BE1E2AFFBBB000CAEC66 /* CohereTypes.swift */,
 				002B1AD82AF1E0AF002F4B77 /* CommonBehaviour.swift */,
 			);
 			path = BedrockTypes;
@@ -108,6 +136,7 @@
 		00808D1B2AF27A8D00A576CB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				008DFB1A2AF4A54800687BB9 /* BedrockModelParameterUI.swift */,
 				002B1AD62AF1DF96002F4B77 /* BedrockTypesUI.swift */,
 				00B559622AD0E22900718090 /* Model.swift */,
 				00B559492AD0E16800718090 /* ViewModel.swift */,
@@ -118,7 +147,7 @@
 		008DFB172AF4A3DD00687BB9 /* Parameters */ = {
 			isa = PBXGroup;
 			children = (
-				008DFB182AF4A3F700687BB9 /* ParameterView.swift */,
+				008DFB182AF4A3F700687BB9 /* ModelParameterView.swift */,
 			);
 			path = Parameters;
 			sourceTree = "<group>";
@@ -128,6 +157,7 @@
 			children = (
 				00B559392AD0D9D000718090 /* SwiftFMPlayground */,
 				002B1ACA2AF1D8FC002F4B77 /* BedrockTypes */,
+				00C788902AFDBB3A0007B41A /* BedrockTypesTests */,
 				00B559382AD0D9D000718090 /* Products */,
 				00B559672AD0E28500718090 /* Frameworks */,
 			);
@@ -138,6 +168,7 @@
 			children = (
 				00B559372AD0D9D000718090 /* Swift FM Playground.app */,
 				002B1AC92AF1D8FC002F4B77 /* libBedrockTypes.a */,
+				00C7888F2AFDBB3A0007B41A /* BedrockTypesTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,6 +217,14 @@
 				005B5F5C2AD2393F000EC830 /* ImagePlayground.swift */,
 			);
 			path = Playgrounds;
+			sourceTree = "<group>";
+		};
+		00C788902AFDBB3A0007B41A /* BedrockTypesTests */ = {
+			isa = PBXGroup;
+			children = (
+				00C788912AFDBB3A0007B41A /* BedrockTypesTests.swift */,
+			);
+			path = BedrockTypesTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -243,6 +282,24 @@
 			productReference = 00B559372AD0D9D000718090 /* Swift FM Playground.app */;
 			productType = "com.apple.product-type.application";
 		};
+		00C7888E2AFDBB3A0007B41A /* BedrockTypesTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 00C788952AFDBB3A0007B41A /* Build configuration list for PBXNativeTarget "BedrockTypesTests" */;
+			buildPhases = (
+				00C7888B2AFDBB3A0007B41A /* Sources */,
+				00C7888C2AFDBB3A0007B41A /* Frameworks */,
+				00C7888D2AFDBB3A0007B41A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				00C788942AFDBB3A0007B41A /* PBXTargetDependency */,
+			);
+			name = BedrockTypesTests;
+			productName = BedrockTypesTests;
+			productReference = 00C7888F2AFDBB3A0007B41A /* BedrockTypesTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -258,6 +315,10 @@
 					};
 					00B559362AD0D9D000718090 = {
 						CreatedOnToolsVersion = 15.0;
+					};
+					00C7888E2AFDBB3A0007B41A = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = 00B559362AD0D9D000718090;
 					};
 				};
 			};
@@ -282,6 +343,7 @@
 			targets = (
 				00B559362AD0D9D000718090 /* Swift FM Playground */,
 				002B1AC82AF1D8FC002F4B77 /* BedrockTypes */,
+				00C7888E2AFDBB3A0007B41A /* BedrockTypesTests */,
 			);
 		};
 /* End PBXProject section */
@@ -296,6 +358,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00C7888D2AFDBB3A0007B41A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -303,9 +372,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				007F25492AF9B848009DCE14 /* Parameter.swift in Sources */,
+				0026BE232AFFCEAB00CAEC66 /* TitanTypes.swift in Sources */,
 				002B1AD92AF1E0AF002F4B77 /* CommonBehaviour.swift in Sources */,
 				002B1AD22AF1D931002F4B77 /* BedrockTypes.swift in Sources */,
+				0026BE1F2AFFBBB000CAEC66 /* CohereTypes.swift in Sources */,
+				0026BE252AFFCEDB00CAEC66 /* ClaudeTypes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +385,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				002B1AD72AF1DF96002F4B77 /* BedrockTypesUI.swift in Sources */,
-				008DFB192AF4A3F700687BB9 /* ParameterView.swift in Sources */,
+				008DFB192AF4A3F700687BB9 /* ModelParameterView.swift in Sources */,
 				00B559732AD0E79200718090 /* ListModelsPlayground.swift in Sources */,
 				00B559772AD0E84600718090 /* Playground.swift in Sources */,
 				005B5F5D2AD2393F000EC830 /* ImagePlayground.swift in Sources */,
@@ -324,6 +395,7 @@
 				00808D1D2AF2D29400A576CB /* ModelSelectionView.swift in Sources */,
 				005B5F5B2AD23918000EC830 /* VoicePlayground.swift in Sources */,
 				005B5F592AD23900000EC830 /* ChatPlayground.swift in Sources */,
+				0026BE202AFFBBD100CAEC66 /* BedrockModelParameterUI.swift in Sources */,
 				00B5594A2AD0E16800718090 /* ViewModel.swift in Sources */,
 				00B5593B2AD0D9D000718090 /* SwiftFMPlaygroundApp.swift in Sources */,
 				00B559632AD0E22900718090 /* Model.swift in Sources */,
@@ -331,7 +403,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		00C7888B2AFDBB3A0007B41A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				00C788922AFDBB3A0007B41A /* BedrockTypesTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		00C788942AFDBB3A0007B41A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 00B559362AD0D9D000718090 /* Swift FM Playground */;
+			targetProxy = 00C788932AFDBB3A0007B41A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		002B1AD02AF1D8FC002F4B77 /* Debug */ = {
@@ -542,6 +630,40 @@
 			};
 			name = Release;
 		};
+		00C788962AFDBB3A0007B41A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56U756R2L2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stormacq.app.demo.BedrockTypesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Swift FM Playground.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Swift FM Playground";
+			};
+			name = Debug;
+		};
+		00C788972AFDBB3A0007B41A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 56U756R2L2;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.stormacq.app.demo.BedrockTypesTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Swift FM Playground.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Swift FM Playground";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -568,6 +690,15 @@
 			buildConfigurations = (
 				00B559472AD0D9D100718090 /* Debug */,
 				00B559482AD0D9D100718090 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		00C788952AFDBB3A0007B41A /* Build configuration list for PBXNativeTarget "BedrockTypesTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				00C788962AFDBB3A0007B41A /* Debug */,
+				00C788972AFDBB3A0007B41A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

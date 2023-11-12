@@ -42,9 +42,10 @@ struct Bedrock {
         return try await bedrockClient().listFoundationModels(input: request)
     }
     
-    func invokeModel(withId modelId: BedrockClaudeModel, prompt: String) async throws -> BedrockInvokeClaudeResponse {
+    // TODO: make it generic for all Bedrock Models (returns T.AssociateType ?)
+    func invokeModel(withId modelId: BedrockClaudeModel, prompt: String) async throws -> ClaudeInvokeResponse {
         
-        let params = BedrockClaudeModelParameters(prompt: prompt)
+        let params = ClaudeParameters(prompt: prompt)
         let request = InvokeModelInput(body: try self.encode(params),
                                        contentType: "application/json",
                                        modelId: modelId.rawValue)

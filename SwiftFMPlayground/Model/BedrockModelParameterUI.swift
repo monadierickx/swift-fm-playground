@@ -4,34 +4,12 @@
 //
 //  Created by Stormacq, Sebastien on 02/11/2023.
 //
+// a generic way to represent model parameters to display in the UI
 
-// a generic way to represent model parameters to display in an UI
 import BedrockTypes
 
 // modelid => list of model parameters
 public typealias AllModelParameters = [BedrockModelIdentifier: ModelParameters]
-
-// TODO: should this belong to Model struct ?
-public struct BedrockModelParameters {
-    
-    public static let allModelsParameters: AllModelParameters = [
-        // https://docs.anthropic.com/claude/reference/complete_post
-        BedrockClaudeModel.instant.rawValue : BedrockModelParameters.parameters,
-        BedrockClaudeModel.claudev1.rawValue : BedrockModelParameters.parameters,
-        BedrockClaudeModel.claudev2.rawValue : BedrockModelParameters.parameters
-    ]
-    
-    // this methods returns a container used by the UI
-    public static let parameters: ModelParameters = [
-        "temperature" : .number(BedrockModelParameterNumber(value: 1.0, label: "Temperature", minValue: 0.0, maxValue: 1.0)),
-        "topp" : .number(BedrockModelParameterNumber(value: 0.7, label: "Top P", minValue: 0.0, maxValue: 1.0)),
-        "topk" : .number(BedrockModelParameterNumber(value: 5, label: "Top K", minValue: 10, maxValue: 500)),
-        "max_token_to_sample" : .number(BedrockModelParameterNumber(value: 256, label: "Length", minValue: 25, maxValue: 2048)),
-        "stop_sequences" : .string(BedrockModelParameterString(value: ["\n\nHuman:"], label: "Stop sequences", maxValues: 5)) // 5 is an arbitray value
-    ]
-
-}
-
 
 public enum BedrockModelParameter: Encodable  {
     case number(BedrockModelParameterNumber)

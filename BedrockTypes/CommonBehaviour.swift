@@ -9,7 +9,7 @@ import Foundation
 
 //public protocol BedrockType: Codable {
 //    func payload(forPrompt: String) throws -> Data
-//    func generatedText(from: Data) throws -> String
+//    func result(from: Data) throws -> String
 //}
 //
 //public protocol BedrockTypeCoders {

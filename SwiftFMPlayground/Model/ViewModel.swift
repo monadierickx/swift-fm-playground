@@ -41,7 +41,7 @@ final class ViewModel: ObservableObject {
     
     func selectedModelParameter() -> OrderedDictionary<String, BedrockModelParameter> {
         
-        guard let rawParameters = self.data.allModelsParameters[selectedModel] else {
+        guard let rawParameters = self.data.modelsParameters(for: selectedModel) else {
             return [:]
         }
 

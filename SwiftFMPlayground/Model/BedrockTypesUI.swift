@@ -120,7 +120,7 @@ extension Array<BedrockModelSummaryUI> {
     }
     
     /**
-     Return a list of models that match the given inpur and output capability
+     Return a list of models that match the given input and output capability
      */
     func modelsId(forProvider provider: String?,
                withInputCapability inputCapability: InputCapabilities?,
