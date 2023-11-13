@@ -24,15 +24,13 @@ struct Model {
     
     // this methods returns a container used by the UI
     private static let claudeModelParameters: ModelParameters = [
-        "temperature" : .number(BedrockModelParameterNumber(value: 1.0, label: "Temperature", minValue: 0.0, maxValue: 1.0)),
-        "topp" : .number(BedrockModelParameterNumber(value: 0.7, label: "Top P", minValue: 0.0, maxValue: 1.0)),
-        "topk" : .number(BedrockModelParameterNumber(value: 5, label: "Top K", minValue: 10, maxValue: 500)),
-        "max_token_to_sample" : .number(BedrockModelParameterNumber(value: 256, label: "Length", minValue: 25, maxValue: 2048)),
-        "stop_sequences" : .string(BedrockModelParameterString(value: ["\n\nHuman:"], label: "Stop sequences", maxValues: 5)) // 5 is an arbitray value
+        "temperature" : .number(BedrockModelParameterNumber(value: 1.0, label: "Temperature", minValue: 0.0, maxValue: 1.0, displayOrder: 1)),
+        "topp" : .number(BedrockModelParameterNumber(value: 0.7, label: "Top P", minValue: 0.0, maxValue: 1.0, displayOrder: 2)),
+        "topk" : .number(BedrockModelParameterNumber(value: 5, label: "Top K", minValue: 10, maxValue: 500, displayOrder: 3)),
+        "max_token_to_sample" : .number(BedrockModelParameterNumber(value: 256, label: "Length", minValue: 25, maxValue: 2048, displayOrder: 4)),
+        "stop_sequences" : .string(BedrockModelParameterString(value: ["\\n\\nHuman:"], label: "Stop sequences", maxValues: 5, displayOrder: 5)) // 5 is an arbitray value
     ]
-    
 }
-
 
 extension Model {
     static func mock() -> Model {

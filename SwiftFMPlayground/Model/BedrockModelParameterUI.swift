@@ -17,7 +17,6 @@ public enum BedrockModelParameter: Encodable  {
 }
 
 // parameter name : value (and other characteristics for UI, such as minValue, maxValue, UI Label ...)
-// TODO : create an encoding variation of the below
 public typealias ModelParameters = [String: BedrockModelParameter]
 
 public struct BedrockModelParameterNumber: Encodable {
@@ -26,14 +25,16 @@ public struct BedrockModelParameterNumber: Encodable {
     public let minValue: Double
     public let maxValue: Double
     public private(set) var isInt: Bool = false
-    public init (value: Double, label: String, minValue: Double, maxValue: Double) {
+    public let displayOrder: Int
+    public init (value: Double, label: String, minValue: Double, maxValue: Double, displayOrder: Int) {
         self.value = value
         self.label = label
         self.minValue = minValue
         self.maxValue = maxValue
+        self.displayOrder = displayOrder
     }
-    public init (value: Int, label: String, minValue: Double, maxValue: Double) {
-        self.init(value: Double(value), label: label, minValue: minValue, maxValue: maxValue)
+    public init (value: Int, label: String, minValue: Double, maxValue: Double, displayOrder: Int) {
+        self.init(value: Double(value), label: label, minValue: minValue, maxValue: maxValue, displayOrder: displayOrder)
         self.isInt = true
     }
     public var intValue: Int  {
@@ -60,9 +61,11 @@ public struct BedrockModelParameterString: Encodable {
     public var value: [String] = []
     public let label: String
     public let maxValues: Int
-    public init (value: [String], label: String, maxValues: Int = 1) {
+    public let displayOrder: Int
+    public init (value: [String], label: String, maxValues: Int = 1, displayOrder: Int) {
         self.value = value
         self.label = label
         self.maxValues = maxValues
+        self.displayOrder = displayOrder
     }
 }

@@ -46,11 +46,27 @@ final class ViewModel: ObservableObject {
         }
 
         // https://stackoverflow.com/a/68023633/663360
-        let parameters = OrderedDictionary(uniqueKeys: rawParameters.keys, values: rawParameters.values)
+        var parameters = OrderedDictionary(uniqueKeysWithValues: rawParameters)
         
-        // TODO: sort the parameters to always display them in the same order in the console
-        // this will require to add a field to the parameter struct
-        
+        // TODO: should I move the sorting code to the struct 
+        parameters.sort(by: { element1, element2 in
+            guard let rp1 = rawParameters[element1.key],
+                  let rp2 = rawParameters[element2.key] else {
+                  return false
+            }
+            let order1: Int
+            switch rp1 {
+            case .number(let numberModelParameter): order1 = numberModelParameter.displayOrder
+            case .string(let stringModelParamter): order1 = stringModelParamter.displayOrder
+            }
+            let order2: Int
+            switch rp2 {
+            case .number(let numberModelParameter): order2 = numberModelParameter.displayOrder
+            case .string(let stringModelParamter): order2 = stringModelParamter.displayOrder
+            }
+            return order1 < order2
+        })
+
         return parameters
     }
 }
