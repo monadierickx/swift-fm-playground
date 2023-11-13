@@ -21,10 +21,11 @@ enum CohereEmbedTruncating: String, Encodable {
 struct CohereEmbedDocument: Encodable {
     let texts: [String]
     let inputType: CohereEmbedInputType
-    let truncate: CohereEmbedTruncating = .end
+    let truncate: CohereEmbedTruncating = .none
     
     func encode() throws -> Data {
         let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
         return try encoder.encode(self)
     }
 }
