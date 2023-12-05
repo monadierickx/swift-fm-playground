@@ -11,7 +11,8 @@ struct ModelSelectionView: View {
     @EnvironmentObject private var viewModel: ViewModel
     
     @State var selectedProvider: String = ""
-    
+//    @State var selectedProvider: BedrockModelSummaryUI
+
     // just used to observe changes and reset provider list accordingly
     // I don't like adding this dependency but this is the simplest way
     // I found to monitor changes
@@ -59,14 +60,13 @@ struct ModelSelectionView: View {
                         }
                     }
                     Picker("Model:", selection: $viewModel.selectedModel) {
-                        Text("").tag("") // silence runtime warning when selection is ""
                         
                         //  list all models that can handle that specific input and output
                         ForEach(models.modelsId(forProvider: selectedProvider,
                                                 withInputCapability: inputCapability,
                                                 andOutpuCapability: outputCapability),
                                 id: \.self) {
-                            Text($0)
+                            Text("\($0.modelName) (\($0.modelId))").tag($0 as BedrockModelSummaryUI?)
                         }
                     }
                     // synchronize the model picker based on the value of the provider
@@ -75,7 +75,7 @@ struct ModelSelectionView: View {
                             let m = models.modelsId(forProvider: selectedProvider,
                                                     withInputCapability: inputCapability,
                                                     andOutpuCapability: outputCapability)
-                            viewModel.selectedModel = m.count > 0 ? m[0] : ""
+                            viewModel.selectedModel = m.count > 0 ? m[0] : nil
                         }
                     }
                     

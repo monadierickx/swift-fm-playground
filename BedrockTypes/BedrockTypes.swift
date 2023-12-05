@@ -9,19 +9,88 @@ import Foundation
 
 // MARK: - Data structures
 
-public typealias BedrockModelIdentifier = String
+// model enum
+public struct BedrockModel: RawRepresentable, Equatable, Hashable {
+    public var rawValue: String
+    
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+}
 
+// Anthropic
+public extension BedrockModel {
+    static var instant: BedrockModel { .init(rawValue: "anthropic.claude-instant-v1") }
+    static var claudev1: BedrockModel { .init(rawValue: "anthropic.claude-v1") }
+    static var claudev2: BedrockModel { .init(rawValue: "anthropic.claude-v2") }
+    static var claudev2_1: BedrockModel { .init(rawValue: "anthropic.claude-v2:1") }
+    func isAnthropic() -> Bool {
+        switch self {
+        case .instant, .claudev1, .claudev2, .claudev2_1: return true
+        default: return false
+        }
+    }
+}
 
-//struct AnyStringKey: CodingKey, Hashable, ExpressibleByStringLiteral {
-//  var stringValue: String
-//  init(stringValue: String) { self.stringValue = stringValue }
-//  init(_ stringValue: String) { self.init(stringValue: stringValue) }
-//  // the three lines below are not used, they are there to comply to `CodingKey` protocol
-//  var intValue: Int?
-//  init?(intValue: Int) { nil }
-//  init(stringLiteral value: String) { self.init(value) }
+// Meta
+public extension BedrockModel {
+    static var llama2_13b: BedrockModel { .init(rawValue: "meta.llama2.13b") }
+    static var llama2_70b: BedrockModel { .init(rawValue: "meta.llama2.70b") }
+}
+
+public extension BedrockModel {
+    init?(from: String?) {
+        guard let model = from else {
+            return nil
+        }
+        self.init(rawValue: model)
+        switch self {
+        case .instant,
+             .claudev1,
+             .claudev2,
+             .claudev2_1,
+             .llama2_13b: return
+        default: return nil
+        }
+    }
+}
+
+//public enum BedrockModel: Hashable {
+//    case anthropicModel(AnthropicModel)
+//    case metaModel(MetaModel)
+//    
+//    public func id() -> BedrockModelIdentifier {
+//        switch self {
+//        case .anthropicModel(let anthropic): return anthropic.rawValue
+//        case .metaModel(let meta): return meta.rawValue
+//        }
+//    }
 //}
 
+public protocol BedrockResponse: Decodable {
+    init(from data: Data) throws
+}
 
+public extension BedrockResponse {
+    static func decode<T: Decodable>(_ data: Data) throws -> T {
+        let decoder = JSONDecoder()
+        return try decoder.decode(T.self, from: data)
+    }
+    static func decode<T: Decodable>(json: String) throws -> T {
+        let data = json.data(using: .utf8)!
+        return try self.decode(data)
+    }
+}
 
+public protocol BedrockRequest: Encodable {
+    func encode() throws -> Data
+}
+
+public extension BedrockRequest {
+    func encode() throws -> Data {
+        let encoder = JSONEncoder()
+        encoder.keyEncodingStrategy = .convertToSnakeCase
+        return try encoder.encode(self)
+    }
+}
 

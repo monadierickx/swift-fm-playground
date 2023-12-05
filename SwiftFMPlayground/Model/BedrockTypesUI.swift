@@ -43,6 +43,10 @@ struct BedrockModelSummaryUI: Hashable, Identifiable {
                                          responseStreamingSupported: model.responseStreamingSupported?.description ?? "unknown")
         }
     }
+    
+    func bedrockModel() {
+        
+    }
 }
 
 enum InputCapabilities: String {
@@ -61,12 +65,13 @@ extension Array<BedrockModelSummaryUI> {
     /**
      Return the list of modelId for the given provider
      */
-    private func modelsId(for provider: String?) -> [String] {
+    private func modelsId(for provider: String?) -> [BedrockModelSummaryUI] { // }[String] {
         self.filter {
             $0.providerName == provider
-        }.map {
-            $0.modelId
         }
+//        .map {
+//            $0.modelId
+//        }
     }
 
     /**
@@ -124,7 +129,7 @@ extension Array<BedrockModelSummaryUI> {
      */
     func modelsId(forProvider provider: String?,
                withInputCapability inputCapability: InputCapabilities?,
-               andOutpuCapability outputCapability: OutputCapabilities?) -> [String] {
+                  andOutpuCapability outputCapability: OutputCapabilities?) -> [BedrockModelSummaryUI] { //[String] {
         
         // when no capability is passed, return all models for this provider
         guard let inputCapability, let outputCapability else {
@@ -147,18 +152,18 @@ extension Array<BedrockModelSummaryUI> {
                 .contains(outputCapability.rawValue.lowercased())
         }
         
-        // 2. extract just the model id
-        .map {
-            $0.modelId
-        }
-        
-        // 3. keep only unique values
-        .uniqued()
-        
-        // 4. tranform to [String]
-        .map {
-            $0
-        }
+//        // 2. extract just the model id
+//        .map {
+//            $0.modelId
+//        }
+//        
+//        // 3. keep only unique values
+//        .uniqued()
+//        
+//        // 4. tranform to [String]
+//        .map {
+//            $0
+//        }
     }
 
 }

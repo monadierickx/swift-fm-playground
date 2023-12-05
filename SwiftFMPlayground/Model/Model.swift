@@ -13,13 +13,14 @@ struct Model {
     var listFoundationModels: [BedrockModelSummaryUI] = []
     
     // allows to inject values for the Mock
-    func modelsParameters(for selectedModel: BedrockModelIdentifier) -> ModelParameters?  { return allModelsParameters[selectedModel] }
+    func modelsParameters(for selectedModel: BedrockModel) -> ModelParameters?  { return allModelsParameters[selectedModel] }
     private var allModelsParameters: AllModelParameters =
         [
             // https://docs.anthropic.com/claude/reference/complete_post
-            BedrockClaudeModel.instant.rawValue : Model.claudeModelParameters,
-            BedrockClaudeModel.claudev1.rawValue : Model.claudeModelParameters,
-            BedrockClaudeModel.claudev2.rawValue : Model.claudeModelParameters
+            BedrockModel.instant : Model.claudeModelParameters,
+            BedrockModel.claudev1 : Model.claudeModelParameters,
+            BedrockModel.claudev2 : Model.claudeModelParameters,
+            BedrockModel.claudev2_1 : Model.claudeModelParameters
         ]
     
     // this methods returns a container used by the UI
@@ -30,6 +31,11 @@ struct Model {
         "max_token_to_sample" : .number(BedrockModelParameterNumber(value: 256, label: "Length", minValue: 25, maxValue: 2048, displayOrder: 4)),
         "stop_sequences" : .string(BedrockModelParameterString(value: ["\\n\\nHuman:"], label: "Stop sequences", maxValues: 5, displayOrder: 5)) // 5 is an arbitray value
     ]
+}
+
+// mock
+extension BedrockModel {
+    static var mock1: BedrockModel { .init(rawValue: "id1") }
 }
 
 extension Model {
@@ -61,7 +67,7 @@ extension Model {
                                                             providerName: "provider 2",
                                                             responseStreamingSupported: "yes"))
         
-        m.allModelsParameters["id1"] = Model.claudeModelParameters
+        m.allModelsParameters[.mock1] = Model.claudeModelParameters
         return m
     }
 }

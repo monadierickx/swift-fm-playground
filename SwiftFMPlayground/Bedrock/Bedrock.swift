@@ -16,7 +16,7 @@ struct Bedrock {
     
     private var logger = Logger(label: "Bedrock")
     
-    var region: String = "us-east-1"
+    var region: String = "us-east-1" //TODO: add a type safe way to express regions
 
     init() {
 #if DEBUG
@@ -42,13 +42,19 @@ struct Bedrock {
         return try await bedrockClient().listFoundationModels(input: request)
     }
     
-    // TODO: make it generic for all Bedrock Models (returns T.AssociateType ?)
-    func invokeModel(withId modelId: BedrockClaudeModel, prompt: String) async throws -> ClaudeInvokeResponse {
+    func invokeClaude(model: BedrockModel, request: ClaudeRequest) async throws -> ClaudeResponse {
+        let expectedModel = "anthropic.claude"
+        guard model.rawValue.starts(with: expectedModel) else {
+            throw BedrockError.invalidModel("Expecting \(expectedModel)*")
+        }
+        let data = try await self.invokeModel(withId: model, params: request.encode())
+        return try ClaudeResponse(from: data)
+    }
+    private func invokeModel(withId model: BedrockModel, params: Data) async throws -> Data {
         
-        let params = ClaudeParameters(prompt: prompt)
-        let request = InvokeModelInput(body: try self.encode(params),
+        let request = InvokeModelInput(body: params,
                                        contentType: "application/json",
-                                       modelId: modelId.rawValue)
+                                       modelId: model.rawValue)
         let response = try await bedrockRuntimeClient().invokeModel(input: request)
         
         guard response.contentType == "application/json",
@@ -56,25 +62,7 @@ struct Bedrock {
             logger.debug("Invalid Bedrock response: \(response)")
             throw BedrockError.invalidResponse(response.body)
         }
-        return try self.decode(data)
-    }
-    
-    private func decode<T: Decodable>(_ data: Data) throws -> T {
-        let decoder = JSONDecoder()
-        return try decoder.decode(T.self, from: data)
-    }
-    private func decode<T: Decodable>(json: String) throws -> T {
-        let data = json.data(using: .utf8)!
-        return try self.decode(data)
-    }
-    private func encode<T: Encodable>(_ value: T) throws -> Data {
-        let encoder = JSONEncoder()
-        encoder.keyEncodingStrategy = .convertToSnakeCase
-        return try encoder.encode(value)
-    }
-    private func encode<T: Encodable>(_ value: T) throws -> String {
-        let data : Data =  try self.encode(value)
-        return String(data: data, encoding: .utf8) ?? "error when encoding the string"
+        return data
     }
 }
 
@@ -82,4 +70,5 @@ struct Bedrock {
 
 enum BedrockError: Error {
     case invalidResponse(Data?)
+    case invalidModel(String)
 }

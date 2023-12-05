@@ -18,7 +18,7 @@ struct PlaygroundView: View {
     var showCommon: Bool = true
     var body: some View {
         
-        let parameters = viewModel.selectedModelParameter()
+        let parameters = try! viewModel.selectedModelParameter()
         
         VStack() {
             if (showCommon) {

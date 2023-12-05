@@ -29,7 +29,7 @@ struct CohereEmbedDocument: Encodable {
         return try encoder.encode(self)
     }
 }
-struct CohereEmbedResponse: Decodable, CustomStringConvertible {
+struct CohereEmbedResponse: BedrockResponse, CustomStringConvertible {
     let embeddings: [[Double]]
     let id: String
     let texts: [String]

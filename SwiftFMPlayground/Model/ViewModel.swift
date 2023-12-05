@@ -9,7 +9,6 @@ import Foundation
 import Logging
 import OrderedCollections
 import BedrockTypes
-import AWSBedrock
 
 @MainActor
 final class ViewModel: ObservableObject {
@@ -19,7 +18,7 @@ final class ViewModel: ObservableObject {
     @Published var data : Model
     @Published var state: Status = .ready()
     
-    @Published var selectedModel: BedrockModelIdentifier = ""
+    @Published var selectedModel: BedrockModelSummaryUI? = nil
 
     init(model: Model = Model()) {
 #if DEBUG
@@ -38,10 +37,13 @@ final class ViewModel: ObservableObject {
         }
         return self.data.listFoundationModels
     }
-    
-    func selectedModelParameter() -> OrderedDictionary<String, BedrockModelParameter> {
+    func selectedBedrockModel() -> BedrockModel? {
+        return BedrockModel.init(from: selectedModel?.modelId)
+    }
+    func selectedModelParameter() throws -> OrderedDictionary<String, BedrockModelParameter> {
         
-        guard let rawParameters = self.data.modelsParameters(for: selectedModel) else {
+        guard let selectedModel = selectedBedrockModel(),
+              let rawParameters = self.data.modelsParameters(for: selectedModel) else {
             return [:]
         }
 
@@ -68,6 +70,24 @@ final class ViewModel: ObservableObject {
         })
 
         return parameters
+    }
+    
+    func invoke(with text: String) async throws -> String {
+        guard let model = selectedBedrockModel() else {
+            return "model is nil"
+        }
+        
+        let bedrock = Bedrock()
+        
+        if model.isAnthropic() {
+            // TODO: update status bar
+            // TODO: show a progress() UI 
+            let request = ClaudeRequest(prompt: text)
+            let response = try await bedrock.invokeClaude(model: model, request: request)
+            return response.completion
+        } else {
+            return "not implemented"
+        }
     }
 }
 

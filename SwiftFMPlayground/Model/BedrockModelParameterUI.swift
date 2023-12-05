@@ -9,7 +9,7 @@
 import BedrockTypes
 
 // modelid => list of model parameters
-public typealias AllModelParameters = [BedrockModelIdentifier: ModelParameters]
+public typealias AllModelParameters = [BedrockModel: ModelParameters]
 
 public enum BedrockModelParameter: Encodable  {
     case number(BedrockModelParameterNumber)

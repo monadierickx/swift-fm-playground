@@ -31,7 +31,14 @@ struct TextPlayground: PlaygroundComponent {
             HStack {
                 Spacer()
                 Button(action: {
-                    print("send")
+                    Task {
+                        do {
+                            text = try await viewModel.invoke(with: text)
+                        } catch {
+                            text = "\(error)"
+                        }
+                    }
+                    
                 }, label: {
                     Text("Send \(Image(systemName: "paperplane"))")
                 })
@@ -40,8 +47,6 @@ struct TextPlayground: PlaygroundComponent {
         }
     }
 }
-
-
 
 #Preview {
     TextPlayground()

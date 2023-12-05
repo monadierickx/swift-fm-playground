@@ -16,7 +16,7 @@ struct TitanEmbedDocument: Encodable {
     }
 }
 
-struct TitanEmbedResponse: Decodable, CustomStringConvertible {
+struct TitanEmbedResponse: BedrockResponse, CustomStringConvertible {
     
     let embedding: [Double]
     let inputTextTokenCount: Int
