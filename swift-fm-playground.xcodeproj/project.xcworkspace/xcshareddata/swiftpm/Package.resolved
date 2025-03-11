@@ -1,12 +1,13 @@
 {
+  "originHash" : "6b97cf0def1a3b00a8af4942b71a563632313f13d9f4d3b3c4ecbd75cc547689",
   "pins" : [
     {
       "identity" : "aws-crt-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-crt-swift",
       "state" : {
-        "revision" : "fd1756b6e5c9fd1a906edfb743f7cb64c2c98639",
-        "version" : "0.17.0"
+        "revision" : "b6380f683b31072d77b601c88674461c11bcad5a",
+        "version" : "0.30.0"
       }
     },
     {
@@ -14,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "668c5ce3bf757e044f80cc71e492f60d699f0968",
-        "version" : "0.30.0"
+        "revision" : "3c20e0be8c8246de8b8e04372404ef1f90be71b6",
+        "version" : "0.46.0"
       }
     },
     {
@@ -23,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "6037a8157082d00da6ff1be1462022dcaccb3662",
-        "version" : "0.34.0"
+        "revision" : "b2322a067f85c230f17c80be8a67dd543454b081",
+        "version" : "0.51.0"
       }
     },
     {
@@ -32,26 +33,26 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms.git",
       "state" : {
-        "revision" : "bcd4f369ac962bc3e5244c9df778739f8f5bdbf1",
-        "version" : "1.1.0"
+        "revision" : "f6919dfc309e7f1b56224378b11e28bab5bccc42",
+        "version" : "1.2.0"
       }
     },
     {
       "identity" : "swift-collections",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-collections",
+      "location" : "https://github.com/apple/swift-collections.git",
       "state" : {
-        "revision" : "a902f1823a7ff3c9ab2fba0f992396b948eda307",
-        "version" : "1.0.5"
+        "revision" : "3d2dc41a01f9e49d84f0a3925fb858bed64f702d",
+        "version" : "1.1.2"
       }
     },
     {
       "identity" : "swift-log",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-log.git",
+      "location" : "https://github.com/apple/swift-log",
       "state" : {
-        "revision" : "532d8b529501fb73a2455b179e0bbb6d49b652ed",
-        "version" : "1.5.3"
+        "revision" : "9cb486020ebf03bfa5b5df985387a14a98744537",
+        "version" : "1.6.1"
       }
     },
     {
@@ -62,16 +63,7 @@
         "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
         "version" : "1.0.2"
       }
-    },
-    {
-      "identity" : "xmlcoder",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MaxDesiatov/XMLCoder.git",
-      "state" : {
-        "revision" : "80b4a1646399b8e4e0ce80711653476a85bd5e37",
-        "version" : "0.17.0"
-      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

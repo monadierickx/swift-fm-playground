@@ -20,10 +20,10 @@ public struct BedrockModel: RawRepresentable, Equatable, Hashable {
 
 // Anthropic
 public extension BedrockModel {
-    static var instant: BedrockModel { .init(rawValue: "anthropic.claude-instant-v1") }
-    static var claudev1: BedrockModel { .init(rawValue: "anthropic.claude-v1") }
-    static var claudev2: BedrockModel { .init(rawValue: "anthropic.claude-v2") }
-    static var claudev2_1: BedrockModel { .init(rawValue: "anthropic.claude-v2:1") }
+    static let instant: BedrockModel = BedrockModel(rawValue: "anthropic.claude-instant-v1")
+    static let claudev1: BedrockModel = BedrockModel(rawValue: "anthropic.claude-v1")
+    static let claudev2: BedrockModel = BedrockModel(rawValue: "anthropic.claude-v2")
+    static let claudev2_1: BedrockModel = BedrockModel(rawValue: "anthropic.claude-v2:1")
     func isAnthropic() -> Bool {
         switch self {
         case .instant, .claudev1, .claudev2, .claudev2_1: return true
@@ -93,4 +93,3 @@ public extension BedrockRequest {
         return try encoder.encode(self)
     }
 }
-

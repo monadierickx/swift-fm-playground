@@ -82,9 +82,10 @@ final class ViewModel: ObservableObject {
         if model.isAnthropic() {
             // TODO: update status bar
             // TODO: show a progress() UI 
+            // TODO: include input parameters
             let request = ClaudeRequest(prompt: text)
             let response = try await bedrock.invokeClaude(model: model, request: request)
-            return response.completion
+            return response.completion.trim()
         } else {
             return "not implemented"
         }
