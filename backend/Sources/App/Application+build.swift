@@ -140,15 +140,14 @@ func buildRouter(useSSO: Bool) async throws -> Router<AppRequestContext> {
                 )
             }
             // tmp: save an image to disk to check
-            let timeStamp = getTimestamp()
-            try savePNGToDisk(
-                data: output.images[0],
-                filePath:
-                    "./img/generated_images/\(timeStamp).png"
-            )
+            // let timeStamp = getTimestamp()
+            // try savePNGToDisk(
+            //     data: output.images[0],
+            //     filePath:
+            //         "./img/generated_images/\(timeStamp).png"
+            // )
             return output
         } catch {
-            // print(error)
             throw error
         }
     }

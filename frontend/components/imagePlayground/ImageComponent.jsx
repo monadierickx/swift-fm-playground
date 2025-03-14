@@ -1,37 +1,43 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import Spinner from "@/components/Spinner";
-import StyleSelector from "@/components/imagePlayground/StyleSelector";
+// import StyleSelector from "@/components/imagePlayground/StyleSelector";
 import GlobalConfig from "@/app/app.config";
+import ImageModelSelector from "./ImageModelSelector";
+import { defaultImageModel } from "@/helpers/imageModelData";
+
 
 export default function ImageContainer() {
     const [imgSrc, setImgSrc] = useState('/placeholder.png');
     const [inputValue, setInputValue] = useState('');
-    const [stylePreset, setStylePreset] = useState('no style');
+    // const [stylePreset, setStylePreset] = useState('no style');
     const [isLoading, setIsLoading] = useState(false);
+    const [selectedModel, setSelectedModel] = useState(defaultImageModel);
 
-    // const endpoint = "/foundation-models/image/amazon.nova-canvas-v1:0";
-    // const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
+    const onModelChange = (newModel) => {
+        setSelectedModel(newModel);
+        // setInputValue("");
+    }
 
-    const handleStyleChange = (newStyle) => {
-        setStylePreset(newStyle);
-    };
+    // const handleStyleChange = (newStyle) => {
+    //     setStylePreset(newStyle);
+    // };
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
     };
 
     const sendMessage = async () => {
-        const endpoint = "/foundation-models/image/amazon.nova-canvas-v1:0";
+        const endpoint = `/foundation-models/image/${selectedModel.modelId}`;
         const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
 
         if (inputValue.trim() === '') { return; }
 
         setIsLoading(true);
 
-        if (stylePreset === "no style") {
-            setStylePreset("");
-        }
+        // if (stylePreset === "no style") {
+        //     setStylePreset("");
+        // }
 
         const prompt = {
             prompt: inputValue.trim(),
@@ -61,8 +67,9 @@ export default function ImageContainer() {
 
     return (
         <div className="flex flex-col flex-auto h-full p-6">
-            <h3 className="text-3xl font-medium text-gray-700">Image Playground (Nova Canvas)</h3>
+            <h3 className="text-3xl font-medium text-gray-700">Image Playground</h3>
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 p-4 mt-8">
+                <ImageModelSelector model={selectedModel} onModelChange={onModelChange} />
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
                     <div className="flex-grow">
                         <div className="relative w-full">
@@ -79,7 +86,7 @@ export default function ImageContainer() {
                                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10" />
                         </div>
                     </div>
-                    <StyleSelector onStyleChange={handleStyleChange} />
+                    {/* <StyleSelector onStyleChange={handleStyleChange} /> */}
                     <div className="ml-4">
                         <button
                             type="button"
