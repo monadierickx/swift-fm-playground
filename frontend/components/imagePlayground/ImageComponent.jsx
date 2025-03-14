@@ -10,8 +10,8 @@ export default function ImageContainer() {
     const [stylePreset, setStylePreset] = useState('no style');
     const [isLoading, setIsLoading] = useState(false);
 
-    const endpoint = "/foundation-models/model/image/stability.stable-diffusion-xl/invoke";
-    const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
+    // const endpoint = "/foundation-models/image/amazon.nova-canvas-v1:0";
+    // const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
 
     const handleStyleChange = (newStyle) => {
         setStylePreset(newStyle);
@@ -22,6 +22,9 @@ export default function ImageContainer() {
     };
 
     const sendMessage = async () => {
+        const endpoint = "/foundation-models/image/amazon.nova-canvas-v1:0";
+        const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
+
         if (inputValue.trim() === '') { return; }
 
         setIsLoading(true);
@@ -32,13 +35,13 @@ export default function ImageContainer() {
 
         const prompt = {
             prompt: inputValue.trim(),
-            stylePreset: stylePreset
+            // stylePreset: stylePreset
         }
 
         try {
             const response = await fetch(api, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(prompt)
             });
 
@@ -48,7 +51,7 @@ export default function ImageContainer() {
 
             const body = await response.json();
 
-            setImgSrc(`data:image/png;base64,${body.imageByteArray}`);
+            setImgSrc(`data:image/png;base64,${body.images[0]}`);
         } catch (error) {
             console.error('Error fetching image:', error);
         } finally {
@@ -58,7 +61,7 @@ export default function ImageContainer() {
 
     return (
         <div className="flex flex-col flex-auto h-full p-6">
-            <h3 className="text-3xl font-medium text-gray-700">Image Playground (Stable Diffusion XL)</h3>
+            <h3 className="text-3xl font-medium text-gray-700">Image Playground (Nova Canvas)</h3>
             <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 p-4 mt-8">
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
                     <div className="flex-grow">
@@ -76,7 +79,7 @@ export default function ImageContainer() {
                                 className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10" />
                         </div>
                     </div>
-                    <StyleSelector onStyleChange={handleStyleChange}/>
+                    <StyleSelector onStyleChange={handleStyleChange} />
                     <div className="ml-4">
                         <button
                             type="button"
@@ -85,21 +88,21 @@ export default function ImageContainer() {
                         >
                             <span>Create image</span>
                             <span className="ml-2">
-                  <svg
-                      className="w-4 h-4 transform rotate-45 -mt-px"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    ></path>
-                  </svg>
-                </span>
+                                <svg
+                                    className="w-4 h-4 transform rotate-45 -mt-px"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                    ></path>
+                                </svg>
+                            </span>
                         </button>
                     </div>
                 </div>

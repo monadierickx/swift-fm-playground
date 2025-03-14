@@ -39,6 +39,7 @@ public struct SwiftBedrock: Sendable {
     /// - Throws: Error if client initialization fails
     public init(
         region: Region = .useast1,
+        // region: Region = .uswest2,
         logger: Logger? = nil,
         bedrockClient: MyBedrockClientProtocol? = nil,
         bedrockRuntimeClient: MyBedrockRuntimeClientProtocol? = nil,

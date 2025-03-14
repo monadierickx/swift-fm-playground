@@ -59,7 +59,7 @@ export default function TextContainer() {
             });
 
             const response = await fetch(api, {
-                method: 'POST', // FIXME: are we sure about POST? 
+                method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
                 body: body
             });
