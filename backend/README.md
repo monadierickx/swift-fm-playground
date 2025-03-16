@@ -84,7 +84,7 @@ In the `backend/Sources/SwiftBedrockTypes/DeepSeek/DeepSeekBedrockModels.swift` 
 import Foundation
 
 public extension BedrockModel {
-    static let deepseek_r1_v1: BedrockModel = BedrockModel(id: "deepseek.r1-v1:0", family: .deepseek)
+    static let deepseek_r1_v1: BedrockModel = BedrockModel(id: "us.deepseek.r1-v1:0", family: .deepseek)
 }
 ```
 
@@ -112,36 +112,29 @@ public init?(rawValue: String) {
 In the `backend/Sources/SwiftBedrockTypes/DeepSeek/DeepSeekRequestBody.swift` file create a struct that reflects exactly how the body of the request for an invokeModel call to this family should look. For the DeepSeek a request looks like this: 
 ```json
 {
-    "inferenceConfig": {
-        "max_tokens": 512
-    },
-    "messages": [
-        {
-        "role": "user",
-        "content": "this is where you place your input text"
-        }
-    ]
+    "prompt": "\(prompt)",
+    "temperature": 1, 
+    "top_p": 0.9,
+    "max_tokens": 200,
+    "stop": ["END"]
 }
 ```
 This means the `DeepSeekRequestBody` will be defined like so: 
 
 ```swift
 public struct DeepSeekRequestBody: BedrockBodyCodable {
-    let inferenceConfig: InferenceConfig
-    let messages: [Message]
+    let prompt: String
+    let temperature: Double
+    let top_p: Double
+    let max_tokens: Int
+    let stop: [String]
 
     public init(prompt: String, maxTokens: Int, temperature: Double) {
-        self.inferenceConfig = InferenceConfig(max_tokens: maxTokens)
-        self.messages = [Message(role: .user, content: prompt)]
-    }
-
-    struct InferenceConfig: Codable {
-        let max_tokens: Int
-    }
-
-    struct Message: Codable {
-        let role: Role
-        let content: String
+        self.prompt = prompt
+        self.temperature = temperature
+        self.top_p = 0.9
+        self.max_tokens = maxTokens
+        self.stop = ["END"]
     }
 }
 ```
@@ -151,15 +144,28 @@ Make sure to add the public initializer with parameters `prompt`, `maxTokens` an
 ### 6. Create `DeepSeekResponseBody`
 Based on the structure of the response body the `DeekSeekResponseBody` struct has to be created. 
 ```json
-// TODO
+{
+    "choices":
+        [
+            {
+                "text":"completion",
+                "stop_reason":"length"
+            }
+        ]
+}
 ```
 
 ```swift
 public struct DeepSeekResponseBody: ContainsTextCompletion {
-    // TODO 
+    let choices: [Choice]
+
+    struct Choice: Codable {
+        let text: String
+        let stop_reason: String
+    }
 
     public func getTextCompletion() throws -> TextCompletion {
-        // TODO
+        TextCompletion(self.choices[0].text)
     }
 }
 ```
