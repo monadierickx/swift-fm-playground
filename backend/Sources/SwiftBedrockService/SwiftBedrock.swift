@@ -471,4 +471,46 @@ public struct SwiftBedrock: Sendable {
         )
         return output
     }
+
+    /// tmp
+    public func converse(
+        with model: BedrockModel,
+        prompt: String,
+        history: [BedrockRuntimeClientTypes.Message] = []
+    ) async throws -> String {
+        logger.trace(
+            "Conversing",
+            metadata: [
+                "model.id": .string(model.id),
+                "model.family": .string(model.family.description),
+                "prompt": .string(prompt),
+            ]
+        )
+        try validatePrompt(prompt)
+        var messages = history  // FIXME
+        messages.append(
+            BedrockRuntimeClientTypes.Message(
+                content: [.text(prompt)],
+                role: .user
+            )
+        )
+        logger.trace("Created messages", metadata: ["messages.count": "\(messages.count)"])
+        let input = ConverseInput(messages: messages, modelId: model.id)
+        logger.trace(
+            "Created ConverseInput",
+            metadata: ["messages.count": "\(messages.count)", "model": "\(model.description)"]
+        )
+        let response = try await self.bedrockRuntimeClient.converse(input: input)
+        logger.trace("Received response", metadata: ["response": "\(response)"])
+
+        if case let .message(msg) = response.output {
+            logger.trace("Extracted message", metadata: ["message": "\(msg)"])
+            if case let .text(reply) = msg.content![0] {
+                logger.trace("Extracted reply", metadata: ["reply": "\(reply)"])
+                return reply
+            }
+        }
+        logger.trace("Not good")
+        return "Oeps"
+    }
 }

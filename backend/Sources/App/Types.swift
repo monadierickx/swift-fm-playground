@@ -26,6 +26,11 @@ struct TextCompletionInput: Codable {
     let temperature: Double?
 }
 
+struct ChatInput: Codable {
+    let prompt: String
+    // let history: [BedrockRuntimeClientTypes.Message] = []
+}
+
 struct ImageGenerationInput: Codable {
     let prompt: String
     let nrOfImages: Int?

@@ -145,5 +145,23 @@ func buildRouter(useSSO: Bool) async throws -> Router<AppRequestContext> {
         }
     }
 
+    // POST /foundation-models/chat/{modelId}
+    router.post("/foundation-models/chat/:modelId") { request, context -> String in
+        do {
+            guard let modelId = context.parameters.get("modelId") else {
+                throw HTTPError(.badRequest, message: "No modelId found.")
+            }
+            guard let model = BedrockModel(rawValue: modelId),
+                model.inputModality.contains(.text)
+            else {
+                throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
+            }
+            let input = try await request.decode(as: ChatInput.self, context: context)
+            return try await bedrock.converse(with: model, prompt: input.prompt)
+        } catch {
+            throw error
+        }
+    }
+
     return router
 }
