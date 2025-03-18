@@ -4,10 +4,10 @@
 import PackageDescription
 
 let package = Package(
-    name: "HummingbirdBackend",
+    name: "HummingbirdBackend", // FIXME: better name
     platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17)],
     products: [
-        .executable(name: "App", targets: ["App"])
+        .executable(name: "App", targets: ["App"])  // FIXME: better name
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),

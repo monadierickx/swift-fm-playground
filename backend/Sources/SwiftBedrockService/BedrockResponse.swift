@@ -19,10 +19,10 @@ import SwiftBedrockTypes
 
 public struct BedrockResponse {
     let model: BedrockModel
-    let contentType: String
+    let contentType: ContentType
     let body: ContainsTextCompletion
 
-    private init(model: BedrockModel, contentType: String = "application/json", body: ContainsTextCompletion) {
+    private init(model: BedrockModel, contentType: ContentType = .json, body: ContainsTextCompletion) {
         self.model = model
         self.contentType = contentType
         self.body = body

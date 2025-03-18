@@ -19,15 +19,15 @@ import SwiftBedrockTypes
 
 struct BedrockRequest {
     let model: BedrockModel
-    let contentType: String
-    let accept: String
+    let contentType: ContentType
+    let accept: ContentType
     private let body: BedrockBodyCodable
 
     private init(
         model: BedrockModel,
         body: BedrockBodyCodable,
-        contentType: String = "application/json",
-        accept: String = "application/json"
+        contentType: ContentType = .json,
+        accept: ContentType = .json
     ) {
         self.model = model
         self.body = body
@@ -170,7 +170,7 @@ struct BedrockRequest {
                 nrOfImages: nrOfImages
             )
         default:
-            throw SwiftBedrockError.invalidModel(model.id)
+            throw SwiftBedrockError.invalidModel(model.id) // FIXME: allow new models 
         }
         self.init(model: model, body: body)
     }
@@ -182,9 +182,9 @@ struct BedrockRequest {
         do {
             let jsonData: Data = try JSONEncoder().encode(self.body)
             return InvokeModelInput(
-                accept: self.accept,
+                accept: self.accept.headerValue,
                 body: jsonData,
-                contentType: self.contentType,
+                contentType: self.contentType.headerValue,
                 modelId: model.id
             )
         } catch {

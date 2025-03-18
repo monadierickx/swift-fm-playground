@@ -40,7 +40,7 @@ public func buildApplication(
     -> some ApplicationProtocol
 {
     let environment = Environment()
-    var logger = Logger(label: "HummingbirdBackend")
+    var logger = Logger(label: "HummingbirdBackend") // FIXME: better name
     logger.logLevel =
         arguments.logLevel ?? environment.get("LOG_LEVEL").flatMap {
             Logger.Level(rawValue: $0)
@@ -92,7 +92,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     router.post("/foundation-models/text/:modelId") { request, context -> TextCompletion in
         do {
             guard let modelId = context.parameters.get("modelId") else {
-                throw HTTPError(.badRequest, message: "No modelId found.")
+                throw HTTPError(.badRequest, message: "No modelId was given.")
             }
             guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
@@ -120,12 +120,13 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     router.post("/foundation-models/image/:modelId") { request, context -> ImageGenerationOutput in
         do {
             guard let modelId = context.parameters.get("modelId") else {
-                throw HTTPError(.badRequest, message: "No modelId found.")
+                throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = BedrockModel(rawValue: modelId),
-                model.outputModality.contains(.image)
-            else {
+            guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
+            }
+            guard model.outputModality.contains(.image) else {
+                throw HTTPError(.badRequest, message: "Model \(modelId) does not support image output.")
             }
             let input = try await request.decode(as: ImageGenerationInput.self, context: context)
 
@@ -156,12 +157,13 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     router.post("/foundation-models/chat/:modelId") { request, context -> String in
         do {
             guard let modelId = context.parameters.get("modelId") else {
-                throw HTTPError(.badRequest, message: "No modelId found.")
+                throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = BedrockModel(rawValue: modelId),
-                model.inputModality.contains(.text)
-            else {
+            guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
+            }
+            guard model.outputModality.contains(.text) else {
+                throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
             return try await bedrock.converse(with: model, prompt: input.prompt)

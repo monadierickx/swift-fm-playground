@@ -77,7 +77,10 @@ public enum ModelFamily: Sendable {
 ### 2. Create model family directory
 Create the `backend/Sources/SwiftBedrockTypes/DeepSeek` directory with the following three files: `DeepSeekBedrockModels.swift`, `DeepSeekRequestBody.swift`, `DeepSeekResponseBody.swift`. 
 
-### 3. Create BedrockModel in `DeepSeekBedrockModels.swift`
+### 3. Create BedrockModel
+
+Follow the steps in [How to add a new model?](#how-to-add-a-new-model) to add a model to your new model family.
+<!-- ### 3. Create BedrockModel in `DeepSeekBedrockModels.swift`
 In the `backend/Sources/SwiftBedrockTypes/DeepSeek/DeepSeekBedrockModels.swift` file create the public extension to BedrockModel and add all the models you want to implement with the correct modelId, the modelFamily you just created and if necessary the input and/or output modality (defaults to `.text` for both). 
 
 ```swift
@@ -106,7 +109,7 @@ public init?(rawValue: String) {
         return nil
     }
 }
-```
+``` -->
 
 ### 5. Create `DeepSeekRequestBody`
 In the `backend/Sources/SwiftBedrockTypes/DeepSeek/DeepSeekRequestBody.swift` file create a struct that reflects exactly how the body of the request for an invokeModel call to this family should look. For the DeepSeek a request looks like this: 
@@ -142,7 +145,7 @@ public struct DeepSeekRequestBody: BedrockBodyCodable {
 Make sure to add the public initializer with parameters `prompt`, `maxTokens` and `temperature` to comply to the `BedrockBodyCodable` protocol. 
 
 ### 6. Create `DeepSeekResponseBody`
-Based on the structure of the response body the `DeekSeekResponseBody` struct has to be created. 
+Based on the structure of the response body, write the `DeekSeekResponseBody` struct. 
 ```json
 {
     "choices":
