@@ -19,19 +19,34 @@ struct Nova: ModelFamily {
     let name: String = "Nova"
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getTextRequestBody is not implemented for Nova")
+        NovaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
     }
-    
+
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
-        throw SwiftBedrockError.notImplemented("getTextResponseBody is not implemented for Nova")
+        let decoder = JSONDecoder()
+        return try decoder.decode(NovaResponseBody.self, from: data)
     }
 
-    func getImageRequestBody() throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getImageRequestBody is not implemented for Nova")
-    }
-    
-    func getImageResponseBody() throws -> ContainsImageGeneration {
-        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for Nova")
+    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
+        AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)
     }
 
+    func getImageVariationRequestBody(
+        prompt: String,
+        image: String,
+        similarity: Double,
+        nrOfImages: Int
+    ) throws -> BedrockBodyCodable {
+        AmazonImageRequestBody.imageVariation(
+            prompt: prompt,
+            referenceImage: image,
+            similarity: similarity,
+            nrOfImages: nrOfImages
+        )
+    }
+
+    func getImageResponseBody(from data: Data) throws -> ContainsImageGeneration {
+        let decoder = JSONDecoder()
+        return try decoder.decode(AmazonImageResponseBody.self, from: data)
+    }
 }

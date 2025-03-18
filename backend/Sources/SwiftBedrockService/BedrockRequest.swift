@@ -102,8 +102,10 @@ struct BedrockRequest {
                 "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
             )
         }
-        let body: BedrockBodyCodable = try model.family.getImageRequestBody()
-        self.init(model: model, body: body)
+        self.init(
+            model: model,
+            body: try model.family.getTextToImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
+        )
     }
 
     // MARK: image variation
@@ -138,24 +140,12 @@ struct BedrockRequest {
                 "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
             )
         }
-        // var body: BedrockBodyCodable
-        // switch model.family {
-        // case .titan, .nova:
-        //     body = AmazonImageRequestBody.imageVariation(
-        //         prompt: prompt,
-        //         referenceImage: image,
-        //         similarity: similarity,
-        //         nrOfImages: nrOfImages
-        //     )
-        // default:
-        //     throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
-        // }
-        let body = AmazonImageRequestBody.imageVariation(
-                prompt: prompt,
-                referenceImage: image,
-                similarity: similarity,
-                nrOfImages: nrOfImages
-            )
+        let body = try model.family.getImageVariationRequestBody(
+            prompt: prompt,
+            image: image,
+            similarity: similarity,
+            nrOfImages: nrOfImages
+        )
         self.init(model: model, body: body)
     }
 

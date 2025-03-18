@@ -21,18 +21,26 @@ struct Anthropic: ModelFamily {
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         AnthropicRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
     }
-    
+
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
         let decoder = JSONDecoder()
         return try decoder.decode(AnthropicResponseBody.self, from: data)
     }
 
-    func getImageRequestBody() throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getImageRequestBody is not implemented for Anthropic")
-    }
-    
-    func getImageResponseBody() throws -> ContainsImageGeneration {
-        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for Anthropic")
+    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
+        throw SwiftBedrockError.notImplemented("getTextToImageRequestBody is not implemented for Anthropic")
     }
 
+    func getImageVariationRequestBody(
+        prompt: String,
+        image: String,
+        similarity: Double,
+        nrOfImages: Int
+    ) throws -> BedrockBodyCodable {
+        throw SwiftBedrockError.notImplemented("getImageVariationRequestBody is not implemented for Anthropic")
+    }
+
+    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration {
+        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for Anthropic")
+    }
 }

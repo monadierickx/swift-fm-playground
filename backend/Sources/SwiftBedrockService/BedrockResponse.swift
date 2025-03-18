@@ -69,22 +69,7 @@ public struct BedrockResponse {
     ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
     static func createTextResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
-            // var body: ContainsTextCompletion
-            // let decoder = JSONDecoder()
-            // switch model.family {
-            // case .anthropic:
-            //     body = try decoder.decode(AnthropicResponseBody.self, from: data)
-            // case .titan:
-            //     body = try decoder.decode(TitanResponseBody.self, from: data)
-            // case .nova:
-            //     body = try decoder.decode(NovaResponseBody.self, from: data)
-            // case .deepseek:
-            //     body = try decoder.decode(DeepSeekResponseBody.self, from: data)
-            // default:
-            //     throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
-            // }
-            let body: ContainsTextCompletion = try model.family.getTextResponseBody(from: data)
-            return self.init(model: model, textCompletionBody: body)
+            return self.init(model: model, textCompletionBody: try model.family.getTextResponseBody(from: data))
         } catch {
             throw SwiftBedrockError.invalidResponseBody(data)
         }
@@ -98,15 +83,7 @@ public struct BedrockResponse {
     ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
     static func createImageResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
-            // var body: ContainsImageGeneration
-            let decoder = JSONDecoder()
-            // switch model.family {
-            // case .titan, .nova:
-            //     body = try decoder.decode(AmazonImageResponseBody.self, from: data)
-            // default:
-            //     throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
-            // }
-            let body = try decoder.decode(AmazonImageResponseBody.self, from: data)
+            let body = try model.family.getImageResponseBody(from: data)
             return self.init(model: model, imageGenerationBody: body)
         } catch {
             throw SwiftBedrockError.invalidResponseBody(data)

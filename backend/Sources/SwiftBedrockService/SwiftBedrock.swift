@@ -242,8 +242,8 @@ public struct SwiftBedrock: Sendable {
             logger.trace(
                 "Fetched foundation models",
                 metadata: [
-                    "models.count": "\(modelsInfo.count)"
-                        // "models.content": .stringConvertible(modelsInfo),
+                    "models.count": "\(modelsInfo.count)",
+                    "models.content": .string(String(describing: modelsInfo)),
                 ]
             )
             return modelsInfo

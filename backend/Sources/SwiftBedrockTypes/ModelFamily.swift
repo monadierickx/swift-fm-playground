@@ -23,8 +23,14 @@ public protocol ModelFamily: Sendable, Hashable, Equatable {
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
 
-    func getImageRequestBody() throws -> BedrockBodyCodable
-    func getImageResponseBody() throws -> ContainsImageGeneration
+    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable
+    func getImageVariationRequestBody(
+        prompt: String,
+        image: String,
+        similarity: Double,
+        nrOfImages: Int
+    ) throws -> BedrockBodyCodable
+    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
 }
 
 // public enum ModelFamily: Sendable {
