@@ -265,7 +265,7 @@ struct SwiftBedrockServiceTests {
         }
     }
 
-    // MARK: editImage
+    // MARK: generateImageVariation
 
     @Test(
         "Generate image variation using an implemented model",
@@ -275,10 +275,10 @@ struct SwiftBedrockServiceTests {
             BedrockModel.nova_canvas,
         ]
     )
-    func editImageWithValidModel(model: BedrockModel) async throws {
+    func generateImageVariationWithValidModel(model: BedrockModel) async throws {
         let mockBase64Image =
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.editImage(
+        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
             image: mockBase64Image,
             prompt: "This is a test",
             with: model,
@@ -305,11 +305,11 @@ struct SwiftBedrockServiceTests {
             BedrockModel.claudev3_5_haiku,
         ]
     )
-    func editImageWithInvalidModel(model: BedrockModel) async throws {
+    func generateImageVariationWithInvalidModel(model: BedrockModel) async throws {
         await #expect(throws: SwiftBedrockError.self) {
             let mockBase64Image =
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.editImage(
+            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
                 image: mockBase64Image,
                 prompt: "This is a test",
                 with: model,
@@ -322,10 +322,10 @@ struct SwiftBedrockServiceTests {
         "Generate image variation using a valid nrOfImages",
         arguments: [1, 2, 3, 4, 5]
     )
-    func editImageWithValidNrOfImages(nrOfImages: Int) async throws {
+    func generateImageVariationWithValidNrOfImages(nrOfImages: Int) async throws {
         let mockBase64Image =
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.editImage(
+        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
             image: mockBase64Image,
             prompt: "This is a test",
             with: BedrockModel.nova_canvas,
@@ -338,11 +338,11 @@ struct SwiftBedrockServiceTests {
         "Generate image variation using an invalid nrOfImages",
         arguments: [-4, 0, 6, 20]
     )
-    func editImageWithInvalidNrOfImages(nrOfImages: Int) async throws {
+    func generateImageVariationWithInvalidNrOfImages(nrOfImages: Int) async throws {
         await #expect(throws: SwiftBedrockError.self) {
             let mockBase64Image =
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.editImage(
+            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
                 image: mockBase64Image,
                 prompt: "This is a test",
                 with: BedrockModel.nova_canvas,
@@ -355,10 +355,10 @@ struct SwiftBedrockServiceTests {
         "Generate image variation using a valid similarity",
         arguments: [0, 0.4, 1]
     )
-    func editImageWithValidNr(similarity: Double) async throws {
+    func generateImageVariationWithValidNr(similarity: Double) async throws {
         let mockBase64Image =
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.editImage(
+        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
             image: mockBase64Image,
             prompt: "This is a test",
             with: BedrockModel.nova_canvas,
@@ -372,11 +372,11 @@ struct SwiftBedrockServiceTests {
         "Generate image variation using an invalid similarity",
         arguments: [-4, -0.001, 1.1, 2]
     )
-    func editImageWithInvalidNrOfImages(similarity: Double) async throws {
+    func generateImageVariationWithInvalidNrOfImages(similarity: Double) async throws {
         await #expect(throws: SwiftBedrockError.self) {
             let mockBase64Image =
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.editImage(
+            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
                 image: mockBase64Image,
                 prompt: "This is a test",
                 with: BedrockModel.nova_canvas,
@@ -392,10 +392,10 @@ struct SwiftBedrockServiceTests {
             "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
         ]
     )
-    func editImageWithValidPrompt(prompt: String) async throws {
+    func generateImageVariationWithValidPrompt(prompt: String) async throws {
         let mockBase64Image =
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.editImage(
+        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
             image: mockBase64Image,
             prompt: prompt,
             with: BedrockModel.nova_canvas,
@@ -408,11 +408,11 @@ struct SwiftBedrockServiceTests {
         "Generate image variation using an invalid prompt",
         arguments: ["", " ", " \n  ", "\t"]
     )
-    func editImageWithInvalidPrompt(prompt: String) async throws {
+    func generateImageVariationWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: SwiftBedrockError.self) {
             let mockBase64Image =
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.editImage(
+            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
                 image: mockBase64Image,
                 prompt: prompt,
                 with: BedrockModel.nova_canvas,

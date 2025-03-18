@@ -17,9 +17,9 @@ import Foundation
 
 public struct AmazonImageRequestBody: BedrockBodyCodable {
     let taskType: TaskType
-    let textToImageParams: TextToImageParams?
-    let imageVariationParams: ImageVariationParams?
-    let imageGenerationConfig: ImageGenerationConfig
+    private let textToImageParams: TextToImageParams?
+    private let imageVariationParams: ImageVariationParams?
+    private let imageGenerationConfig: ImageGenerationConfig
 
     // MARK: - Initialization
 
@@ -73,7 +73,7 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
 
     // MARK: - Nested Types
 
-    public struct TextToImageParams: Codable {
+    private struct TextToImageParams: Codable {
         let text: String
         let conditionImage: String?
         let controlMode: ControlMode?
@@ -88,7 +88,7 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
             self.negativeText = nil
         }
 
-        init(
+        private init(
             text: String,
             conditionImage: String,
             controlMode: ControlMode? = nil,
@@ -103,24 +103,24 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
         }
     }
 
-    public enum ControlMode: String, Codable {
+    private enum ControlMode: String, Codable {
         case cannyEdge = "CANNY_EDGE"
         case segmentation = "SEGMENTATION"
     }
 
-    public struct ImageVariationParams: Codable {
+    private struct ImageVariationParams: Codable {
         let text: String
         let images: [String]
         let similarityStrength: Double
 
-        public init(text: String, referenceImage: String, similarity: Double) {
+        init(text: String, referenceImage: String, similarity: Double) {
             self.text = text
             self.images = [referenceImage]
             self.similarityStrength = similarity
         }
     }
 
-    public struct ImageGenerationConfig: Codable {
+    private struct ImageGenerationConfig: Codable {
         let cfgScale: Int
         let seed: Int
         let quality: String
@@ -128,7 +128,7 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
         let height: Int
         let numberOfImages: Int
 
-        public init(nrOfImages: Int = 3) {
+        init(nrOfImages: Int = 3) {
             self.cfgScale = 8
             self.seed = 42
             self.quality = "standard"

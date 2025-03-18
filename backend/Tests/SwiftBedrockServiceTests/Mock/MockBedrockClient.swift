@@ -20,7 +20,7 @@ import Foundation
 import SwiftBedrockService
 import SwiftBedrockTypes
 
-public struct MockBedrockClient: MyBedrockClientProtocol {
+public struct MockBedrockClient: BedrockClientProtocol {
     public init() {}
 
     public func listFoundationModels(

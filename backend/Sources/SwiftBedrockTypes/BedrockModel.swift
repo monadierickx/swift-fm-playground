@@ -46,14 +46,6 @@ public struct BedrockModel: Equatable, Hashable, Sendable, RawRepresentable {
     /// - Parameter rawValue: The model identifier string
     /// - Returns: The corresponding BedrockModel instance, or nil if the identifier is not recognized
     public init?(rawValue: String) {
-        // If the rawValue is an ARN for an inference profile
-        if rawValue.starts(with: "arn:aws:bedrock:") {
-            if rawValue.contains("deepseek") {
-                self.init(id: rawValue, family: .deepseek)
-                return
-            }
-            // TODO: Add other model families as needed
-        }
         switch rawValue {
         case BedrockModel.instant.id:
             self = BedrockModel.instant
@@ -65,7 +57,7 @@ public struct BedrockModel: Equatable, Hashable, Sendable, RawRepresentable {
             self = BedrockModel.claudev2_1
         case BedrockModel.claudev3_haiku.id:
             self = BedrockModel.claudev3_haiku
-        case BedrockModel.claudev3_5_haiku.id:  // FIXME: ARN
+        case BedrockModel.claudev3_5_haiku.id:  // FIXME
             self = BedrockModel.claudev3_5_haiku
         // case BedrockModel.claudev3_5_sonnet_v2.id:
         //     self = BedrockModel.claudev3_5_sonnet_v2
@@ -106,9 +98,5 @@ public struct BedrockModel: Equatable, Hashable, Sendable, RawRepresentable {
     /// - Returns: True if the model supports the specified modalities
     public func supports(input: ModelModality, output: ModelModality) -> Bool {
         inputModality.contains(input) && outputModality.contains(output)
-    }
-
-    public var description: String {
-        "BedrockModel(id: \(id), family: \(family), input: \(inputModality), output: \(outputModality))"
     }
 }

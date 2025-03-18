@@ -18,11 +18,12 @@ import AWSClientRuntime
 import AWSSDKIdentity
 import Foundation
 
-public protocol MyBedrockClientProtocol: Sendable {
+// Protocol allows writing mocks for unit tests
+public protocol BedrockClientProtocol: Sendable {
     func listFoundationModels(
         input: ListFoundationModelsInput
     ) async throws
         -> ListFoundationModelsOutput
 }
 
-extension BedrockClient: @retroactive @unchecked Sendable, MyBedrockClientProtocol {}
+extension BedrockClient: @retroactive @unchecked Sendable, BedrockClientProtocol {}

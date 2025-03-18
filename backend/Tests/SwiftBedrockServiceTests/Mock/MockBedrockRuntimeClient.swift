@@ -20,7 +20,7 @@ import Foundation
 import SwiftBedrockService
 import SwiftBedrockTypes
 
-public struct MockBedrockRuntimeClient: MyBedrockRuntimeClientProtocol {
+public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
     public init() {}
 
     // MARK: converse

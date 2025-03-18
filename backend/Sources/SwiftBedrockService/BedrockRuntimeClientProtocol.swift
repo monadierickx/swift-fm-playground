@@ -19,9 +19,10 @@ import AWSSDKIdentity
 import Foundation
 import SwiftBedrockTypes
 
-public protocol MyBedrockRuntimeClientProtocol: Sendable {
+// Protocol allows writing mocks for unit tests
+public protocol BedrockRuntimeClientProtocol: Sendable {
     func invokeModel(input: InvokeModelInput) async throws -> InvokeModelOutput
     func converse(input: ConverseInput) async throws -> ConverseOutput
 }
 
-extension BedrockRuntimeClient: @retroactive @unchecked Sendable, MyBedrockRuntimeClientProtocol {}
+extension BedrockRuntimeClient: @retroactive @unchecked Sendable, BedrockRuntimeClientProtocol {}
