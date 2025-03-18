@@ -72,35 +72,11 @@ struct BedrockRequest {
                 "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
             )
         }
-        var body: BedrockBodyCodable
-        switch model.family {
-        case .anthropic:
-            body = AnthropicRequestBody(
-                prompt: prompt,
-                maxTokens: maxTokens,
-                temperature: temperature
-            )
-        case .titan:
-            body = TitanRequestBody(
-                prompt: prompt,
-                maxTokens: maxTokens,
-                temperature: temperature
-            )
-        case .nova:
-            body = NovaRequestBody(
-                prompt: prompt,
-                maxTokens: maxTokens,
-                temperature: temperature
-            )
-        case .deepseek:
-            body = DeepSeekRequestBody(
-                prompt: prompt,
-                maxTokens: maxTokens,
-                temperature: temperature
-            )
-        default:
-            throw SwiftBedrockError.invalidModel(model.id)
-        }
+        let body: BedrockBodyCodable = try model.family.getTextRequestBody(
+            prompt: prompt,
+            maxTokens: maxTokens,
+            temperature: temperature
+        )
         self.init(model: model, body: body)
     }
 
@@ -126,13 +102,7 @@ struct BedrockRequest {
                 "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
             )
         }
-        var body: BedrockBodyCodable
-        switch model.family {
-        case .titan, .nova:
-            body = AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)
-        default:
-            throw SwiftBedrockError.invalidModel(model.id)
-        }
+        let body: BedrockBodyCodable = try model.family.getImageRequestBody()
         self.init(model: model, body: body)
     }
 
@@ -168,18 +138,24 @@ struct BedrockRequest {
                 "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
             )
         }
-        var body: BedrockBodyCodable
-        switch model.family {
-        case .titan, .nova:
-            body = AmazonImageRequestBody.imageVariation(
+        // var body: BedrockBodyCodable
+        // switch model.family {
+        // case .titan, .nova:
+        //     body = AmazonImageRequestBody.imageVariation(
+        //         prompt: prompt,
+        //         referenceImage: image,
+        //         similarity: similarity,
+        //         nrOfImages: nrOfImages
+        //     )
+        // default:
+        //     throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
+        // }
+        let body = AmazonImageRequestBody.imageVariation(
                 prompt: prompt,
                 referenceImage: image,
                 similarity: similarity,
                 nrOfImages: nrOfImages
             )
-        default:
-            throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
-        }
         self.init(model: model, body: body)
     }
 

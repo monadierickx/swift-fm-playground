@@ -19,7 +19,7 @@ import Foundation
 extension BedrockModel {
     public static let nova_micro: BedrockModel = BedrockModel(
         id: "amazon.nova-micro-v1:0",
-        family: .nova
+        family: Nova()
     )
 }
 
@@ -27,7 +27,7 @@ extension BedrockModel {
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
         id: "amazon.nova-canvas-v1:0",
-        family: .nova,
+        family: Nova(),
         inputModality: [.text, .image],  // CHECKME: niet wat in the catalog staat
         outputModality: [.image]
     )

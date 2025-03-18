@@ -27,4 +27,5 @@ public enum SwiftBedrockError: Error {
     case invalidModel(String)
     case encodingError(String)
     case decodingError(String)
+    case notImplemented(String)
 }

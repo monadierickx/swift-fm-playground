@@ -15,22 +15,34 @@
 
 import Foundation
 
-public enum ModelFamily: Sendable {
-    case anthropic
-    case titan
-    case nova
-    case meta
-    case deepseek
-    case unknown
+public protocol ModelFamily: Sendable, Hashable, Equatable {
+    var name: String { get }
 
-    public var description: String {
-        switch self {
-        case .anthropic: return "anthropic"
-        case .titan: return "titan"
-        case .nova: return "nova"
-        case .meta: return "meta"
-        case .deepseek: return "deepseek"
-        case .unknown: return "unknown"
-        }
-    }
+    init()
+
+    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable
+    func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
+
+    func getImageRequestBody() throws -> BedrockBodyCodable
+    func getImageResponseBody() throws -> ContainsImageGeneration
 }
+
+// public enum ModelFamily: Sendable {
+//     case anthropic
+//     case titan
+//     case nova
+//     case meta
+//     case deepseek
+//     case unknown
+
+//     public var description: String {
+//         switch self {
+//         case .anthropic: return "anthropic"
+//         case .titan: return "titan"
+//         case .nova: return "nova"
+//         case .meta: return "meta"
+//         case .deepseek: return "deepseek"
+//         case .unknown: return "unknown"
+//         }
+//     }
+// }

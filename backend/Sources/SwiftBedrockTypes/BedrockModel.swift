@@ -44,25 +44,25 @@ private actor ModelRegistry {
     }
 }
 
-public struct BedrockModel: Equatable, Hashable, Sendable {
-    // CHECK: RawRepresentable was taken out to allow async initializer from rawValue
+public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
 
     public var rawValue: String { id }
     public typealias RawValue = String
 
     public var id: String
-    public let family: ModelFamily
+    public let family: any ModelFamily
     public let inputModality: [ModelModality]
     public let outputModality: [ModelModality]
 
     /// Creates a BedrockModel instance from a raw string value
     /// - Parameter rawValue: The model identifier string
     /// - Returns: The corresponding BedrockModel instance
-    public init(rawValue: String) async {
+    public init?(rawValue: String) async {
         if let model = await ModelRegistry.shared.getModel(id: rawValue) {
             self = model
         } else {
-            self = BedrockModel(id: rawValue, family: .unknown)
+            //    self = BedrockModel(id: rawValue, family: .unknown) // FIXME: I don't know that we still need .unknown
+            return nil
         }
     }
 
@@ -78,7 +78,7 @@ public struct BedrockModel: Equatable, Hashable, Sendable {
     ///   - outputModality: Array of supported output modalities (defaults to [.text])
     public init(
         id: String,
-        family: ModelFamily,
+        family: any ModelFamily,
         inputModality: [ModelModality] = [.text],
         outputModality: [ModelModality] = [.text]
     ) {
@@ -105,4 +105,31 @@ public struct BedrockModel: Equatable, Hashable, Sendable {
     public func supports(input: ModelModality, output: ModelModality) -> Bool {
         inputModality.contains(input) && outputModality.contains(output)
     }
+
+    // FIXME: tmp solution for RawReprestable as it is not allowed to be async
+    private static let immutableModelMap: [String: BedrockModel] = [
+        BedrockModel.instant.id: .instant,
+        BedrockModel.claudev1.id: .claudev1,
+        BedrockModel.claudev2.id: .claudev2,
+        BedrockModel.claudev2_1.id: .claudev2_1,
+        BedrockModel.claudev3_haiku.id: .claudev3_haiku,
+        BedrockModel.claudev3_5_haiku.id: .claudev3_5_haiku,
+        BedrockModel.titan_text_g1_premier.id: .titan_text_g1_premier,
+        BedrockModel.titan_text_g1_express.id: .titan_text_g1_express,
+        BedrockModel.titan_text_g1_lite.id: .titan_text_g1_lite,
+        BedrockModel.nova_micro.id: .nova_micro,
+        BedrockModel.titan_image_g1_v2.id: .titan_image_g1_v2,
+        BedrockModel.titan_image_g1_v1.id: .titan_image_g1_v1,
+        BedrockModel.nova_canvas.id: .nova_canvas,
+        BedrockModel.deepseek_r1_v1.id: .deepseek_r1_v1,
+    ]
+
+    public init?(rawValue: String) {
+        if let model = Self.immutableModelMap[rawValue] {
+            self = model
+        } else {
+            return nil
+        }
+    }
+
 }

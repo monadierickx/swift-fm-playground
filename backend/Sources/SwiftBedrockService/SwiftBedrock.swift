@@ -214,38 +214,43 @@ public struct SwiftBedrock: Sendable {
     /// - Returns: An array of ModelInfo objects containing details about each available model.
     public func listModels() async throws -> [ModelInfo] {
         logger.trace("Fetching foundation models")
-        let response = try await bedrockClient.listFoundationModels(
-            input: ListFoundationModelsInput()
-        )
-        guard let models = response.modelSummaries else {
-            logger.trace("Failed to extract modelSummaries from response")
-            throw SwiftBedrockError.invalidResponse(
-                "Something went wrong while extracting the modelSummaries from the response."
+        do {
+            let response = try await bedrockClient.listFoundationModels(
+                input: ListFoundationModelsInput()
             )
-        }
-        var modelsInfo: [ModelInfo] = []
-        modelsInfo = models.compactMap { (model) -> ModelInfo? in
-            guard let modelId = model.modelId,
-                let providerName = model.providerName,
-                let modelName = model.modelName
-            else {
-                logger.trace("Skipping model due to missing required properties")
-                return nil
+            guard let models = response.modelSummaries else {
+                logger.trace("Failed to extract modelSummaries from response")
+                throw SwiftBedrockError.invalidResponse(
+                    "Something went wrong while extracting the modelSummaries from the response."
+                )
             }
-            return ModelInfo(
-                modelName: modelName,
-                providerName: providerName,
-                modelId: modelId
+            var modelsInfo: [ModelInfo] = []
+            modelsInfo = models.compactMap { (model) -> ModelInfo? in
+                guard let modelId = model.modelId,
+                    let providerName = model.providerName,
+                    let modelName = model.modelName
+                else {
+                    logger.trace("Skipping model due to missing required properties")
+                    return nil
+                }
+                return ModelInfo(
+                    modelName: modelName,
+                    providerName: providerName,
+                    modelId: modelId
+                )
+            }
+            logger.trace(
+                "Fetched foundation models",
+                metadata: [
+                    "models.count": "\(modelsInfo.count)"
+                        // "models.content": .stringConvertible(modelsInfo),
+                ]
             )
+            return modelsInfo
+        } catch {
+            logger.trace("Error while completing text", metadata: ["error": "\(error)"])
+            throw error
         }
-        logger.trace(
-            "Fetched foundation models",
-            metadata: [
-                "models.count": "\(modelsInfo.count)"
-                    // "models.content": .stringConvertible(modelsInfo),
-            ]
-        )
-        return modelsInfo
     }
 
     /// Generates a text completion using a specified model.
@@ -269,14 +274,13 @@ public struct SwiftBedrock: Sendable {
             "Generating text completion",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.description),
+                "model.family": .string(model.family.name),
                 "model.inputModality": .string(String(describing: model.inputModality)),
                 "model.outputModality": .string(String(describing: model.outputModality)),
                 "prompt": .string(text),
                 "maxTokens": .stringConvertible(maxTokens ?? "not defined"),
             ]
         )
-        // FIXME: how to best catch these errors?
         do {
             let maxTokens = maxTokens ?? 300
             try validateMaxTokens(maxTokens)
@@ -359,7 +363,7 @@ public struct SwiftBedrock: Sendable {
             "Generating image(s)",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.description),
+                "model.family": .string(model.family.name),
                 "model.inputModality": .string(String(describing: model.inputModality)),
                 "model.outputModality": .string(String(describing: model.outputModality)),
                 "prompt": .string(prompt),
@@ -429,7 +433,7 @@ public struct SwiftBedrock: Sendable {
             "Generating image(s) from reference image",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.description),
+                "model.family": .string(model.family.name),
                 "model.inputModality": .string(String(describing: model.inputModality)),
                 "model.outputModality": .string(String(describing: model.outputModality)),
                 "prompt": .string(prompt),
@@ -494,7 +498,7 @@ public struct SwiftBedrock: Sendable {
             "Conversing",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.description),
+                "model.family": .string(model.family.name),
                 "model.inputModality": .string(String(describing: model.inputModality)),
                 "model.outputModality": .string(String(describing: model.outputModality)),
                 "prompt": .string(prompt),
