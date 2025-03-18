@@ -170,7 +170,7 @@ struct BedrockRequest {
                 nrOfImages: nrOfImages
             )
         default:
-            throw SwiftBedrockError.invalidModel(model.id) // FIXME: allow new models 
+            throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
         }
         self.init(model: model, body: body)
     }

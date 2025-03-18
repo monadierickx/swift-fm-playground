@@ -422,12 +422,13 @@ struct SwiftBedrockServiceTests {
     }
 
     // MARK: converse
+    let validPrompts = [
+        "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
+    ]
 
     @Test(
         "Continue conversation using a valid prompt",
-        arguments: [
-            "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
-        ]
+        arguments: self.validPrompts
     )
     func converseWithValidPrompt(prompt: String) async throws {
         let output: String = try await bedrock.converse(

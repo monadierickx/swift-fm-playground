@@ -487,9 +487,9 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting body from response."
                 )
             }
-            if let bodyString = String(data: responseBody, encoding: .utf8) {
-                logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
-            }
+            // if let bodyString = String(data: responseBody, encoding: .utf8) {
+            //     logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
+            // }
 
             let decoder = JSONDecoder()
             let output: ImageGenerationOutput = try decoder.decode(

@@ -40,7 +40,7 @@ public func buildApplication(
     -> some ApplicationProtocol
 {
     let environment = Environment()
-    var logger = Logger(label: "HummingbirdBackend") // FIXME: better name
+    var logger = Logger(label: "HummingbirdBackend")  // FIXME: better name
     logger.logLevel =
         arguments.logLevel ?? environment.get("LOG_LEVEL").flatMap {
             Logger.Level(rawValue: $0)
