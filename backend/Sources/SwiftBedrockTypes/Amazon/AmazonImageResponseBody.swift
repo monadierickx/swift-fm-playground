@@ -15,12 +15,10 @@
 
 import Foundation
 
-public protocol BedrockBodyCodable: Codable {}
+public struct AmazonImageResponseBody: ContainsImageGeneration {
+    let images: [Data]
 
-public protocol ContainsTextCompletion: Codable {
-    func getTextCompletion() throws -> TextCompletion
-}
-
-public protocol ContainsImageGeneration: Codable {
-    func getGeneratedImage() -> ImageGenerationOutput
+    public func getGeneratedImage() -> ImageGenerationOutput {
+        ImageGenerationOutput(images: images)
+    }
 }

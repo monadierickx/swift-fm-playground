@@ -324,7 +324,7 @@ public struct SwiftBedrock: Sendable {
                 logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
             }
 
-            let bedrockResponse: BedrockResponse = try BedrockResponse(
+            let bedrockResponse: BedrockResponse = try BedrockResponse.createTextResponse(
                 body: responseBody,
                 model: model
             )
@@ -396,25 +396,11 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting body from response."
                 )
             }
-            if let bodyString = String(data: responseBody, encoding: .utf8) {
-                logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
-            }
-
-            let decoder = JSONDecoder()
-            let output: ImageGenerationOutput = try decoder.decode(
-                ImageGenerationOutput.self,
-                from: responseBody
+            let bedrockResponse: BedrockResponse = try BedrockResponse.createImageResponse(
+                body: responseBody,
+                model: model
             )
-
-            logger.trace(
-                "Generated image(s)",
-                metadata: [
-                    "model": .string(model.id),
-                    "response": .string(String(describing: response)),
-                    "images.count": .stringConvertible(output.images.count),
-                ]
-            )
-            return output
+            return try bedrockResponse.getGeneratedImage()
         } catch {
             logger.trace("Error while generating image", metadata: ["error": "\(error)"])
             throw error
@@ -487,25 +473,11 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting body from response."
                 )
             }
-            // if let bodyString = String(data: responseBody, encoding: .utf8) {
-            //     logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
-            // }
-
-            let decoder = JSONDecoder()
-            let output: ImageGenerationOutput = try decoder.decode(
-                ImageGenerationOutput.self,
-                from: responseBody
+            let bedrockResponse: BedrockResponse = try BedrockResponse.createImageResponse(
+                body: responseBody,
+                model: model
             )
-
-            logger.trace(
-                "Generated image(s)",
-                metadata: [
-                    "model": .string(model.id),
-                    "response": .string(String(describing: response)),
-                    "images.count": .stringConvertible(output.images.count),
-                ]
-            )
-            return output
+            return try bedrockResponse.getGeneratedImage()
         } catch {
             logger.trace("Error while generating image variations", metadata: ["error": "\(error)"])
             throw error

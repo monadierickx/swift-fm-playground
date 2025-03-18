@@ -20,21 +20,38 @@ import SwiftBedrockTypes
 public struct BedrockResponse {
     let model: BedrockModel
     let contentType: ContentType
-    let body: ContainsTextCompletion
+    let textCompletionBody: ContainsTextCompletion?
+    let imageGenerationBody: ContainsImageGeneration?
 
-    private init(model: BedrockModel, contentType: ContentType = .json, body: ContainsTextCompletion) {
+    private init(
+        model: BedrockModel,
+        contentType: ContentType = .json,
+        textCompletionBody: ContainsTextCompletion
+    ) {
         self.model = model
         self.contentType = contentType
-        self.body = body
+        self.textCompletionBody = textCompletionBody
+        self.imageGenerationBody = nil
     }
 
-    /// Creates a BedrockResponse from raw response data
+    private init(
+        model: BedrockModel,
+        contentType: ContentType = .json,
+        imageGenerationBody: ContainsImageGeneration
+    ) {
+        self.model = model
+        self.contentType = contentType
+        self.textCompletionBody = nil
+        self.imageGenerationBody = imageGenerationBody
+    }
+
+    /// Creates a BedrockResponse from raw response data containing text completion
     /// - Parameters:
     ///   - data: The raw response data from the Bedrock service
     ///   - model: The Bedrock model that generated the response
     /// - Throws: SwiftBedrockError.invalidModel if the model is not supported
     ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
-    public init(body data: Data, model: BedrockModel) throws {
+    static func createTextResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
             var body: ContainsTextCompletion
             let decoder = JSONDecoder()
@@ -48,9 +65,25 @@ public struct BedrockResponse {
             case .deepseek:
                 body = try decoder.decode(DeepSeekResponseBody.self, from: data)
             default:
-                throw SwiftBedrockError.invalidModel(model.id)
+                throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
             }
-            self.init(model: model, body: body)
+            return self.init(model: model, textCompletionBody: body)
+        } catch {
+            throw SwiftBedrockError.invalidResponseBody(data)
+        }
+    }
+
+    static func createImageResponse(body data: Data, model: BedrockModel) throws -> Self {
+        do {
+            var body: ContainsImageGeneration
+            let decoder = JSONDecoder()
+            switch model.family {
+            case .titan, .nova:
+                body = try decoder.decode(AmazonImageResponseBody.self, from: data)
+            default:
+                throw SwiftBedrockError.invalidModel(model.id)  // FIXME: allow new models
+            }
+            return self.init(model: model, imageGenerationBody: body)
         } catch {
             throw SwiftBedrockError.invalidResponseBody(data)
         }
@@ -61,7 +94,26 @@ public struct BedrockResponse {
     /// - Throws: SwiftBedrockError.decodingError if the completion cannot be extracted
     public func getTextCompletion() throws -> TextCompletion {
         do {
-            return try body.getTextCompletion()
+            guard let textCompletionBody = textCompletionBody else {
+                throw SwiftBedrockError.decodingError("No text completion body found in the response")
+            }
+            return try textCompletionBody.getTextCompletion()
+        } catch {
+            throw SwiftBedrockError.decodingError(
+                "Something went wrong while decoding the request body to find the completion: \(error)"
+            )
+        }
+    }
+
+    /// Extracts the image generation from the response body
+    /// - Returns: The image generation from the response
+    /// - Throws: SwiftBedrockError.decodingError if the image generation cannot be extracted
+    public func getGeneratedImage() throws -> ImageGenerationOutput {
+        do {
+            guard let imageGenerationBody = imageGenerationBody else {
+                throw SwiftBedrockError.decodingError("No image generation body found in the response")
+            }
+            return imageGenerationBody.getGeneratedImage()
         } catch {
             throw SwiftBedrockError.decodingError(
                 "Something went wrong while decoding the request body to find the completion: \(error)"
