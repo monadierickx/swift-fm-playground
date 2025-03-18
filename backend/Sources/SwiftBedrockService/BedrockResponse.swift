@@ -50,7 +50,7 @@ public struct BedrockResponse {
     ///   - customBody: Response data conforming to ContainsTextCompletion
     ///   - model: Any Bedrock model that generated the response
     static func createCustomTextResponse(customBody: ContainsTextCompletion, model: BedrockModel) -> Self {
-        return self.init(model: model, textCompletionBody: customBody)
+        self.init(model: model, textCompletionBody: customBody)
     }
 
     /// Creates a BedrockResponse from custom response data containing image generation
@@ -58,7 +58,7 @@ public struct BedrockResponse {
     ///   - customBody: Response data conforming to ContainsImageGeneration
     ///   - model: Any Bedrock model that generated the response
     static func createCustomImageResponse(customBody: ContainsImageGeneration, model: BedrockModel) -> Self {
-        return self.init(model: model, imageGenerationBody: customBody)
+        self.init(model: model, imageGenerationBody: customBody)
     }
 
     /// Creates a BedrockResponse from raw response data containing text completion
