@@ -52,16 +52,16 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
                 message: "Malformed input request, please reformat your input and try again."
             )
         }
-        let model: BedrockModel = BedrockModel(rawValue: modelId)!
+        let model: BedrockModel = await BedrockModel(rawValue: modelId)!
         if model.outputModality.contains(.image) {
             return InvokeModelOutput(body: try getImageGeneration(body: inputBody))
         } else {
-            switch model.family {
-            case .nova:
+            switch model.family.name {
+            case "Nova":
                 return InvokeModelOutput(body: try invokeNovaModel(body: inputBody))
-            case .titan:
+            case "Titan":
                 return InvokeModelOutput(body: try invokeTitanModel(body: inputBody))
-            case .anthropic:
+            case "Anthropic":
                 return InvokeModelOutput(body: try invokeAnthropicModel(body: inputBody))
             default:
                 throw AWSBedrockRuntime.ValidationException(
