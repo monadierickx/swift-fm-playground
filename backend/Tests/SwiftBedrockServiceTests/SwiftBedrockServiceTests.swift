@@ -38,6 +38,13 @@ struct SwiftBedrockServiceTests {
         #expect(models[0].modelName == "Claude Instant")
         #expect(models[0].providerName == "Anthropic")
     }
+    
+    // MARK: constants
+    static let validPrompts = [
+        "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
+    ]
+    static let invalidPrompts = ["", " ", " \n  ", "\t"]
+    static let 
 
     // MARK: completeText
 
@@ -137,9 +144,7 @@ struct SwiftBedrockServiceTests {
 
     @Test(
         "Complete text using a valid prompt",
-        arguments: [
-            "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
-        ]
+        arguments: validPrompts
     )
     func completeTextWithValidPrompt(prompt: String) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -152,7 +157,7 @@ struct SwiftBedrockServiceTests {
 
     @Test(
         "Complete text using an invalid prompt",
-        arguments: ["", " ", " \n  ", "\t"]
+        arguments: invalidPrompts
     )
     func completeTextWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: SwiftBedrockError.self) {
@@ -422,13 +427,12 @@ struct SwiftBedrockServiceTests {
     }
 
     // MARK: converse
-    let validPrompts = [
-        "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
-    ]
 
     @Test(
         "Continue conversation using a valid prompt",
-        arguments: self.validPrompts
+        arguments: [
+            "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
+        ]
     )
     func converseWithValidPrompt(prompt: String) async throws {
         let output: String = try await bedrock.converse(

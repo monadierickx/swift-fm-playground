@@ -4,7 +4,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "HummingbirdBackend", // FIXME: better name
+    name: "HummingbirdBackend",  // FIXME: better name
     platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17)],
     products: [
         .executable(name: "App", targets: ["App"])  // FIXME: better name
