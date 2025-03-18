@@ -244,7 +244,7 @@ public struct SwiftBedrock: Sendable {
         _ text: String,
         with model: BedrockModel,
         maxTokens: Int? = nil,
-        temperature: Double? = nil //
+        temperature: Double? = nil
     ) async throws -> TextCompletion {
         logger.trace(
             "Generating text completion",
