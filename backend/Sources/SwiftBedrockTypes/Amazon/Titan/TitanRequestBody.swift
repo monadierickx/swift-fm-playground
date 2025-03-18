@@ -16,8 +16,8 @@
 import Foundation
 
 public struct TitanRequestBody: BedrockBodyCodable {
-    let inputText: String
-    let textGenerationConfig: TextGenerationConfig
+    private let inputText: String
+    private let textGenerationConfig: TextGenerationConfig
 
     public init(prompt: String, maxTokens: Int, temperature: Double) {
         self.inputText = prompt
@@ -27,7 +27,7 @@ public struct TitanRequestBody: BedrockBodyCodable {
         )
     }
 
-    public struct TextGenerationConfig: Codable {
+    private struct TextGenerationConfig: Codable {
         let maxTokenCount: Int
         let temperature: Double
     }

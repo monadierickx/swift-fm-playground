@@ -16,10 +16,10 @@
 import Foundation
 
 public struct AnthropicRequestBody: BedrockBodyCodable {
-    let anthropic_version: String
-    let max_tokens: Int
-    let temperature: Double
-    let messages: [AnthropicMessage]
+    private let anthropic_version: String
+    private let max_tokens: Int
+    private let temperature: Double
+    private let messages: [AnthropicMessage]
 
     public init(prompt: String, maxTokens: Int, temperature: Double) {
         self.anthropic_version = "bedrock-2023-05-31"
@@ -30,12 +30,12 @@ public struct AnthropicRequestBody: BedrockBodyCodable {
         ]
     }
 
-    public struct AnthropicMessage: Codable {
+    private struct AnthropicMessage: Codable {
         let role: Role
         let content: [AnthropicContent]
     }
 
-    public struct AnthropicContent: Codable {
+    private struct AnthropicContent: Codable {
         let type: String
         let text: String
 

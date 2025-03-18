@@ -16,9 +16,9 @@
 import Foundation
 
 public struct DeepSeekResponseBody: ContainsTextCompletion {
-    let choices: [Choice]
+    private let choices: [Choice]
 
-    struct Choice: Codable {
+    private struct Choice: Codable {
         let text: String
         let stop_reason: String
     }

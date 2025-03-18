@@ -16,28 +16,28 @@
 import Foundation
 
 public struct NovaResponseBody: ContainsTextCompletion {
-    let output: Output
-    let stopReason: String
-    let usage: Usage
+    private let output: Output
+    private let stopReason: String
+    private let usage: Usage
 
     public func getTextCompletion() throws -> TextCompletion {
         TextCompletion(output.message.content[0].text)
     }
 
-    struct Output: Codable {
+    private struct Output: Codable {
         let message: Message
     }
 
-    struct Message: Codable {
+    private struct Message: Codable {
         let content: [Content]
         let role: Role
     }
 
-    struct Content: Codable {
+    private struct Content: Codable {
         let text: String
     }
 
-    struct Usage: Codable {
+    private struct Usage: Codable {
         let inputTokens: Int
         let outputTokens: Int
         let totalTokens: Int

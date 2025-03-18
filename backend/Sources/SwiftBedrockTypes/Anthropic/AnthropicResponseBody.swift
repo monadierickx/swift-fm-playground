@@ -16,14 +16,14 @@
 import Foundation
 
 public struct AnthropicResponseBody: ContainsTextCompletion {
-    let id: String
-    let type: String
-    let role: String
-    let model: String
-    let content: [Content]
-    let stop_reason: String
-    let stop_sequence: String?
-    let usage: Usage
+    private let id: String
+    private let type: String
+    private let role: String
+    private let model: String
+    private let content: [Content]
+    private let stop_reason: String
+    private let stop_sequence: String?
+    private let usage: Usage
 
     public func getTextCompletion() throws -> TextCompletion {
         guard let completion = self.content[0].text else {
@@ -32,13 +32,13 @@ public struct AnthropicResponseBody: ContainsTextCompletion {
         return TextCompletion(completion)
     }
 
-    struct Content: Codable {
+    private struct Content: Codable {
         let type: String
         let text: String?
         let thinking: String?
     }
 
-    struct Usage: Codable {
+    private struct Usage: Codable {
         let input_tokens: Int
         let output_tokens: Int
     }

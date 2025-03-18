@@ -16,11 +16,11 @@
 import Foundation
 
 public struct DeepSeekRequestBody: BedrockBodyCodable {
-    let prompt: String
-    let temperature: Double
-    let top_p: Double
-    let max_tokens: Int
-    let stop: [String]
+    private let prompt: String
+    private let temperature: Double
+    private let top_p: Double
+    private let max_tokens: Int
+    private let stop: [String]
 
     public init(prompt: String, maxTokens: Int, temperature: Double) {
         self.prompt = prompt

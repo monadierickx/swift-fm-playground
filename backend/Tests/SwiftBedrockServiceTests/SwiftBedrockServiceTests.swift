@@ -51,7 +51,7 @@ struct SwiftBedrockServiceTests {
     static let validPrompts = [
         "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
     ]
-    static let invalidPrompts = ["", " ", " \n  ", "\t", String(repeating: "test ", count: 5_000_000)]
+    static let invalidPrompts = ["", " ", " \n  ", "\t", String(repeating: "tests", count: 5_000_001)]
     static let textCompletionModels = [
         BedrockModel.nova_micro,
         BedrockModel.titan_text_g1_lite,

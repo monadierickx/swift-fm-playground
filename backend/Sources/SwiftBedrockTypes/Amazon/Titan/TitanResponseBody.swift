@@ -16,14 +16,14 @@
 import Foundation
 
 public struct TitanResponseBody: ContainsTextCompletion {
-    let inputTextTokenCount: Int
-    let results: [Result]
+    private let inputTextTokenCount: Int
+    private let results: [Result]
 
     public func getTextCompletion() throws -> TextCompletion {
         TextCompletion(results[0].outputText)
     }
 
-    struct Result: Codable {
+    private struct Result: Codable {
         let tokenCount: Int
         let outputText: String
         let completionReason: String
