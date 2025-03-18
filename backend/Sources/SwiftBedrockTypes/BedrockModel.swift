@@ -45,7 +45,7 @@ public struct BedrockModel: Equatable, Hashable, Sendable, RawRepresentable {
     /// Creates a BedrockModel instance from a raw string value
     /// - Parameter rawValue: The model identifier string
     /// - Returns: The corresponding BedrockModel instance, or nil if the identifier is not recognized
-    public init?(rawValue: String) {
+    public init(rawValue: String) {
         switch rawValue {
         case BedrockModel.instant.id:
             self = BedrockModel.instant
@@ -78,7 +78,7 @@ public struct BedrockModel: Equatable, Hashable, Sendable, RawRepresentable {
         case BedrockModel.deepseek_r1_v1.id:
             self = BedrockModel.deepseek_r1_v1
         default:
-            return nil
+            self = BedrockModel(id: rawValue, family: .unknown)
         }
     }
 

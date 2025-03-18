@@ -21,6 +21,7 @@ public enum ModelFamily: Sendable {
     case nova
     case meta
     case deepseek
+    case unknown
 
     public var description: String {
         switch self {
@@ -29,6 +30,7 @@ public enum ModelFamily: Sendable {
         case .nova: return "nova"
         case .meta: return "meta"
         case .deepseek: return "deepseek"
+        case .unknown: return "unknown"
         }
     }
 }

@@ -35,6 +35,14 @@ struct BedrockRequest {
         self.accept = accept
     }
 
+    /// Creates a BedrockRequest with a custom body
+    /// - Parameters:
+    ///   - model: Any Bedrock model to use
+    ///   - data: The custom BedrockBodyCodable body
+    public static func createRequestWithCustomBody(model: BedrockModel, body: BedrockBodyCodable) -> BedrockRequest {
+        BedrockRequest(model: model, body: body)
+    }
+
     // MARK: text
     /// Creates a BedrockRequest for a text request with the specified parameters
     /// - Parameters:

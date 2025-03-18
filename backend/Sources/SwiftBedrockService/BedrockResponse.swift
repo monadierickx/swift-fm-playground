@@ -45,6 +45,22 @@ public struct BedrockResponse {
         self.imageGenerationBody = imageGenerationBody
     }
 
+    /// Creates a BedrockResponse from custom response data containing text completion
+    /// - Parameters:
+    ///   - customBody: Response data conforming to ContainsTextCompletion
+    ///   - model: Any Bedrock model that generated the response
+    static func createCustomTextResponse(customBody: ContainsTextCompletion, model: BedrockModel) -> Self {
+        return self.init(model: model, textCompletionBody: customBody)
+    }
+
+    /// Creates a BedrockResponse from custom response data containing image generation
+    /// - Parameters:
+    ///   - customBody: Response data conforming to ContainsImageGeneration
+    ///   - model: Any Bedrock model that generated the response
+    static func createCustomImageResponse(customBody: ContainsImageGeneration, model: BedrockModel) -> Self {
+        return self.init(model: model, imageGenerationBody: customBody)
+    }
+
     /// Creates a BedrockResponse from raw response data containing text completion
     /// - Parameters:
     ///   - data: The raw response data from the Bedrock service
@@ -73,6 +89,12 @@ public struct BedrockResponse {
         }
     }
 
+    /// Creates a BedrockResponse from raw response data containing an image generation
+    /// - Parameters:
+    ///   - data: The raw response data from the Bedrock service
+    ///   - model: The Bedrock model that generated the response
+    /// - Throws: SwiftBedrockError.invalidModel if the model is not supported
+    ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
     static func createImageResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
             var body: ContainsImageGeneration
