@@ -44,7 +44,7 @@ struct SwiftBedrockServiceTests {
         "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
     ]
     static let invalidPrompts = ["", " ", " \n  ", "\t"]
-    static let 
+    
 
     // MARK: completeText
 
