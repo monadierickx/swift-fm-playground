@@ -18,9 +18,7 @@ import Foundation
 struct DeepSeekText: TextModality {
     let name: String = "DeepSeek"
 
-    func getName() -> String {
-        name
-    }
+    func getName() -> String { "DeepSeek Text Generation" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         DeepSeekRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)

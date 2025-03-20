@@ -15,7 +15,7 @@
 
 import Foundation
 
-struct TitanText: Modality {
+struct TitanText: TextModality {
     func getName() -> String { "Titan Text Generation" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {

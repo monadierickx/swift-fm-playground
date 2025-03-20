@@ -39,6 +39,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: The corresponding BedrockModel instance or nil if the model is not implemented
     public init?(rawValue: String) {
         switch rawValue {
+        // claude
         case BedrockModel.instant.id:
             self = BedrockModel.instant
         case BedrockModel.claudev1.id:
@@ -51,12 +52,22 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
             self = BedrockModel.claudev3_haiku
         case BedrockModel.claudev3_5_haiku.id:
             self = BedrockModel.claudev3_5_haiku
+        case BedrockModel.claudev3_opus.id:
+            self = BedrockModel.claudev3_opus
+        case BedrockModel.claudev3_5_sonnet.id:
+            self = BedrockModel.claudev3_5_sonnet
+        case BedrockModel.claudev3_5_sonnet_v2.id:
+            self = BedrockModel.claudev3_5_sonnet_v2
+        case BedrockModel.claudev3_7_sonnet.id:
+            self = BedrockModel.claudev3_7_sonnet
+        // titan
         case BedrockModel.titan_text_g1_premier.id:
             self = BedrockModel.titan_text_g1_premier
         case BedrockModel.titan_text_g1_express.id:
             self = BedrockModel.titan_text_g1_express
         case BedrockModel.titan_text_g1_lite.id:
             self = BedrockModel.titan_text_g1_lite
+        // nova
         case BedrockModel.nova_micro.id:
             self = BedrockModel.nova_micro
         case BedrockModel.titan_image_g1_v2.id:
@@ -65,6 +76,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
             self = BedrockModel.titan_image_g1_v1
         case BedrockModel.nova_canvas.id:
             self = BedrockModel.nova_canvas
+        // deepseek
         case BedrockModel.deepseek_r1_v1.id:
             self = BedrockModel.deepseek_r1_v1
         default:

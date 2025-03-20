@@ -17,31 +17,51 @@ import Foundation
 import SwiftBedrockTypes
 
 extension BedrockModel {
+    public static let llama_3_8b_instruct: BedrockModel = BedrockModel(
+        id: "meta.llama3-8b-instruct-v1:0",
+        modality: LlamaText()
+    )
     public static let llama3_70b_instruct: BedrockModel = BedrockModel(
         id: "meta.llama3-70b-instruct-v1:0",
         modality: LlamaText()
     )
-    // public static let llama3_1_8b_instruct: BedrockModel = BedrockModel(
-    //     id: "meta.llama3-1-8b-instruct-v1:0",
-    //     modality: LlamaText()
-    // )
-    // public static let llama3_1_70b_instruct: BedrockModel = BedrockModel(
-    //     id: "meta.llama3-1-70b-instruct-v1:0",
-    //     modality: LlamaText()
-    // )
-    // public static let llama3_2_3b_instruct: BedrockModel = BedrockModel(
-    //     id: "meta.llama3-2-3b-instruct-v1:0",
-    //     modality: LlamaText()
-    // )
+    public static let llama3_1_8b_instruct: BedrockModel = BedrockModel(
+        id: "us.meta.llama3-1-8b-instruct-v1:0",
+        modality: LlamaText()
+    )
+    public static let llama3_1_70b_instruct: BedrockModel = BedrockModel(
+        id: "us.meta.llama3-1-70b-instruct-v1:0",
+        modality: LlamaText()
+    )
+    public static let llama3_2_1b_instruct: BedrockModel = BedrockModel(
+        id: "us.meta.llama3-2-1b-instruct-v1:0",
+        modality: LlamaText()
+    )
+    public static let llama3_2_3b_instruct: BedrockModel = BedrockModel(
+        id: "us.meta.llama3-2-3b-instruct-v1:0",
+        modality: LlamaText()
+    )
+    public static let llama3_3_70b_instruct: BedrockModel = BedrockModel(
+        id: "us.meta.llama3-3-70b-instruct-v1:0",
+        modality: LlamaText()
+    )
+    public static let llama3_8b_instruct: BedrockModel = BedrockModel(
+        id: "meta.llama3-8b-instruct-v1:0",
+        modality: LlamaText()
+    )
 }
 
 extension BedrockModel {
     init?(llamaId: String) {
         switch llamaId {
+        case "meta.llama3-8b-instruct-v1:0": self = .llama_3_8b_instruct
         case "meta.llama3-70b-instruct-v1:0": self = .llama3_70b_instruct
-        // case "meta.llama3-1-8b-instruct-v1:0": self = .llama3_1_8b_instruct
-        // case "meta.llama3-1-70b-instruct-v1:0": self = .llama3_1_70b_instruct
-        // case "meta.llama3-2-3b-instruct-v1:0": self = .llama3_2_3b_instruct
+        case "us.meta.llama3-1-8b-instruct-v1:0": self = .llama3_1_8b_instruct
+        case "us.meta.llama3-1-70b-instruct-v1:0": self = .llama3_1_70b_instruct
+        case "meta.llama3-2-1b-instruct-v1:0": self = .llama3_2_1b_instruct
+        case "us.meta.llama3-2-3b-instruct-v1:0": self = .llama3_2_3b_instruct
+        case "us.meta.llama3-3-70b-instruct-v1:0": self = .llama3_3_70b_instruct
+        case "meta.llama3-8b-instruct-v1:0": self = .llama3_8b_instruct
         default:
             return nil
         }

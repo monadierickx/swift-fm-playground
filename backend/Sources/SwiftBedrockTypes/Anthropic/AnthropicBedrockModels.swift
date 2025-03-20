@@ -21,6 +21,9 @@ typealias ClaudeV2 = AnthropicText
 typealias ClaudeV2_1 = AnthropicText
 typealias ClaudeV3Haiku = AnthropicText
 typealias ClaudeV3_5Haiku = AnthropicText
+typealias ClaudeV3Opus = AnthropicText
+typealias ClaudeV3_5Sonnet = AnthropicText
+typealias ClaudeV3_7Sonnet = AnthropicText
 
 extension BedrockModel {
     public static let instant: BedrockModel = BedrockModel(
@@ -44,7 +47,23 @@ extension BedrockModel {
         modality: ClaudeV3Haiku()
     )
     public static let claudev3_5_haiku: BedrockModel = BedrockModel(
-        id: "anthropic.claude-3-5-haiku-20241022-v1:0",
+        id: "us.anthropic.claude-3-5-haiku-20241022-v1:0",
         modality: ClaudeV3_5Haiku()
+    )
+    public static let claudev3_opus: BedrockModel = BedrockModel(
+        id: "us.anthropic.claude-3-opus-20240229-v1:0",
+        modality: ClaudeV3Opus()
+    )
+    public static let claudev3_5_sonnet: BedrockModel = BedrockModel(
+        id: "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
+        modality: ClaudeV3_5Sonnet()
+    )
+    public static let claudev3_5_sonnet_v2: BedrockModel = BedrockModel(
+        id: "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
+        modality: ClaudeV3_5Sonnet()
+    )
+    public static let claudev3_7_sonnet: BedrockModel = BedrockModel(
+        id: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+        modality: ClaudeV3_7Sonnet()
     )
 }

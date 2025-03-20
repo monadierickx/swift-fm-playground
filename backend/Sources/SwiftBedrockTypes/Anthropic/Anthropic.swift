@@ -16,11 +16,7 @@
 import Foundation
 
 struct AnthropicText: TextModality {
-    let name: String = "Anthropic"
-
-    func getName() -> String {
-        name
-    }
+    func getName() -> String { "Anthropic Text Generation" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         AnthropicRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)

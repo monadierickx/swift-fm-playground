@@ -52,22 +52,22 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
                 message: "Malformed input request, please reformat your input and try again."
             )
         }
-        let model: BedrockModel = await BedrockModel(rawValue: modelId)!
-        if model.outputModality.contains(.image) {
+        let model: BedrockModel = BedrockModel(rawValue: modelId)!
+
+        switch model.modality.getName() {
+        case "Amazon Image Generation":
             return InvokeModelOutput(body: try getImageGeneration(body: inputBody))
-        } else {
-            switch model.family.name {
-            case "Nova":
-                return InvokeModelOutput(body: try invokeNovaModel(body: inputBody))
-            case "Titan":
-                return InvokeModelOutput(body: try invokeTitanModel(body: inputBody))
-            case "Anthropic":
-                return InvokeModelOutput(body: try invokeAnthropicModel(body: inputBody))
-            default:
-                throw AWSBedrockRuntime.ValidationException(
-                    message: "Malformed input request, please reformat your input and try again."
-                )
-            }
+        case "Nova Text Generation":
+            return InvokeModelOutput(body: try invokeNovaModel(body: inputBody))
+        case "Titan Text Generation":
+            return InvokeModelOutput(body: try invokeTitanModel(body: inputBody))
+        case "Anthropic Text Generation":
+            return InvokeModelOutput(body: try invokeAnthropicModel(body: inputBody))
+        default:
+            throw AWSBedrockRuntime.ValidationException(
+                // message: "Malformed input request, please reformat your input and try again."
+                message: "Hier in de default! model: \(String(describing: model))"
+            )
         }
     }
 
@@ -151,7 +151,8 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
                 as? [String: Any]
         else {
             throw AWSBedrockRuntime.ValidationException(
-                message: "Malformed input request, please reformat your input and try again."
+                message: "Hier is het)"
+                // message: "Malformed input request, please reformat your input and try again."
             )
         }
         if let inputText = json["inputText"] as? String {

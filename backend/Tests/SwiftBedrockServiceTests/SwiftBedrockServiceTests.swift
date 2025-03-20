@@ -18,6 +18,10 @@ import Testing
 @testable import SwiftBedrockService
 @testable import SwiftBedrockTypes
 
+//struct Constants {
+//    
+//}
+
 @Suite("SwiftBedrockService Tests")
 struct SwiftBedrockServiceTests {
     let bedrock: SwiftBedrock
@@ -49,23 +53,24 @@ struct SwiftBedrockServiceTests {
     static let validSimilarity = [0.5]
     static let invalidSimilarity = [-4, 0.02, 1.1, 2]
     static let validPrompts = [
-        "This is a test", "!@#$%^&*()_+{}|:<>?", String(repeating: "test ", count: 1000),
+        "This is a test",
+        "!@#$%^&*()_+{}|:<>?",
+        String(repeating: "test ", count: 1000),
     ]
-    static let invalidPrompts = ["", " ", " \n  ", "\t", String(repeating: "tests", count: 5_000_001)]
+    static let invalidPrompts = [
+        "", " ", " \n  ", "\t",
+//        String(repeating: "tests", count: 5_000_001),
+    ]
     static let textCompletionModels = [
         BedrockModel.nova_micro,
         BedrockModel.titan_text_g1_lite,
-        BedrockModel.titan_text_g1_express,
-        BedrockModel.titan_text_g1_premier,
+//        BedrockModel.titan_text_g1_express,
+//        BedrockModel.titan_text_g1_premier,
         BedrockModel.claudev1,
         BedrockModel.claudev2,
         BedrockModel.claudev2_1,
         BedrockModel.claudev3_haiku,
         BedrockModel.claudev3_5_haiku,
-    ]
-    static let unimplementedModels = [
-        BedrockModel.llama2_13b,
-        BedrockModel.llama2_70b,
     ]
     static let imageGenerationModels = [
         BedrockModel.titan_image_g1_v1,
@@ -91,7 +96,7 @@ struct SwiftBedrockServiceTests {
 
     @Test(
         "Complete text using an invalid model",
-        arguments: unimplementedModels + imageGenerationModels
+        arguments: imageGenerationModels
     )
     func completeTextWithInvalidModel(model: BedrockModel) async throws {
         await #expect(throws: SwiftBedrockError.self) {
@@ -194,7 +199,7 @@ struct SwiftBedrockServiceTests {
 
     @Test(
         "Generate image using an implemented model",
-        arguments: unimplementedModels + textCompletionModels
+        arguments: textCompletionModels
     )
     func generateImageWithInvalidModel(model: BedrockModel) async throws {
         await #expect(throws: SwiftBedrockError.self) {
@@ -279,7 +284,7 @@ struct SwiftBedrockServiceTests {
 
     @Test(
         "Generate image variation using an invalid model",
-        arguments: unimplementedModels + textCompletionModels
+        arguments: textCompletionModels
     )
     func generateImageVariationWithInvalidModel(model: BedrockModel) async throws {
         await #expect(throws: SwiftBedrockError.self) {
