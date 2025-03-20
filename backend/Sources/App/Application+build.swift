@@ -94,10 +94,10 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = await BedrockModel(rawValue: modelId) else {
+            guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            guard model.outputModality.contains(.text) else {
+            guard model.hasTextModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: TextCompletionInput.self, context: context)
@@ -122,11 +122,10 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = await BedrockModel(rawValue: modelId) else {
+            guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            // let model = await BedrockModel(rawValue: modelId)
-            guard model.outputModality.contains(.image) else {
+            guard model.hasImageModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support image output.")
             }
             let input = try await request.decode(as: ImageGenerationInput.self, context: context)
@@ -160,11 +159,10 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = await BedrockModel(rawValue: modelId) else {
+            guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            // let model = await BedrockModel(rawValue: modelId)
-            guard model.outputModality.contains(.text) else {
+            guard model.hasImageModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)

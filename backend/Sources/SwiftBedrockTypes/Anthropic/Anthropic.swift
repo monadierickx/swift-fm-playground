@@ -15,8 +15,12 @@
 
 import Foundation
 
-struct Anthropic: ModelFamily {
+struct AnthropicText: TextModality {
     let name: String = "Anthropic"
+
+    func getName() -> String {
+        name
+    }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         AnthropicRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
@@ -25,22 +29,5 @@ struct Anthropic: ModelFamily {
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
         let decoder = JSONDecoder()
         return try decoder.decode(AnthropicResponseBody.self, from: data)
-    }
-
-    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getTextToImageRequestBody is not implemented for Anthropic")
-    }
-
-    func getImageVariationRequestBody(
-        prompt: String,
-        image: String,
-        similarity: Double,
-        nrOfImages: Int
-    ) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getImageVariationRequestBody is not implemented for Anthropic")
-    }
-
-    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration {
-        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for Anthropic")
     }
 }

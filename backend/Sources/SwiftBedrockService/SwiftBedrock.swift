@@ -274,9 +274,7 @@ public struct SwiftBedrock: Sendable {
             "Generating text completion",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.name),
-                "model.inputModality": .string(String(describing: model.inputModality)),
-                "model.outputModality": .string(String(describing: model.outputModality)),
+                "model.modality": .string(model.modality.getName()),
                 "prompt": .string(text),
                 "maxTokens": .stringConvertible(maxTokens ?? "not defined"),
             ]
@@ -363,9 +361,7 @@ public struct SwiftBedrock: Sendable {
             "Generating image(s)",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.name),
-                "model.inputModality": .string(String(describing: model.inputModality)),
-                "model.outputModality": .string(String(describing: model.outputModality)),
+                "model.modality": .string(model.modality.getName()),
                 "prompt": .string(prompt),
                 "nrOfImages": .stringConvertible(nrOfImages ?? "not defined"),
             ]
@@ -433,9 +429,7 @@ public struct SwiftBedrock: Sendable {
             "Generating image(s) from reference image",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.name),
-                "model.inputModality": .string(String(describing: model.inputModality)),
-                "model.outputModality": .string(String(describing: model.outputModality)),
+                "model.modality": .string(model.modality.getName()),
                 "prompt": .string(prompt),
                 "nrOfImages": .stringConvertible(nrOfImages ?? "not defined"),
                 "similarity": .stringConvertible(similarity ?? "not defined"),
@@ -498,9 +492,7 @@ public struct SwiftBedrock: Sendable {
             "Conversing",
             metadata: [
                 "model.id": .string(model.id),
-                "model.family": .string(model.family.name),
-                "model.inputModality": .string(String(describing: model.inputModality)),
-                "model.outputModality": .string(String(describing: model.outputModality)),
+                "model.modality": .string(model.modality.getName()),
                 "prompt": .string(prompt),
             ]
         )

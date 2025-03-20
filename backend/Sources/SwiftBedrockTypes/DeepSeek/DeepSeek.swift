@@ -15,8 +15,12 @@
 
 import Foundation
 
-struct DeepSeek: ModelFamily {
+struct DeepSeekText: TextModality {
     let name: String = "DeepSeek"
+
+    func getName() -> String {
+        name
+    }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         DeepSeekRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
@@ -26,22 +30,4 @@ struct DeepSeek: ModelFamily {
         let decoder = JSONDecoder()
         return try decoder.decode(DeepSeekResponseBody.self, from: data)
     }
-
-    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getTextToImageRequestBody is not implemented for DeepSeek")
-    }
-
-    func getImageVariationRequestBody(
-        prompt: String,
-        image: String,
-        similarity: Double,
-        nrOfImages: Int
-    ) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getImageVariationRequestBody is not implemented for DeepSeek")
-    }
-
-    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration {
-        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for DeepSeek")
-    }
-
 }

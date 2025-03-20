@@ -41,24 +41,8 @@ public struct BedrockResponse {
     ) {
         self.model = model
         self.contentType = contentType
-        self.textCompletionBody = nil
         self.imageGenerationBody = imageGenerationBody
-    }
-
-    /// Creates a BedrockResponse from custom response data containing text completion
-    /// - Parameters:
-    ///   - customBody: Response data conforming to ContainsTextCompletion
-    ///   - model: Any Bedrock model that generated the response
-    static func createCustomTextResponse(customBody: ContainsTextCompletion, model: BedrockModel) -> Self {
-        self.init(model: model, textCompletionBody: customBody)
-    }
-
-    /// Creates a BedrockResponse from custom response data containing image generation
-    /// - Parameters:
-    ///   - customBody: Response data conforming to ContainsImageGeneration
-    ///   - model: Any Bedrock model that generated the response
-    static func createCustomImageResponse(customBody: ContainsImageGeneration, model: BedrockModel) -> Self {
-        self.init(model: model, imageGenerationBody: customBody)
+        self.textCompletionBody = nil
     }
 
     /// Creates a BedrockResponse from raw response data containing text completion
@@ -69,7 +53,8 @@ public struct BedrockResponse {
     ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
     static func createTextResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
-            return self.init(model: model, textCompletionBody: try model.family.getTextResponseBody(from: data))
+            let textModality = try model.getTextModality()
+            return self.init(model: model, textCompletionBody: try textModality.getTextResponseBody(from: data))
         } catch {
             throw SwiftBedrockError.invalidResponseBody(data)
         }
@@ -83,8 +68,8 @@ public struct BedrockResponse {
     ///          SwiftBedrockError.invalidResponseBody if the response cannot be decoded
     static func createImageResponse(body data: Data, model: BedrockModel) throws -> Self {
         do {
-            let body = try model.family.getImageResponseBody(from: data)
-            return self.init(model: model, imageGenerationBody: body)
+            let imageModality = try model.getImageModality()
+            return self.init(model: model, imageGenerationBody: try imageModality.getImageResponseBody(from: data))
         } catch {
             throw SwiftBedrockError.invalidResponseBody(data)
         }

@@ -15,8 +15,8 @@
 
 import Foundation
 
-struct Meta: ModelFamily {
-    let name: String = "Meta"
+struct MetaText: TextModality {
+    func getName() -> String { "Meta" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         throw SwiftBedrockError.notImplemented("getTextRequestBody is not implemented for Meta")
@@ -25,22 +25,4 @@ struct Meta: ModelFamily {
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
         throw SwiftBedrockError.notImplemented("getTextResponseBody is not implemented for Meta")
     }
-
-    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getTextToImageRequestBody is not implemented for Meta")
-    }
-
-    func getImageVariationRequestBody(
-        prompt: String,
-        image: String,
-        similarity: Double,
-        nrOfImages: Int
-    ) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getImageVariationRequestBody is not implemented for Meta")
-    }
-
-    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration {
-        throw SwiftBedrockError.notImplemented("getImageResponseBody is not implemented for Meta")
-    }
-
 }

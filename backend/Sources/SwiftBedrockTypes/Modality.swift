@@ -15,14 +15,16 @@
 
 import Foundation
 
-public protocol ModelFamily: Sendable, Hashable, Equatable {
-    var name: String { get }
+public protocol Modality: Sendable, Hashable, Equatable {
+    func getName() -> String
+}
 
-    init()
-
+public protocol TextModality: Modality {
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
+}
 
+public protocol ImageModality: Modality {
     func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable
     func getImageVariationRequestBody(
         prompt: String,
@@ -32,23 +34,3 @@ public protocol ModelFamily: Sendable, Hashable, Equatable {
     ) throws -> BedrockBodyCodable
     func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
 }
-
-// public enum ModelFamily: Sendable {
-//     case anthropic
-//     case titan
-//     case nova
-//     case meta
-//     case deepseek
-//     case unknown
-
-//     public var description: String {
-//         switch self {
-//         case .anthropic: return "anthropic"
-//         case .titan: return "titan"
-//         case .nova: return "nova"
-//         case .meta: return "meta"
-//         case .deepseek: return "deepseek"
-//         case .unknown: return "unknown"
-//         }
-//     }
-// }

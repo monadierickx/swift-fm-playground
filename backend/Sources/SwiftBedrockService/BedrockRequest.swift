@@ -35,14 +35,6 @@ struct BedrockRequest {
         self.accept = accept
     }
 
-    /// Creates a BedrockRequest with a custom body
-    /// - Parameters:
-    ///   - model: Any Bedrock model to use
-    ///   - data: The custom BedrockBodyCodable body
-    public static func createRequestWithCustomBody(model: BedrockModel, body: BedrockBodyCodable) -> BedrockRequest {
-        BedrockRequest(model: model, body: body)
-    }
-
     // MARK: text
     /// Creates a BedrockRequest for a text request with the specified parameters
     /// - Parameters:
@@ -67,12 +59,8 @@ struct BedrockRequest {
         maxTokens: Int,
         temperature: Double
     ) throws {
-        guard model.supports(input: .text, output: .text) else {
-            throw SwiftBedrockError.invalidModel(
-                "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
-            )
-        }
-        let body: BedrockBodyCodable = try model.family.getTextRequestBody(
+        let textModality = try model.getTextModality()
+        let body: BedrockBodyCodable = try textModality.getTextRequestBody(
             prompt: prompt,
             maxTokens: maxTokens,
             temperature: temperature
@@ -97,14 +85,10 @@ struct BedrockRequest {
     }
 
     private init(model: BedrockModel, prompt: String, nrOfImages: Int) throws {
-        guard model.supports(input: .text, output: .image) else {
-            throw SwiftBedrockError.invalidModel(
-                "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
-            )
-        }
+        let imageModality = try model.getImageModality()
         self.init(
             model: model,
-            body: try model.family.getTextToImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
+            body: try imageModality.getTextToImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
         )
     }
 
@@ -135,12 +119,8 @@ struct BedrockRequest {
         similarity: Double,
         nrOfImages: Int
     ) throws {
-        guard model.supports(input: [.text, .image], output: [.image]) else {
-            throw SwiftBedrockError.invalidModel(
-                "Modality of \(model.id) not as expected: input: \(model.inputModality), output: \(model.outputModality)"
-            )
-        }
-        let body = try model.family.getImageVariationRequestBody(
+        let imageModality = try model.getImageModality()
+        let body = try imageModality.getImageVariationRequestBody(
             prompt: prompt,
             image: image,
             similarity: similarity,
@@ -167,5 +147,4 @@ struct BedrockRequest {
             )
         }
     }
-
 }

@@ -15,8 +15,8 @@
 
 import Foundation
 
-struct Nova: ModelFamily {
-    let name: String = "Nova"
+struct NovaText: TextModality {
+    func getName() -> String { "Nova" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         NovaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
@@ -26,6 +26,10 @@ struct Nova: ModelFamily {
         let decoder = JSONDecoder()
         return try decoder.decode(NovaResponseBody.self, from: data)
     }
+}
+
+struct NovaImage: ImageModality {
+    func getName() -> String { "Nova" }
 
     func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
         AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)

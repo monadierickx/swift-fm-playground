@@ -15,8 +15,8 @@
 
 import Foundation
 
-struct Titan: ModelFamily {
-    let name: String = "Titan"
+struct TitanText: Modality {
+    func getName() -> String { "Titan" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         NovaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
@@ -26,6 +26,10 @@ struct Titan: ModelFamily {
         let decoder = JSONDecoder()
         return try decoder.decode(TitanResponseBody.self, from: data)
     }
+}
+
+struct TitanImage: Modality {
+    func getName() -> String { "Titan" }
 
     func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
         AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)
