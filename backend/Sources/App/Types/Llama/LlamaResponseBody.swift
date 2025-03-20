@@ -23,7 +23,7 @@ struct LlamaResponseBody: ContainsTextCompletion {
     let stop_reason: String
 
     public func getTextCompletion() throws -> TextCompletion {
-        TextCompletion(String(generation.trimmingPrefix("\n"))
-        )
+        TextCompletion(String(generation.trimmingPrefix("\n\n")))
+        // sidenote: when you format the prompt the output starts with "\n\n", when you don't it starts with "\n"
     }
 }

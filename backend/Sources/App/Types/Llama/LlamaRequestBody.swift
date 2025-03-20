@@ -23,7 +23,8 @@ public struct LlamaRequestBody: BedrockBodyCodable {
     let top_p: Double
 
     public init(prompt: String, maxTokens: Int = 512, temperature: Double = 0.5) {
-        self.prompt = prompt
+        self.prompt =
+            "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\(prompt)<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
         self.max_gen_len = maxTokens
         self.temperature = temperature
         self.top_p = 0.9

@@ -94,11 +94,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            var model: BedrockModel? = BedrockModel(rawValue: modelId)
-            if modelId == "meta.llama3-70b-instruct-v1:0" {
-                model = BedrockModel.llama3_70b_instruct
-            }
-            guard let model: BedrockModel = model else {
+            guard let model = BedrockModel(rawValue: modelId) ?? BedrockModel(llamaId: modelId) else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) is not supported.")
             }
             guard model.hasTextModality() else {
