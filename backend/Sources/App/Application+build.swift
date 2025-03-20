@@ -94,8 +94,12 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
-            guard let model = BedrockModel(rawValue: modelId) else {
-                throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
+            var model: BedrockModel? = BedrockModel(rawValue: modelId)
+            if modelId == "meta.llama3-70b-instruct-v1:0" {
+                model = BedrockModel.llama3_70b_instruct
+            }
+            guard let model: BedrockModel = model else {
+                throw HTTPError(.badRequest, message: "Model \(modelId) is not supported.")
             }
             guard model.hasTextModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
@@ -112,7 +116,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 "An error occured while generating text",
                 metadata: ["url": "/foundation-models/text/:modelId", "error": "\(error)"]
             )
-            throw error
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }
 
@@ -149,7 +153,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 "An error occured while generating image",
                 metadata: ["url": "/foundation-models/image/:modelId", "error": "\(error)"]
             )
-            throw error
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }
 
@@ -172,7 +176,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 "An error occured while generating chat",
                 metadata: ["url": "/foundation-models/chat/:modelId", "error": "\(error)"]
             )
-            throw error
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }
 

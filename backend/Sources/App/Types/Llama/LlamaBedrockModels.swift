@@ -14,8 +14,10 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftBedrockTypes
 
 extension BedrockModel {
-    public static var llama2_13b: BedrockModel { .init(id: "meta.llama2.13b", modality: MetaText()) }
-    public static var llama2_70b: BedrockModel { .init(id: "meta.llama2.70b", modality: MetaText()) }
+    public static var llama3_70b_instruct: BedrockModel {
+        .init(id: "meta.llama3-70b-instruct-v1:0", modality: LlamaText())
+    }
 }

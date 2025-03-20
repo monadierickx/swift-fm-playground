@@ -15,7 +15,10 @@
 
 import Foundation
 
-// text
+// MARK: text generation
+
+typealias NovaMicro = NovaText
+
 extension BedrockModel {
     public static let nova_micro: BedrockModel = BedrockModel(
         id: "amazon.nova-micro-v1:0",
@@ -23,10 +26,13 @@ extension BedrockModel {
     )
 }
 
-// image
+// MARK: image generation
+
+typealias NovaCanvas = AmazonImage
+
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
         id: "amazon.nova-canvas-v1:0",
-        modality: NovaImage()
+        modality: NovaCanvas()
     )
 }

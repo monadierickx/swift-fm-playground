@@ -15,6 +15,8 @@
 
 import Foundation
 
+typealias DeepSeekR1V1 = DeepSeekText
+
 extension BedrockModel {
-    public static let deepseek_r1_v1: BedrockModel = BedrockModel(id: "us.deepseek.r1-v1:0", modality: DeepSeekText())
+    public static let deepseek_r1_v1: BedrockModel = BedrockModel(id: "us.deepseek.r1-v1:0", modality: DeepSeekR1V1())
 }

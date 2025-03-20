@@ -16,7 +16,7 @@
 import Foundation
 
 struct NovaText: TextModality {
-    func getName() -> String { "Nova" }
+    func getName() -> String { "Nova Text Generation" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
         NovaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
@@ -25,32 +25,5 @@ struct NovaText: TextModality {
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
         let decoder = JSONDecoder()
         return try decoder.decode(NovaResponseBody.self, from: data)
-    }
-}
-
-struct NovaImage: ImageModality {
-    func getName() -> String { "Nova" }
-
-    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
-        AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)
-    }
-
-    func getImageVariationRequestBody(
-        prompt: String,
-        image: String,
-        similarity: Double,
-        nrOfImages: Int
-    ) throws -> BedrockBodyCodable {
-        AmazonImageRequestBody.imageVariation(
-            prompt: prompt,
-            referenceImage: image,
-            similarity: similarity,
-            nrOfImages: nrOfImages
-        )
-    }
-
-    func getImageResponseBody(from data: Data) throws -> ContainsImageGeneration {
-        let decoder = JSONDecoder()
-        return try decoder.decode(AmazonImageResponseBody.self, from: data)
     }
 }

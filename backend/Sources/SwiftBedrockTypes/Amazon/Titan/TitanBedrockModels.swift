@@ -15,30 +15,39 @@
 
 import Foundation
 
-// text
+// MARK: text generation
+
+typealias TitanTextPremierV1 = TitanText
+typealias TitanTextExpressV1 = TitanText
+typealias TitanTextLiteV1 = TitanText
+
 extension BedrockModel {
     public static let titan_text_g1_premier: BedrockModel = BedrockModel(
         id: "amazon.titan-text-premier-v1:0",
-        modality: TitanText()
+        modality: TitanTextPremierV1()
     )
     public static let titan_text_g1_express: BedrockModel = BedrockModel(
         id: "amazon.titan-text-express-v1",
-        modality: TitanText()
+        modality: TitanTextExpressV1()
     )
     public static let titan_text_g1_lite: BedrockModel = BedrockModel(
         id: "amazon.titan-text-lite-v1",
-        modality: TitanText()
+        modality: TitanTextLiteV1()
     )
 }
 
-// image
+// MARK: image generation
+
+typealias TitanImageG1V1 = AmazonImage
+typealias TitanImageG1V2 = AmazonImage
+
 extension BedrockModel {
-    public static let titan_image_g1_v2: BedrockModel = BedrockModel(
-        id: "amazon.titan-image-generator-v2:0",
-        modality: TitanImage()
-    )
     public static let titan_image_g1_v1: BedrockModel = BedrockModel(
         id: "amazon.titan-image-generator-v1",
-        modality: TitanImage()
+        modality: TitanImageG1V1()
+    )
+    public static let titan_image_g1_v2: BedrockModel = BedrockModel(
+        id: "amazon.titan-image-generator-v2:0",
+        modality: TitanImageG1V2()
     )
 }

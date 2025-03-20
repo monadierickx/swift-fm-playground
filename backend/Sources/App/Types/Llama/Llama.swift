@@ -14,16 +14,17 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftBedrockTypes
 
-struct TitanText: Modality {
-    func getName() -> String { "Titan Text Generation" }
+struct LlamaText: TextModality {
+    func getName() -> String { "Llama Text Generation" }
 
     func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        NovaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
+        LlamaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
     }
 
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
         let decoder = JSONDecoder()
-        return try decoder.decode(TitanResponseBody.self, from: data)
+        return try decoder.decode(LlamaResponseBody.self, from: data)
     }
 }

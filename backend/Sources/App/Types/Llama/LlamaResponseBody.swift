@@ -14,15 +14,16 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import SwiftBedrockTypes
 
-struct MetaText: TextModality {
-    func getName() -> String { "Meta" }
+struct LlamaResponseBody: ContainsTextCompletion {
+    let generation: String
+    let prompt_token_count: Int
+    let generation_token_count: Int
+    let stop_reason: String
 
-    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        throw SwiftBedrockError.notImplemented("getTextRequestBody is not implemented for Meta")
-    }
-
-    func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
-        throw SwiftBedrockError.notImplemented("getTextResponseBody is not implemented for Meta")
+    public func getTextCompletion() throws -> TextCompletion {
+        TextCompletion(String(generation.trimmingPrefix("\n"))
+        )
     }
 }
