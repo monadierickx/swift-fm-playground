@@ -25,6 +25,8 @@ typealias ClaudeV3Opus = AnthropicText
 typealias ClaudeV3_5Sonnet = AnthropicText
 typealias ClaudeV3_7Sonnet = AnthropicText
 
+// https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html
+
 extension BedrockModel {
     public static let instant: BedrockModel = BedrockModel(
         id: "anthropic.claude-instant-v1",
@@ -33,16 +35,15 @@ extension BedrockModel {
                 minTemperature: 0,
                 maxTemperature: 1,
                 defaultTemperature: 1,
-                minMaxTokens: 1,
                 maxMaxTokens: 4096,
                 defaultMaxTokens: 200,
-                // maxPromptSize: Int,
                 minTopP: 0,
                 maxTopP: 1,
-                defaultTopP: 1,
+                defaultTopP: 0.999,
                 minTopK: 0,
                 maxTopK: 500,
-                defaultTopK: 250
+                // defaultTopK: 250 // default disabled?
+                maxStopSequences: 8191
             )
         )
     )
@@ -53,16 +54,14 @@ extension BedrockModel {
                 minTemperature: 0,
                 maxTemperature: 1,
                 defaultTemperature: 1,
-                minMaxTokens: 1,
                 maxMaxTokens: 4096,
                 defaultMaxTokens: 200,
-                // maxPromptSize: Int,
                 minTopP: 0,
                 maxTopP: 1,
-                defaultTopP: 1,
+                defaultTopP: 0.999,
                 minTopK: 0,
                 maxTopK: 500,
-                defaultTopK: 250
+                maxStopSequences: 8191
             )
         )
     )
@@ -73,16 +72,14 @@ extension BedrockModel {
                 minTemperature: 0,
                 maxTemperature: 1,
                 defaultTemperature: 1,
-                minMaxTokens: 1,
                 maxMaxTokens: 4096,
                 defaultMaxTokens: 200,
-                // maxPromptSize: Int,
                 minTopP: 0,
                 maxTopP: 1,
-                defaultTopP: 1,
+                defaultTopP: 0.999,
                 minTopK: 0,
                 maxTopK: 500,
-                defaultTopK: 250
+                maxStopSequences: 8191
             )
         )
     )
@@ -93,53 +90,123 @@ extension BedrockModel {
                 minTemperature: 0,
                 maxTemperature: 1,
                 defaultTemperature: 1,
-                minMaxTokens: 1,
                 maxMaxTokens: 4096,
                 defaultMaxTokens: 200,
-                // maxPromptSize: Int,
                 minTopP: 0,
                 maxTopP: 1,
-                defaultTopP: 1,
+                defaultTopP: 0.999,
                 minTopK: 0,
                 maxTopK: 500,
-                defaultTopK: 250
+                maxStopSequences: 8191
             )
         )
     )
     public static let claudev3_haiku: BedrockModel = BedrockModel(
         id: "anthropic.claude-3-haiku-20240307-v1:0",
         modality: ClaudeV3Haiku(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
     public static let claudev3_5_haiku: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-haiku-20241022-v1:0",
         modality: ClaudeV3_5Haiku(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
     public static let claudev3_opus: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-opus-20240229-v1:0",
         modality: ClaudeV3Opus(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
     public static let claudev3_5_sonnet: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
         modality: ClaudeV3_5Sonnet(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
     public static let claudev3_5_sonnet_v2: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
         modality: ClaudeV3_5Sonnet(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
     public static let claudev3_7_sonnet: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
         modality: ClaudeV3_7Sonnet(
-            parameters: TextGenerationParameters()
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.999,
+                minTopK: 0,
+                maxTopK: 500,
+                maxStopSequences: 8191
+            )
         )
     )
 }

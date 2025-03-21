@@ -25,18 +25,16 @@ extension BedrockModel {
         id: "amazon.nova-micro-v1:0",
         modality: NovaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
+                minTemperature: 0.00001,
                 maxTemperature: 1,
                 defaultTemperature: 0.7,
-                minMaxTokens: 1,
                 maxMaxTokens: 5_000,
                 defaultMaxTokens: 5_000,
                 minTopP: 0,
                 maxTopP: 1,
                 defaultTopP: 0.9,
                 minTopK: 0,
-                defaultTopK: 50,
-                defaultStopSequences: []
+                maxTopK: 50
             )
         )
     )

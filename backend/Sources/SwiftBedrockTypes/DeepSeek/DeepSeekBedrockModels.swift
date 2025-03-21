@@ -25,7 +25,6 @@ extension BedrockModel {
                 minTemperature: 0,
                 maxTemperature: 1,
                 defaultTemperature: 1,
-                minMaxTokens: 1,
                 maxMaxTokens: 32_768,
                 defaultMaxTokens: 4_000,
                 minTopP: 0,
