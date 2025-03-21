@@ -19,7 +19,7 @@ public struct NovaRequestBody: BedrockBodyCodable {
     private let inferenceConfig: InferenceConfig
     private let messages: [Message]
 
-    public init(prompt: String, maxTokens: Int, temperature: Double) {
+    public init(prompt: String, maxTokens: Int = 512, temperature: Double = 0.7) {
         self.inferenceConfig = InferenceConfig(max_new_tokens: maxTokens)
         self.messages = [Message(role: .user, content: [Content(text: prompt)])]
     }

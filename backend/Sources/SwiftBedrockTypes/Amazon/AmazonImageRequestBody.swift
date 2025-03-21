@@ -26,9 +26,9 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
     /// Creates a text-to-image generation request body
     /// - Parameters:
     ///   - prompt: The text description of the image to generate
-    ///   - nrOfImages: The number of images to generate (default: 3)
+    ///   - nrOfImages: The number of images to generate (default: 1)
     /// - Returns: A configured AmazonImageRequestBody for text-to-image generation
-    public static func textToImage(prompt: String, nrOfImages: Int = 3) -> Self {
+    public static func textToImage(prompt: String, nrOfImages: Int = 1) -> Self {
         AmazonImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
     }
 
@@ -43,14 +43,14 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
     /// - Parameters:
     ///   - prompt: The text description to guide the variation generation
     ///   - referenceImage: The base64-encoded string of the source image
-    ///   - similarity: How similar the variations should be to the source image (0.0-1.0)
-    ///   - nrOfImages: The number of variations to generate (default: 3)
+    ///   - similarity: How similar the variations should be to the source image (0.2-1.0)
+    ///   - nrOfImages: The number of variations to generate (default: 1)
     /// - Returns: A configured AmazonImageRequestBody for image variation generation
     public static func imageVariation(
         prompt: String,
         referenceImage: String,
         similarity: Double = 0.6,
-        nrOfImages: Int = 3
+        nrOfImages: Int = 1
     ) -> Self {
         AmazonImageRequestBody(
             prompt: prompt,

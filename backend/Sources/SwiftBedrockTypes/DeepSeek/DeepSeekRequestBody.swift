@@ -22,7 +22,7 @@ public struct DeepSeekRequestBody: BedrockBodyCodable {
     private let max_tokens: Int
     private let stop: [String]
 
-    public init(prompt: String, maxTokens: Int, temperature: Double) {
+    public init(prompt: String, maxTokens: Int = 4_000, temperature: Double = 1) {
         self.prompt = prompt
         self.temperature = temperature
         self.top_p = 0.9

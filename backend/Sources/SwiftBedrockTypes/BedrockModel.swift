@@ -107,7 +107,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// Checks if the model supports image generation
     /// - Returns: True if the model supports image generation
     public func hasImageModality() -> Bool {
-        guard let _ = modality as? any TextModality else {
+        guard let _ = modality as? any ImageModality else {
             return false
         }
         return true

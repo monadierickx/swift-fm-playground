@@ -21,12 +21,12 @@ public struct AnthropicRequestBody: BedrockBodyCodable {
     private let temperature: Double
     private let messages: [AnthropicMessage]
 
-    public init(prompt: String, maxTokens: Int, temperature: Double) {
+    public init(prompt: String, maxTokens: Int = 200, temperature: Double = 1) {
         self.anthropic_version = "bedrock-2023-05-31"
         self.max_tokens = maxTokens
         self.temperature = temperature
         self.messages = [
-            AnthropicMessage(role: .user, content: [AnthropicContent(text: prompt)])
+            AnthropicMessage(role: .user, content: [AnthropicContent(text: "\n\nHuman:\(prompt)\n\nAssistant:")])
         ]
     }
 

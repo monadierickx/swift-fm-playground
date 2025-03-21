@@ -47,8 +47,8 @@ struct BedrockRequest {
     static func createTextRequest(
         model: BedrockModel,
         prompt: String,
-        maxTokens: Int = 300,
-        temperature: Double = 0.6
+        maxTokens: Int,
+        temperature: Double
     ) throws -> BedrockRequest {
         try .init(model: model, prompt: prompt, maxTokens: maxTokens, temperature: temperature)
     }

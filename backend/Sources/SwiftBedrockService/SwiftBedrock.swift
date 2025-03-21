@@ -196,7 +196,7 @@ public struct SwiftBedrock: Sendable {
 
     /// Validate similarity is between 1 and 5
     private func validateSimilarity(_ similarity: Double) throws {
-        guard similarity >= 0 && similarity <= 1 else {
+        guard similarity >= 0.2 && similarity <= 1 else {
             logger.trace(
                 "Invalid similarity",
                 metadata: ["similarity": .stringConvertible(similarity)]
@@ -280,10 +280,10 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let maxTokens = maxTokens ?? 300
+            let maxTokens = maxTokens ?? 512
             try validateMaxTokens(maxTokens)
 
-            let temperature = temperature ?? 0.6
+            let temperature = temperature ?? 0.5
             try validateTemperature(temperature)
 
             try validatePrompt(text)
@@ -367,7 +367,7 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let nrOfImages = nrOfImages ?? 3
+            let nrOfImages = nrOfImages ?? 1
             try validateNrOfImages(nrOfImages)
             try validatePrompt(prompt)
 
@@ -414,7 +414,7 @@ public struct SwiftBedrock: Sendable {
     ///   - model: the BedrockModel that will be used to generate the image
     ///   - nrOfImages: the number of images that will be generated (must be a number between 1 and 5) optional, default 3
     /// - Throws: SwiftBedrockError.invalidNrOfImages if nrOfImages is not between 1 and 5
-    ///           SwiftBedrockError.similarity if similarity is not between 0 and 1
+    ///           SwiftBedrockError.similarity if similarity is not between 0.2 - 1.0
     ///           SwiftBedrockError.invalidPrompt if the prompt is empty
     ///           SwiftBedrockError.invalidResponse if the response body is missing
     /// - Returns: a ImageGenerationOutput object containing an array of generated images
@@ -436,10 +436,10 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let nrOfImages = nrOfImages ?? 3
+            let nrOfImages = nrOfImages ?? 1
             try validateNrOfImages(nrOfImages)
 
-            let similarity = similarity ?? 0.5
+            let similarity = similarity ?? 0.6
             try validateSimilarity(similarity)
 
             try validatePrompt(prompt)

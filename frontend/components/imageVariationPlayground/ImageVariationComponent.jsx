@@ -214,7 +214,7 @@ export default function ImageVariationContainer() {
                             className="relative w-20"
                             placeholder="1"
                             value={nrOfImages}
-                            range={{ min: 1, max: 3, default: 1 }}
+                            range={{ min: 1, max: 5, default: 1 }}
                             disabled={isLoading}
                             callback={handleNrOfImagesChange}
                         />
@@ -232,7 +232,7 @@ export default function ImageVariationContainer() {
                             className="relative w-20"
                             placeholder="1"
                             value={similarity}
-                            range={{ min: 0, max: 1, default: 0.5 }}
+                            range={{ min: 0.2, max: 1, default: 0.5 }}
                             disabled={isLoading}
                             callback={handleSimilarityChange}
                         />

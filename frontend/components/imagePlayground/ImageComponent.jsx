@@ -109,7 +109,7 @@ export default function ImageContainer() {
                             className="relative w-20"
                             placeholder="1"
                             value={nrOfImages}
-                            range={{ min: 1, max: 3, default: 1 }}
+                            range={{ min: 1, max: 5, default: 1 }}
                             disabled={isLoading}
                             callback={handleNrOfImagesChange}
                         />
