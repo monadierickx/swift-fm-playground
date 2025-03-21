@@ -28,42 +28,118 @@ typealias ClaudeV3_7Sonnet = AnthropicText
 extension BedrockModel {
     public static let instant: BedrockModel = BedrockModel(
         id: "anthropic.claude-instant-v1",
-        modality: ClaudeInstantV1()
+        modality: ClaudeInstantV1(
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                minMaxTokens: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                // maxPromptSize: Int,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 1,
+                minTopK: 0,
+                maxTopK: 500,
+                defaultTopK: 250
+            )
+        )
     )
     public static let claudev1: BedrockModel = BedrockModel(
         id: "anthropic.claude-v1",
-        modality: ClaudeV1()
+        modality: ClaudeV1(
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                minMaxTokens: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                // maxPromptSize: Int,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 1,
+                minTopK: 0,
+                maxTopK: 500,
+                defaultTopK: 250
+            )
+        )
     )
     public static let claudev2: BedrockModel = BedrockModel(
         id: "anthropic.claude-v2",
-        modality: ClaudeV2()
+        modality: ClaudeV2(
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                minMaxTokens: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                // maxPromptSize: Int,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 1,
+                minTopK: 0,
+                maxTopK: 500,
+                defaultTopK: 250
+            )
+        )
     )
     public static let claudev2_1: BedrockModel = BedrockModel(
         id: "anthropic.claude-v2:1",
-        modality: ClaudeV2_1()
+        modality: ClaudeV2_1(
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 1,
+                minMaxTokens: 1,
+                maxMaxTokens: 4096,
+                defaultMaxTokens: 200,
+                // maxPromptSize: Int,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 1,
+                minTopK: 0,
+                maxTopK: 500,
+                defaultTopK: 250
+            )
+        )
     )
     public static let claudev3_haiku: BedrockModel = BedrockModel(
         id: "anthropic.claude-3-haiku-20240307-v1:0",
-        modality: ClaudeV3Haiku()
+        modality: ClaudeV3Haiku(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let claudev3_5_haiku: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-haiku-20241022-v1:0",
-        modality: ClaudeV3_5Haiku()
+        modality: ClaudeV3_5Haiku(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let claudev3_opus: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-opus-20240229-v1:0",
-        modality: ClaudeV3Opus()
+        modality: ClaudeV3Opus(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let claudev3_5_sonnet: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-sonnet-20240620-v1:0",
-        modality: ClaudeV3_5Sonnet()
+        modality: ClaudeV3_5Sonnet(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let claudev3_5_sonnet_v2: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-5-sonnet-20241022-v2:0",
-        modality: ClaudeV3_5Sonnet()
+        modality: ClaudeV3_5Sonnet(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let claudev3_7_sonnet: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
-        modality: ClaudeV3_7Sonnet()
+        modality: ClaudeV3_7Sonnet(
+            parameters: TextGenerationParameters()
+        )
     )
 }

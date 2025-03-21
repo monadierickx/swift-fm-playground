@@ -16,13 +16,29 @@
 import Foundation
 
 // MARK: text generation
+// https://docs.aws.amazon.com/nova/latest/userguide/complete-request-schema.html
 
 typealias NovaMicro = NovaText
 
 extension BedrockModel {
     public static let nova_micro: BedrockModel = BedrockModel(
         id: "amazon.nova-micro-v1:0",
-        modality: NovaText()
+        modality: NovaText(
+            parameters: TextGenerationParameters(
+                minTemperature: 0,
+                maxTemperature: 1,
+                defaultTemperature: 0.7,
+                minMaxTokens: 1,
+                maxMaxTokens: 5_000,
+                defaultMaxTokens: 5_000,
+                minTopP: 0,
+                maxTopP: 1,
+                defaultTopP: 0.9,
+                minTopK: 0,
+                defaultTopK: 50,
+                defaultStopSequences: []
+            )
+        )
     )
 }
 
@@ -33,6 +49,13 @@ typealias NovaCanvas = AmazonImage
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
         id: "amazon.nova-canvas-v1:0",
-        modality: NovaCanvas()
+        modality: NovaCanvas(
+            parameters: ImageGenerationParameters(
+                // maxPromptSize: Int,
+                // minNrOfImages: Int,
+                // maxNrOfImages: Int,
+                // defaultNrOfImages: Int
+            )
+        )
     )
 }

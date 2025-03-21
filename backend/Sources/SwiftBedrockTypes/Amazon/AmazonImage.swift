@@ -17,6 +17,16 @@ import Foundation
 
 struct AmazonImage: ImageModality {
     func getName() -> String { "Amazon Image Generation" }
+    
+    let parameters: ImageGenerationParameters
+
+    init(parameters: ImageGenerationParameters) {
+        self.parameters = parameters
+    }
+
+    func getParameters() -> ImageGenerationParameters {
+        parameters
+    }
 
     func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable {
         AmazonImageRequestBody.textToImage(prompt: prompt, nrOfImages: nrOfImages)

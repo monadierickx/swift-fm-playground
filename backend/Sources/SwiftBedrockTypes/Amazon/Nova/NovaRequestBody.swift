@@ -19,13 +19,28 @@ public struct NovaRequestBody: BedrockBodyCodable {
     private let inferenceConfig: InferenceConfig
     private let messages: [Message]
 
-    public init(prompt: String, maxTokens: Int = 512, temperature: Double = 0.7) {
-        self.inferenceConfig = InferenceConfig(max_new_tokens: maxTokens)
+    public init(
+        prompt: String,
+        maxTokens: Int,
+        temperature: Double = 0.7,
+        topP: Double,
+        topK: Int,
+        stopSequences: [String]
+    ) {
+        self.inferenceConfig = InferenceConfig(
+            maxTokens: maxTokens,
+            topP: topP,
+            topK: topK,
+            stopSequences: stopSequences
+        )
         self.messages = [Message(role: .user, content: [Content(text: prompt)])]
     }
 
     private struct InferenceConfig: Codable {
-        let max_new_tokens: Int
+        let maxTokens: Int
+        let topP: Double
+        let topK: Int
+        let stopSequences: [String]
     }
 
     private struct Message: Codable {

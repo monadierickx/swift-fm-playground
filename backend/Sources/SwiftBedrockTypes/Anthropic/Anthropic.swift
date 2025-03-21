@@ -16,10 +16,34 @@
 import Foundation
 
 struct AnthropicText: TextModality {
+    let parameters: TextGenerationParameters
+
     func getName() -> String { "Anthropic Text Generation" }
 
-    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        AnthropicRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
+    init(parameters: TextGenerationParameters) {
+        self.parameters = parameters
+    }
+
+    func getParameters() -> TextGenerationParameters {
+        parameters
+    }
+
+    func getTextRequestBody(
+        prompt: String,
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
+    ) throws -> BedrockBodyCodable {
+        AnthropicRequestBody(
+            prompt: prompt,
+            maxTokens: maxTokens ?? parameters.maxTokens.defaultVal,
+            temperature: temperature ?? parameters.temperature.defaultVal,
+            topP: topP ?? parameters.topP.defaultVal,
+            topK: topK ?? parameters.topK.defaultVal,
+            stopSequences: stopSequences ?? parameters.stopSequences.defaultVal
+        )
     }
 
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {

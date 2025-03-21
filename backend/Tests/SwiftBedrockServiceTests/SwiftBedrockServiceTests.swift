@@ -63,7 +63,7 @@ struct SwiftBedrockServiceTests {
     ]
     static let textCompletionModels = [
         BedrockModel.nova_micro,
-        BedrockModel.titan_text_g1_lite,
+//        BedrockModel.titan_text_g1_lite,
 //        BedrockModel.titan_text_g1_express,
 //        BedrockModel.titan_text_g1_premier,
         BedrockModel.claudev1,
@@ -194,7 +194,7 @@ struct SwiftBedrockServiceTests {
             "This is a test",
             with: model
         )
-        #expect(output.images.count == 3)
+        #expect(output.images.count == 1)
     }
 
     @Test(
@@ -380,7 +380,7 @@ struct SwiftBedrockServiceTests {
             with: BedrockModel.nova_canvas,
             similarity: 0.6
         )
-        #expect(output.images.count == 3)
+        #expect(output.images.count == 1)
     }
 
     @Test(

@@ -39,7 +39,6 @@ public struct SwiftBedrock: Sendable {
     /// - Throws: Error if client initialization fails
     public init(
         region: Region = .useast1,
-        // region: Region = .uswest2,
         logger: Logger? = nil,
         bedrockClient: BedrockClientProtocol? = nil,
         bedrockRuntimeClient: BedrockRuntimeClientProtocol? = nil,
@@ -132,35 +131,35 @@ public struct SwiftBedrock: Sendable {
         return BedrockRuntimeClient(config: config)
     }
 
-    /// Validate maxTokens is at least 1
-    private func validateMaxTokens(_ maxTokens: Int) throws {
+    /// Validate maxTokens is at least a minimum value
+    private func validateMaxTokens(_ maxTokens: Int, max: Int) throws {
         guard maxTokens >= 1 else {
             logger.trace(
                 "Invalid maxTokens",
                 metadata: ["maxTokens": .stringConvertible(maxTokens)]
             )
             throw SwiftBedrockError.invalidMaxTokens(
-                "MaxTokens should be at least 1. MaxTokens: \(maxTokens)"
+                "MaxTokens should be between 1 and \(max). MaxTokens: \(maxTokens)"
             )
         }
     }
 
-    /// Validate temperature is between 0 and 1
-    private func validateTemperature(_ temperature: Double) throws {
-        guard temperature >= 0 && temperature <= 1 else {
+    /// Validate temperature is between a minimum and a maximum value
+    private func validateTemperature(_ temperature: Double, min: Double, max: Double) throws {
+        guard temperature >= min && temperature <= max else {
             logger.trace(
                 "Invalid temperature",
                 metadata: ["temperature": "\(temperature)"]
             )
             throw SwiftBedrockError.invalidTemperature(
-                "Temperature should be a value between 0 and 1. Temperature: \(temperature)"
+                "Temperature should be a value between \(min) and \(max). Temperature: \(temperature)"
             )
         }
     }
 
     /// Validate prompt is not empty and does not consist of only whitespaces, tabs or newlines
-    /// Additionally validates that the prompt is not longer than the maxPromptTokens (defaults to 25000000)
-    private func validatePrompt(_ prompt: String, maxPromptTokens: Int = 25_000_000) throws {
+    /// Additionally validates that the prompt is not longer than the maxPromptTokens
+    private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
         guard !prompt.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
             logger.trace("Invalid prompt", metadata: ["prompt": .string(prompt)])
             throw SwiftBedrockError.invalidPrompt("Prompt is not allowed to be empty.")
@@ -181,28 +180,28 @@ public struct SwiftBedrock: Sendable {
         }
     }
 
-    /// Validate nrOfImages is between 1 and 5
-    private func validateNrOfImages(_ nrOfImages: Int) throws {
-        guard nrOfImages >= 1 && nrOfImages <= 5 else {
+    /// Validate nrOfImages is between a minimum and a maximum value
+    private func validateNrOfImages(_ nrOfImages: Int, min: Int, max: Int) throws {
+        guard nrOfImages >= min && nrOfImages <= max else {
             logger.trace(
                 "Invalid nrOfImages",
                 metadata: ["nrOfImages": .stringConvertible(nrOfImages)]
             )
             throw SwiftBedrockError.invalidNrOfImages(
-                "NrOfImages should be between 1 and 5. nrOfImages: \(nrOfImages)"
+                "NrOfImages should be between \(min) and \(max). nrOfImages: \(nrOfImages)"
             )
         }
     }
 
-    /// Validate similarity is between 1 and 5
-    private func validateSimilarity(_ similarity: Double) throws {
-        guard similarity >= 0.2 && similarity <= 1 else {
+    /// Validate similarity is between a minimum and a maximum value
+    private func validateSimilarity(_ similarity: Double, min: Double, max: Double) throws {
+        guard similarity >= min && similarity <= max else {
             logger.trace(
                 "Invalid similarity",
                 metadata: ["similarity": .stringConvertible(similarity)]
             )
             throw SwiftBedrockError.invalidNrOfImages(
-                "Similarity should be between 0 and 1. similarity: \(similarity)"
+                "Similarity should be between \(min) and \(max). similarity: \(similarity)"
             )
         }
     }
@@ -265,7 +264,7 @@ public struct SwiftBedrock: Sendable {
     ///           SwiftBedrockError.invalidResponse if the response body is missing
     /// - Returns: a TextCompletion object containing the generated text from the model
     public func completeText(
-        _ text: String,
+        _ prompt: String,
         with model: BedrockModel,
         maxTokens: Int? = nil,
         temperature: Double? = nil
@@ -275,22 +274,22 @@ public struct SwiftBedrock: Sendable {
             metadata: [
                 "model.id": .string(model.id),
                 "model.modality": .string(model.modality.getName()),
-                "prompt": .string(text),
+                "prompt": .string(prompt),
                 "maxTokens": .stringConvertible(maxTokens ?? "not defined"),
             ]
         )
         do {
-            let maxTokens = maxTokens ?? 512
-            try validateMaxTokens(maxTokens)
-
-            let temperature = temperature ?? 0.5
-            try validateTemperature(temperature)
-
-            try validatePrompt(text)
+            let modality = try model.getTextModality()
+            let parameters = modality.getParameters()
+            let maxTokens = maxTokens ?? parameters.maxTokens.defaultVal
+            try validateMaxTokens(maxTokens, max: parameters.maxTokens.max)
+            let temperature = temperature ?? parameters.temperature.defaultVal
+            try validateTemperature(temperature, min: parameters.temperature.min, max: parameters.temperature.max)
+            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createTextRequest(
                 model: model,
-                prompt: text,
+                prompt: prompt,
                 maxTokens: maxTokens,
                 temperature: temperature
             )
@@ -367,9 +366,11 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let nrOfImages = nrOfImages ?? 1
-            try validateNrOfImages(nrOfImages)
-            try validatePrompt(prompt)
+            let modality = try model.getImageModality()
+            let parameters = modality.getParameters()
+            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultVal
+            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.min, max: parameters.nrOfImages.max)
+            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createTextToImageRequest(
                 model: model,
@@ -436,13 +437,13 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let nrOfImages = nrOfImages ?? 1
-            try validateNrOfImages(nrOfImages)
-
-            let similarity = similarity ?? 0.6
-            try validateSimilarity(similarity)
-
-            try validatePrompt(prompt)
+            let modality = try model.getImageModality()
+            let parameters = modality.getParameters()
+            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultVal
+            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.min, max: parameters.nrOfImages.max)
+            let similarity = similarity ?? parameters.similarity.defaultVal
+            try validateSimilarity(similarity, min: parameters.similarity.min, max: parameters.similarity.max)
+            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createImageVariationRequest(
                 model: model,
@@ -497,7 +498,7 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            try validatePrompt(prompt)
+            try validatePrompt(prompt, maxPromptTokens: 200_000) // FIXME
             var messages = history
             messages.append(
                 BedrockRuntimeClientTypes.Message(

@@ -63,7 +63,10 @@ struct BedrockRequest {
         let body: BedrockBodyCodable = try textModality.getTextRequestBody(
             prompt: prompt,
             maxTokens: maxTokens,
-            temperature: temperature
+            temperature: temperature,
+            topP: nil,
+            topK: nil,
+            stopSequences: nil
         )
         self.init(model: model, body: body)
     }

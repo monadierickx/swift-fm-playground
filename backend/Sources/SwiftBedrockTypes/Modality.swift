@@ -20,17 +20,32 @@ public protocol Modality: Sendable, Hashable, Equatable {
 }
 
 public protocol TextModality: Modality {
-    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable
+
+    init(parameters: TextGenerationParameters)
+    func getParameters() -> TextGenerationParameters
+
+    func getTextRequestBody(
+        prompt: String,
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
+    ) throws -> BedrockBodyCodable
+    
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
 }
 
 public protocol ImageModality: Modality {
+    init(parameters: ImageGenerationParameters)
+    func getParameters() -> ImageGenerationParameters
+
     func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable
     func getImageVariationRequestBody(
         prompt: String,
         image: String,
-        similarity: Double,
+        similarity: Double, 
         nrOfImages: Int
-    ) throws -> BedrockBodyCodable
+    ) throws -> BedrockBodyCodable // FIXME: optionals and use defaults
     func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
 }

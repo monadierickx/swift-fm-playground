@@ -14,7 +14,6 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftBedrockTypes
 
 struct LlamaResponseBody: ContainsTextCompletion {
     let generation: String

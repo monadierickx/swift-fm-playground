@@ -79,6 +79,14 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         // deepseek
         case BedrockModel.deepseek_r1_v1.id:
             self = BedrockModel.deepseek_r1_v1
+        // llama
+        case BedrockModel.llama_3_8b_instruct.id: self = BedrockModel.llama_3_8b_instruct
+        case BedrockModel.llama3_70b_instruct.id: self = BedrockModel.llama3_70b_instruct
+        case BedrockModel.llama3_1_8b_instruct.id: self = BedrockModel.llama3_1_8b_instruct
+        case BedrockModel.llama3_1_70b_instruct.id: self = BedrockModel.llama3_1_70b_instruct
+        case BedrockModel.llama3_2_1b_instruct.id: self = BedrockModel.llama3_2_1b_instruct
+        case BedrockModel.llama3_2_3b_instruct.id: self = BedrockModel.llama3_2_3b_instruct
+        case BedrockModel.llama3_3_70b_instruct.id: self = BedrockModel.llama3_3_70b_instruct
         default:
             return nil
         }
@@ -87,7 +95,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// Checks if the model supports text generation
     /// - Returns: True if the model supports text generation
     public func hasTextModality() -> Bool {
-        guard let _ = modality as? any TextModality else {
+        guard let _ = modality as? any TextModality else {  // FIXME: one line here return  modality as? any TextModality == nil
             return false
         }
         return true

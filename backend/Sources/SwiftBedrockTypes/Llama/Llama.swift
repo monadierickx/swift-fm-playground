@@ -14,13 +14,36 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftBedrockTypes
 
 struct LlamaText: TextModality {
     func getName() -> String { "Llama Text Generation" }
 
-    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        LlamaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
+    let parameters: TextGenerationParameters
+
+    init(parameters: TextGenerationParameters) {
+        self.parameters = parameters
+    }
+
+    func getParameters() -> TextGenerationParameters {
+        parameters
+    }
+
+    func getTextRequestBody(
+        prompt: String,
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
+    ) throws -> BedrockBodyCodable {
+        LlamaRequestBody(
+            prompt: prompt,
+            maxTokens: maxTokens ?? parameters.maxTokens.defaultVal,
+            temperature: temperature ?? parameters.temperature.defaultVal,
+            topP: topP ?? parameters.topP.defaultVal,
+            topK: topK ?? parameters.topK.defaultVal,
+            stopSequences: stopSequences ?? parameters.stopSequences.defaultVal
+        )
     }
 
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {

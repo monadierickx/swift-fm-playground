@@ -24,15 +24,22 @@ typealias TitanTextLiteV1 = TitanText
 extension BedrockModel {
     public static let titan_text_g1_premier: BedrockModel = BedrockModel(
         id: "amazon.titan-text-premier-v1:0",
-        modality: TitanTextPremierV1()
+        modality: TitanTextPremierV1(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let titan_text_g1_express: BedrockModel = BedrockModel(
         id: "amazon.titan-text-express-v1",
-        modality: TitanTextExpressV1()
+        modality: TitanTextExpressV1(
+            parameters: TextGenerationParameters()
+        )
     )
     public static let titan_text_g1_lite: BedrockModel = BedrockModel(
         id: "amazon.titan-text-lite-v1",
-        modality: TitanTextLiteV1()
+        modality: TitanTextLiteV1(
+            parameters: TextGenerationParameters()
+
+        )
     )
 }
 
@@ -44,10 +51,24 @@ typealias TitanImageG1V2 = AmazonImage
 extension BedrockModel {
     public static let titan_image_g1_v1: BedrockModel = BedrockModel(
         id: "amazon.titan-image-generator-v1",
-        modality: TitanImageG1V1()
+        modality: TitanImageG1V1(
+            parameters: ImageGenerationParameters(
+                // maxPromptSize: Int,
+                // minNrOfImages: Int,
+                // maxNrOfImages: Int,
+                // defaultNrOfImages: Int
+            )
+        )
     )
     public static let titan_image_g1_v2: BedrockModel = BedrockModel(
         id: "amazon.titan-image-generator-v2:0",
-        modality: TitanImageG1V2()
+        modality: TitanImageG1V2(
+            parameters: ImageGenerationParameters(
+                // maxPromptSize: Int,
+                // minNrOfImages: Int,
+                // maxNrOfImages: Int,
+                // defaultNrOfImages: Int
+            )
+        )
     )
 }
