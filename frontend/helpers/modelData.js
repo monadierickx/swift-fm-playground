@@ -58,23 +58,20 @@ export const models = [
             default: 200
         }
     },
-    // Error message:
-    // "Invocation of model ID anthropic.claude-3-5-haiku-20241022-v1:0 with on-demand throughput isn’t supported. 
-    // Retry your request with the ID or ARN of an inference profile that contains this model."
-    // {
-    //     modelName: "Anthropic Claude 3.5 Haiku",
-    //     modelId: "anthropic.claude-3-5-haiku-20241022-v1:0",
-    //     temperatureRange: {
-    //         min: 0,
-    //         max: 1,
-    //         default: 0.5
-    //     },
-    //     maxTokenRange: {
-    //         min: 0,
-    //         max: 8191,
-    //         default: 200
-    //     }
-    // },
+    {
+        modelName: "Anthropic Claude 3.5 Haiku",
+        modelId: "us.anthropic.claude-3-5-haiku-20241022-v1:0",
+        temperatureRange: {
+            min: 0,
+            max: 1,
+            default: 0.5
+        },
+        maxTokenRange: {
+            min: 0,
+            max: 8191,
+            default: 200
+        }
+    },
     // Amazon
     {
         modelName: "Amazon Nova Micro",
