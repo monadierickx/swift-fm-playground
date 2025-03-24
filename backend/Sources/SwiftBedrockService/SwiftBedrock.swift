@@ -281,10 +281,10 @@ public struct SwiftBedrock: Sendable {
         do {
             let modality = try model.getTextModality()
             let parameters = modality.getParameters()
-            let maxTokens = maxTokens ?? parameters.maxTokens.defaultVal
-            try validateMaxTokens(maxTokens, max: parameters.maxTokens.max)
-            let temperature = temperature ?? parameters.temperature.defaultVal
-            try validateTemperature(temperature, min: parameters.temperature.min, max: parameters.temperature.max)
+            let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue
+            try validateMaxTokens(maxTokens, max: parameters.maxTokens.maxValue)
+            let temperature = temperature ?? parameters.temperature.defaultValue
+            try validateTemperature(temperature, min: parameters.temperature.minValue, max: parameters.temperature.maxValue)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createTextRequest(
@@ -368,8 +368,8 @@ public struct SwiftBedrock: Sendable {
         do {
             let modality = try model.getImageModality()
             let parameters = modality.getParameters()
-            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultVal
-            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.min, max: parameters.nrOfImages.max)
+            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
+            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createTextToImageRequest(
@@ -439,10 +439,10 @@ public struct SwiftBedrock: Sendable {
         do {
             let modality = try model.getImageModality()
             let parameters = modality.getParameters()
-            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultVal
-            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.min, max: parameters.nrOfImages.max)
-            let similarity = similarity ?? parameters.similarity.defaultVal
-            try validateSimilarity(similarity, min: parameters.similarity.min, max: parameters.similarity.max)
+            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
+            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
+            let similarity = similarity ?? parameters.similarity.defaultValue
+            try validateSimilarity(similarity, min: parameters.similarity.minValue, max: parameters.similarity.maxValue)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createImageVariationRequest(

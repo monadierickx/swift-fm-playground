@@ -25,16 +25,13 @@ extension BedrockModel {
         id: "amazon.nova-micro-v1:0",
         modality: NovaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0.00001,
-                maxTemperature: 1,
-                defaultTemperature: 0.7,
-                maxMaxTokens: 5_000,
-                defaultMaxTokens: 5_000,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9,
-                minTopK: 0,
-                maxTopK: 50
+                temperature: Parameter(minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(minValue: 1, maxValue: 5_000, defaultValue: 5_000),
+                topP: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.9),
+                topK: Parameter(minValue: 0, maxValue: 50, defaultValue: 50)
+                // maxPromptSize: Int,
+                // maxStopSequences: Int,
+                // defaultStopSequences: [String]
             )
         )
     )
@@ -48,12 +45,12 @@ extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
         id: "amazon.nova-canvas-v1:0",
         modality: NovaCanvas(
-            parameters: ImageGenerationParameters(
-                // maxPromptSize: Int,
+            parameters:
+                ImageGenerationParameters(// maxPromptSize: Int,
                 // minNrOfImages: Int,
                 // maxNrOfImages: Int,
                 // defaultNrOfImages: Int
-            )
+                )
         )
     )
 }

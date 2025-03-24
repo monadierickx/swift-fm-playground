@@ -22,14 +22,9 @@ extension BedrockModel {
         id: "meta.llama3-8b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
         )
     )
@@ -37,14 +32,9 @@ extension BedrockModel {
         id: "meta.llama3-70b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
         )
     )
@@ -52,14 +42,9 @@ extension BedrockModel {
         id: "us.meta.llama3-1-8b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
         )
     )
@@ -67,14 +52,9 @@ extension BedrockModel {
         id: "us.meta.llama3-1-70b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
 
         )
@@ -83,14 +63,9 @@ extension BedrockModel {
         id: "us.meta.llama3-2-1b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
 
         )
@@ -99,14 +74,9 @@ extension BedrockModel {
         id: "us.meta.llama3-2-3b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
 
         )
@@ -115,14 +85,9 @@ extension BedrockModel {
         id: "us.meta.llama3-3-70b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
 
         )
@@ -131,14 +96,9 @@ extension BedrockModel {
         id: "meta.llama3-8b-instruct-v1:0",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.5,
-                maxMaxTokens: 2048,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
 
         )

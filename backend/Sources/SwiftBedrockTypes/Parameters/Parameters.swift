@@ -18,9 +18,9 @@ import Foundation
 public protocol Parameters: Sendable, Hashable, Equatable {}
 
 public struct Parameter<T: Sendable & Hashable & Equatable>: Sendable, Hashable, Equatable {
-    let minValue: T
-    let maxValue: T
-    let defaultValue: T
+    public let minValue: T
+    public let maxValue: T
+    public let defaultValue: T
 
     public init(minValue: T, maxValue: T, defaultValue: T) {
         self.minValue = minValue
@@ -35,5 +35,5 @@ public struct PromptParams: Parameters {
 
 public struct StopSequenceParams: Parameters {
     public let maxSequences: Int
-    public let defaultVal: [String]
+    public let defaultValue: [String]
 }

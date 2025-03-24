@@ -37,6 +37,6 @@ public struct TextGenerationParameters: Parameters {
         self.topP = topP
         self.topK = topK
         self.prompt = PromptParams(maxSize: maxPromptSize)
-        self.stopSequences = StopSequenceParams(maxSequences: maxStopSequences, defaultVal: defaultStopSequences)
+        self.stopSequences = StopSequenceParams(maxSequences: maxStopSequences, defaultValue: defaultStopSequences)
     }
 }

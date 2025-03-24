@@ -22,13 +22,9 @@ extension BedrockModel {
         id: "us.deepseek.r1-v1:0",
         modality: DeepSeekR1V1(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 1,
-                maxMaxTokens: 32_768,
-                defaultMaxTokens: 4_000,
-                minTopP: 0,
-                maxTopP: 1,
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(minValue: 1, maxValue: 32_768, defaultValue: 32_768),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
                 maxStopSequences: 10,
                 defaultStopSequences: []
             )

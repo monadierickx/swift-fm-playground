@@ -27,14 +27,13 @@ extension BedrockModel {
         id: "amazon.titan-text-premier-v1:0",
         modality: TitanTextPremierV1(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.7,
-                maxMaxTokens: 3_072,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(minValue: 0, maxValue: 3_072, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                // topK: Parameter(minValue: Int, maxValue: Int, defaultValue: Int),
+                // maxPromptSize: Int,
+                // maxStopSequences: Int,
+                // defaultStopSequences: [String]
             )
         )
     )
@@ -42,14 +41,9 @@ extension BedrockModel {
         id: "amazon.titan-text-express-v1",
         modality: TitanTextExpressV1(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.7,
-                maxMaxTokens: 8_192,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(minValue: 0, maxValue: 8_192, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
         )
     )
@@ -57,14 +51,9 @@ extension BedrockModel {
         id: "amazon.titan-text-lite-v1",
         modality: TitanTextLiteV1(
             parameters: TextGenerationParameters(
-                minTemperature: 0,
-                maxTemperature: 1,
-                defaultTemperature: 0.7,
-                maxMaxTokens: 4_096,
-                defaultMaxTokens: 512,
-                minTopP: 0,
-                maxTopP: 1,
-                defaultTopP: 0.9
+                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(minValue: 0, maxValue: 4_096, defaultValue: 512),
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
             )
         )
     )
@@ -82,9 +71,9 @@ extension BedrockModel {
         modality: TitanImageG1V1(
             parameters:
                 ImageGenerationParameters(
-                    minNrOfImages: 1,
-                    maxNrOfImages: 5,
-                    defaultNrOfImages: 1
+                    // minNrOfImages: 1,
+                    // maxNrOfImages: 5,
+                    // defaultNrOfImages: 1
                 )
         )
     )
@@ -93,9 +82,9 @@ extension BedrockModel {
         modality: TitanImageG1V2(
             parameters:
                 ImageGenerationParameters(
-                minNrOfImages: 1,
-                maxNrOfImages: 5,
-                defaultNrOfImages: 1
+                    // minNrOfImages: 1,
+                    // maxNrOfImages: 5,
+                    // defaultNrOfImages: 1
                 )
         )
     )

@@ -38,10 +38,10 @@ struct DeepSeekText: TextModality {
     ) throws -> BedrockBodyCodable {
         DeepSeekRequestBody(
             prompt: prompt,
-            maxTokens: maxTokens ?? parameters.maxTokens.defaultVal,
-            temperature: temperature ?? parameters.temperature.defaultVal,
-            topP: topP ?? parameters.topP.defaultVal,
-            stopSequences: stopSequences ?? parameters.stopSequences.defaultVal
+            maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
+            temperature: temperature ?? parameters.temperature.defaultValue,
+            topP: topP ?? parameters.topP.defaultValue,
+            stopSequences: stopSequences ?? parameters.stopSequences.defaultValue
         )
     }
 
