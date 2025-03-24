@@ -13,20 +13,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
+// import Foundation
 
-public enum SwiftBedrockError: Error {
-    case invalidMaxTokens(String)
-    case invalidTemperature(String)
-    case invalidNrOfImages(String)
-    case invalidPrompt(String)
-    case invalidRequest(String)
-    case invalidResponse(String)
-    case invalidResponseBody(Data?)
-    case completionNotFound(String)
-    case invalidModel(String)
-    case encodingError(String)
-    case decodingError(String)
-    case notImplemented(String)
-    case invalidConverseOutput(String)
-}
+// public struct Message: Codable {
+//     public let role: Role
+//     public let content: [Content]
+
+//     public init(from role: Role, content: [Content]){
+//         self.role = role
+//         self.content = content
+    
+//     }
+
+//     public enum Content: Codable {
+//         case text(String)
+//         case unknown(String)
+//     }
+// }

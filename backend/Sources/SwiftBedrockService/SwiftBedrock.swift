@@ -284,7 +284,11 @@ public struct SwiftBedrock: Sendable {
             let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue
             try validateMaxTokens(maxTokens, max: parameters.maxTokens.maxValue)
             let temperature = temperature ?? parameters.temperature.defaultValue
-            try validateTemperature(temperature, min: parameters.temperature.minValue, max: parameters.temperature.maxValue)
+            try validateTemperature(
+                temperature,
+                min: parameters.temperature.minValue,
+                max: parameters.temperature.maxValue
+            )
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: BedrockRequest = try BedrockRequest.createTextRequest(
@@ -487,8 +491,8 @@ public struct SwiftBedrock: Sendable {
     public func converse(
         with model: BedrockModel,
         prompt: String,
-        history: [BedrockRuntimeClientTypes.Message] = []
-    ) async throws -> String {
+        history: [Message] = []
+    ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
             metadata: [
@@ -498,32 +502,35 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            try validatePrompt(prompt, maxPromptTokens: 200_000) // FIXME
-            var messages = history
-            messages.append(
-                BedrockRuntimeClientTypes.Message(
-                    content: [.text(prompt)],
-                    role: .user
-                )
-            )
-            logger.trace("Created messages", metadata: ["messages.count": "\(messages.count)"])
-            let input = ConverseInput(messages: messages, modelId: model.id)
+            let modality = try model.getTextModality()  // FIXME: ConverseModality?
+            let parameters = modality.getParameters()
+            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+
+            let converseRequest = ConverseRequest(model: model, messages: history)
+            let input = converseRequest.getConverseInput()
             logger.trace(
                 "Created ConverseInput",
-                metadata: ["messages.count": "\(messages.count)", "model": "\(model.id)"]
+                metadata: ["messages.count": "\(history.count)", "model": "\(model.id)"]
             )
             let response = try await self.bedrockRuntimeClient.converse(input: input)
             logger.trace("Received response", metadata: ["response": "\(response)"])
 
-            if case let .message(msg) = response.output {
-                logger.trace("Extracted message", metadata: ["message": "\(msg)"])
-                if case let .text(reply) = msg.content![0] {
-                    logger.trace("Extracted reply", metadata: ["reply": "\(reply)"])
-                    return reply
-                }
+            guard let converseOutput = response.output else {
+                logger.trace(
+                    "Invalid response",
+                    metadata: [
+                        "response": .string(String(describing: response)),
+                        "hasOutput": .stringConvertible(response.output != nil),
+                    ]
+                )
+                throw SwiftBedrockError.invalidResponse(
+                    "Something went wrong while extracting ConverseOutput from response."
+                )
             }
-            logger.trace("Not good")
-            return "Oeps"
+            let converseResponse = try ConverseResponse(converseOutput)
+            var messages = history
+            messages.append(converseResponse.message)
+            return (converseResponse.getReply(), messages)
         } catch {
             logger.trace("Error while conversing", metadata: ["error": "\(error)"])
             throw error

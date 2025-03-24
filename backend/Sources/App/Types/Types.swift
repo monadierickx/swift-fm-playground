@@ -19,6 +19,12 @@ import SwiftBedrockService
 import SwiftBedrockTypes
 
 extension TextCompletion: ResponseCodable {}
+extension Message: ResponseCodable {}
+
+struct ChatOutput: ResponseCodable {
+    let reply: String
+    let history: [Message]
+}
 
 struct TextCompletionInput: Codable {
     let prompt: String

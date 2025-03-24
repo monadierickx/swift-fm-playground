@@ -154,7 +154,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // POST /foundation-models/chat/{modelId}
-    router.post("/foundation-models/chat/:modelId") { request, context -> String in
+    router.post("/foundation-models/chat/:modelId") { request, context -> ChatOutput in
         do {
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
@@ -166,7 +166,8 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            return try await bedrock.converse(with: model, prompt: input.prompt)
+            let (reply, history) = try await bedrock.converse(with: model, prompt: input.prompt)
+            return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(
                 "An error occured while generating chat",
