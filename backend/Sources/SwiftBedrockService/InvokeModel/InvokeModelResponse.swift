@@ -17,7 +17,7 @@
 import Foundation
 import SwiftBedrockTypes
 
-public struct BedrockResponse {
+public struct InvokeModelResponse {
     let model: BedrockModel
     let contentType: ContentType
     let textCompletionBody: ContainsTextCompletion?

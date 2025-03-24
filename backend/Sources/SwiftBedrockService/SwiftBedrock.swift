@@ -291,7 +291,7 @@ public struct SwiftBedrock: Sendable {
             )
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
-            let request: BedrockRequest = try BedrockRequest.createTextRequest(
+            let request: InvokeModelRequest = try InvokeModelRequest.createTextRequest(
                 model: model,
                 prompt: prompt,
                 maxTokens: maxTokens,
@@ -329,17 +329,17 @@ public struct SwiftBedrock: Sendable {
                 logger.trace("Extracted body from response", metadata: ["response.body": "\(bodyString)"])
             }
 
-            let bedrockResponse: BedrockResponse = try BedrockResponse.createTextResponse(
+            let invokemodelResponse: InvokeModelResponse = try InvokeModelResponse.createTextResponse(
                 body: responseBody,
                 model: model
             )
             logger.trace(
                 "Generated text completion",
                 metadata: [
-                    "model": .string(model.id), "response": .string(String(describing: bedrockResponse)),
+                    "model": .string(model.id), "response": .string(String(describing: invokemodelResponse)),
                 ]
             )
-            return try bedrockResponse.getTextCompletion()
+            return try invokemodelResponse.getTextCompletion()
         } catch {
             logger.trace("Error while completing text", metadata: ["error": "\(error)"])
             throw error
@@ -376,7 +376,7 @@ public struct SwiftBedrock: Sendable {
             try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
-            let request: BedrockRequest = try BedrockRequest.createTextToImageRequest(
+            let request: InvokeModelRequest = try InvokeModelRequest.createTextToImageRequest(
                 model: model,
                 prompt: prompt,
                 nrOfImages: nrOfImages
@@ -401,11 +401,11 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting body from response."
                 )
             }
-            let bedrockResponse: BedrockResponse = try BedrockResponse.createImageResponse(
+            let invokemodelResponse: InvokeModelResponse = try InvokeModelResponse.createImageResponse(
                 body: responseBody,
                 model: model
             )
-            return try bedrockResponse.getGeneratedImage()
+            return try invokemodelResponse.getGeneratedImage()
         } catch {
             logger.trace("Error while generating image", metadata: ["error": "\(error)"])
             throw error
@@ -449,7 +449,7 @@ public struct SwiftBedrock: Sendable {
             try validateSimilarity(similarity, min: parameters.similarity.minValue, max: parameters.similarity.maxValue)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
-            let request: BedrockRequest = try BedrockRequest.createImageVariationRequest(
+            let request: InvokeModelRequest = try InvokeModelRequest.createImageVariationRequest(
                 model: model,
                 prompt: prompt,
                 image: image,
@@ -476,11 +476,11 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting body from response."
                 )
             }
-            let bedrockResponse: BedrockResponse = try BedrockResponse.createImageResponse(
+            let invokemodelResponse: InvokeModelResponse = try InvokeModelResponse.createImageResponse(
                 body: responseBody,
                 model: model
             )
-            return try bedrockResponse.getGeneratedImage()
+            return try invokemodelResponse.getGeneratedImage()
         } catch {
             logger.trace("Error while generating image variations", metadata: ["error": "\(error)"])
             throw error

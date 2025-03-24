@@ -17,7 +17,7 @@
 import Foundation
 import SwiftBedrockTypes
 
-struct BedrockRequest {
+struct InvokeModelRequest {
     let model: BedrockModel
     let contentType: ContentType
     let accept: ContentType
@@ -49,7 +49,7 @@ struct BedrockRequest {
         prompt: String,
         maxTokens: Int,
         temperature: Double
-    ) throws -> BedrockRequest {
+    ) throws -> InvokeModelRequest {
         try .init(model: model, prompt: prompt, maxTokens: maxTokens, temperature: temperature)
     }
 
@@ -83,7 +83,7 @@ struct BedrockRequest {
         model: BedrockModel,
         prompt: String,
         nrOfImages: Int
-    ) throws -> BedrockRequest {
+    ) throws -> InvokeModelRequest {
         try .init(model: model, prompt: prompt, nrOfImages: nrOfImages)
     }
 
@@ -111,7 +111,7 @@ struct BedrockRequest {
         image: String,
         similarity: Double,
         nrOfImages: Int
-    ) throws -> BedrockRequest {
+    ) throws -> InvokeModelRequest {
         try .init(model: model, prompt: prompt, image: image, similarity: similarity, nrOfImages: nrOfImages)
     }
 
