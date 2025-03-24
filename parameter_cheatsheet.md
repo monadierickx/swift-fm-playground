@@ -86,7 +86,7 @@
 
 | parameter   | minValue | maxValue | defaultValue |
 | ----------- | -------- | -------- | ------------ |
-| temperature | 0        | 1        | 1          |
+| temperature | 0        | 1        | 1            |
 | maxTokens   | 1        | 32_768   | ???          |
 | topP        | 0        | 1        | ???          |
 | topK        | /        | /        | /            |
@@ -99,7 +99,7 @@
 
 | parameter     | maxSequences | defaultVal |
 | ------------- | ------------ | ---------- |
-| stopSequences | 10          | `[]`       |
+| stopSequences | 10           | `[]`       |
 
 ### Llama
  
@@ -112,10 +112,10 @@
 
 | parameter   | minValue | maxValue | defaultValue |
 | ----------- | -------- | -------- | ------------ |
-| temperature | 0 | 1 | 0.5 |
-| maxTokens   | 1 | 2_048 | 512 |
-| topP        | 0 | 1 | 0.9 |
-| topK        | ??? | ??? | ??? |
+| temperature | 0        | 1        | 0.5          |
+| maxTokens   | 1        | 2_048    | 512          |
+| topP        | 0        | 1        | 0.9          |
+| topK        | ???      | ???      | ???          |
 
 
 | parameter | maxLength |
@@ -130,24 +130,74 @@
 
 ## Image Generation parameters
 
+### Nova 
+[user guide](https://docs.aws.amazon.com/nova/latest/userguide/image-gen-req-resp-structure.html)
+
+#### TEXT_IMAGE
+| parameter  | minValue | maxValue | defaultValue |
+| ---------- | -------- | -------- | ------------ |
+| nrOfImages | 1        | 5        | 1            |
+
+| parameter | maxLength |
+| --------- | --------- |
+| prompt    | 1_024     |
+
+
+#### TEXT_VARIATION
+| parameter  | minValue | maxValue | defaultValue |
+| ---------- | -------- | -------- | ------------ |
+| nrOfImages | 1        | 5        | 1            |
+| similarity | 0.2      | 1.0      | ???          |
+
+| parameter | maxLength |
+| --------- | --------- |
+| prompt    | 1_024     |
+
+#### TO DO
+| parameter | minValue | maxValue    | defaultValue |
+| --------- | -------- | ----------- | ------------ |
+| cfgScale  | 1.1      | 10          | 6.5          |
+| seed      | 0        | 858_993_459 | 12           |
+
+| parameter    | maxLength |
+| ------------ | --------- |
+| negativeText | 1_024     |
+
+width and height, quality ("standard" or "premium")
+
 ### Titan 
 
+[user guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html)
+
+
+#### TEXT_IMAGE
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | minValue | maxValue | defaultValue |
-| similarity | minValue | maxValue | defaultValue |
+| nrOfImages | 1        | 5        | 1            |
 
 | parameter | maxLength |
 | --------- | --------- |
-| prompt    | ???       |
+| prompt    | 512       |
 
-### Nova 
 
+#### TEXT_VARIATION
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | minValue | maxValue | defaultValue |
-| similarity | minValue | maxValue | defaultValue |
+| nrOfImages | 1        | 5        | 1            |
+| similarity | 0.2      | 1.0      | 0.7          |
 
 | parameter | maxLength |
 | --------- | --------- |
-| prompt    | ???       |
+| prompt    | 512       |
+
+#### TO DO
+| parameter | minValue | maxValue      | defaultValue |
+| --------- | -------- | ------------- | ------------ |
+| cfgScale  | 1.1      | 10.0          | 8.0          |
+| seed      | 0        | 2_147_483_646 | 42           |
+
+| parameter    | maxLength |
+| ------------ | --------- |
+| negativeText | 512       |
+
+width and height, quality (default "standard")

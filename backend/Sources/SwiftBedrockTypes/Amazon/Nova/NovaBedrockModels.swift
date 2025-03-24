@@ -29,9 +29,6 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 5_000, defaultValue: 5_000),
                 topP: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.9),
                 topK: Parameter(minValue: 0, maxValue: 50, defaultValue: 50)
-                // maxPromptSize: Int,
-                // maxStopSequences: Int,
-                // defaultStopSequences: [String]
             )
         )
     )
@@ -46,10 +43,10 @@ extension BedrockModel {
         id: "amazon.nova-canvas-v1:0",
         modality: NovaCanvas(
             parameters:
-                ImageGenerationParameters(// maxPromptSize: Int,
-                // minNrOfImages: Int,
-                // maxNrOfImages: Int,
-                // defaultNrOfImages: Int
+                ImageGenerationParameters(
+                    nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
+                    similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.6),
+                    maxPromptSize: 1028
                 )
         )
     )

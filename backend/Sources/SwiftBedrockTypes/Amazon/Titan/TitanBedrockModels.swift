@@ -71,9 +71,9 @@ extension BedrockModel {
         modality: TitanImageG1V1(
             parameters:
                 ImageGenerationParameters(
-                    // minNrOfImages: 1,
-                    // maxNrOfImages: 5,
-                    // defaultNrOfImages: 1
+                    nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
+                    similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.7),
+                    maxPromptSize: 512
                 )
         )
     )
@@ -82,9 +82,9 @@ extension BedrockModel {
         modality: TitanImageG1V2(
             parameters:
                 ImageGenerationParameters(
-                    // minNrOfImages: 1,
-                    // maxNrOfImages: 5,
-                    // defaultNrOfImages: 1
+                    nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
+                    similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.7),
+                    maxPromptSize: 512
                 )
         )
     )
