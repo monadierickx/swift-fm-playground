@@ -24,7 +24,7 @@ public struct ConverseResponse {
         guard case .message(let sdkMessage) = output else {
             throw SwiftBedrockError.invalidConverseOutput("Could not extract message from ConverseOutput")
         }
-        self.message = Message(from: sdkMessage)
+        self.message = try Message(from: sdkMessage)
     }
 
     func getReply() -> String {
