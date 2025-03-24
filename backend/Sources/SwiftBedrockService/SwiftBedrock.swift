@@ -506,11 +506,14 @@ public struct SwiftBedrock: Sendable {
             let parameters = modality.getParameters()
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
-            let converseRequest = ConverseRequest(model: model, messages: history)
+            var messages = history 
+            messages.append(Message(from: .user, content: [.text(prompt)]))
+
+            let converseRequest = ConverseRequest(model: model, messages: messages)
             let input = converseRequest.getConverseInput()
             logger.trace(
                 "Created ConverseInput",
-                metadata: ["messages.count": "\(history.count)", "model": "\(model.id)"]
+                metadata: ["messages.count": "\(messages.count)", "model": "\(model.id)"]
             )
             let response = try await self.bedrockRuntimeClient.converse(input: input)
             logger.trace("Received response", metadata: ["response": "\(response)"])
@@ -528,7 +531,6 @@ public struct SwiftBedrock: Sendable {
                 )
             }
             let converseResponse = try ConverseResponse(converseOutput)
-            var messages = history
             messages.append(converseResponse.message)
             return (converseResponse.getReply(), messages)
         } catch {

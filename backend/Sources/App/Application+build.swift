@@ -162,11 +162,11 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            guard model.hasImageModality() else {
+            guard model.hasTextModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            let (reply, history) = try await bedrock.converse(with: model, prompt: input.prompt)
+            let (reply, history) = try await bedrock.converse(with: model, prompt: input.prompt, history: input.history)
             return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(

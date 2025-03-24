@@ -34,7 +34,7 @@ struct TextCompletionInput: Codable {
 
 struct ChatInput: Codable {
     let prompt: String
-    // let history: [BedrockRuntimeClientTypes.Message] = []
+    let history: [Message]
 }
 
 struct ImageGenerationInput: Codable {
