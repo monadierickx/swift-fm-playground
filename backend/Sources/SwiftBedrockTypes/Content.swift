@@ -13,27 +13,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-@preconcurrency import AWSBedrockRuntime
 import Foundation
-import SwiftBedrockTypes
 
-public struct ConverseRequest {
-    let model: BedrockModel
-    let messages: [Message]
-
-    init(model: BedrockModel, messages: [Message] = []) {
-        self.messages = messages
-        self.model = model
-    }
-
-    func getConverseInput() -> ConverseInput {
-        ConverseInput(
-            messages: getSDKMessages(),
-            modelId: model.id
-        )
-    }
-
-    private func getSDKMessages() -> [BedrockRuntimeClientTypes.Message] {
-        messages.map { $0.getSDKMessage() }
-    }
+public enum Content: Codable {
+    case text(String)
+    case unknown(String)
 }

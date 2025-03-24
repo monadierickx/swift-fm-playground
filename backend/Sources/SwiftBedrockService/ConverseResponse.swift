@@ -17,23 +17,22 @@
 import Foundation
 import SwiftBedrockTypes
 
-public struct ConverseRequest {
-    let model: BedrockModel
-    let messages: [Message]
+public struct ConverseResponse {
+    let message: Message
 
-    init(model: BedrockModel, messages: [Message] = []) {
-        self.messages = messages
-        self.model = model
+    public init(_ output: BedrockRuntimeClientTypes.ConverseOutput) throws {
+        guard case .message(let sdkMessage) = output else {
+            throw SwiftBedrockError.invalidConverseOutput("Could not extract message from ConverseOutput")
+        }
+        self.message = Message(from: sdkMessage)
     }
 
-    func getConverseInput() -> ConverseInput {
-        ConverseInput(
-            messages: getSDKMessages(),
-            modelId: model.id
-        )
-    }
-
-    private func getSDKMessages() -> [BedrockRuntimeClientTypes.Message] {
-        messages.map { $0.getSDKMessage() }
+    func getReply() -> String {
+        switch message.content.first {
+        case .text(let text):
+            return text
+        default:
+            return "Not found"  // FIXME
+        }
     }
 }

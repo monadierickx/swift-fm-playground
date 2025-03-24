@@ -13,20 +13,18 @@
 //
 //===----------------------------------------------------------------------===//
 
-// import Foundation
+import Foundation
 
-// public struct Message: Codable {
-//     public let role: Role
-//     public let content: [Content]
+public struct Message: Codable {
+    public let role: Role
+    public let content: [Content]
 
-//     public init(from role: Role, content: [Content]){
-//         self.role = role
-//         self.content = content
-    
-//     }
+    // public static func createTextMessage(from role: Role, text: String) -> Self {
+    //     Message(from: role, content: [.text(text)])
+    // }
 
-//     public enum Content: Codable {
-//         case text(String)
-//         case unknown(String)
-//     }
-// }
+    public init(from role: Role, content: [Content]) {
+        self.role = role
+        self.content = content
+    }
+}
