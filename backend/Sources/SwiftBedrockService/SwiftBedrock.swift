@@ -157,6 +157,19 @@ public struct SwiftBedrock: Sendable {
         }
     }
 
+    /// Validate topP is between a minimum and a maximum value
+    private func validateTopP(_ topP: Double, min: Double, max: Double) throws {
+        guard topP >= min && topP <= max else {
+            logger.trace(
+                "Invalid topP",
+                metadata: ["topP": "\(topP)"]
+            )
+            throw SwiftBedrockError.invalidTemperature(
+                "TopP should be a value between \(min) and \(max). TopP: \(topP)"
+            )
+        }
+    }
+
     /// Validate prompt is not empty and does not consist of only whitespaces, tabs or newlines
     /// Additionally validates that the prompt is not longer than the maxPromptTokens
     private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
@@ -200,8 +213,25 @@ public struct SwiftBedrock: Sendable {
                 "Invalid similarity",
                 metadata: ["similarity": .stringConvertible(similarity)]
             )
-            throw SwiftBedrockError.invalidNrOfImages(
+            throw SwiftBedrockError.invalidSimilarity(
                 "Similarity should be between \(min) and \(max). similarity: \(similarity)"
+            )
+        }
+    }
+
+    /// Validate that not more stopsequences than allowed were given
+    private func validateStopSequences(_ stopSequences: [String], maxNrOfStopSequences: Int) throws {
+        guard stopSequences.count <= maxNrOfStopSequences else {
+            logger.trace(
+                "Invalid stopSequences",
+                metadata: [
+                    "stopSequences": "\(stopSequences)",
+                    "stopSequences.count": "\(stopSequences.count)",
+                    "maxNrOfStopSequences": "\(maxNrOfStopSequences)",
+                ]
+            )
+            throw SwiftBedrockError.invalidStopSequences(
+                "You can only provide up to \(maxNrOfStopSequences) stop sequences. Number of stop sequences: \(stopSequences.count)"
             )
         }
     }
@@ -491,7 +521,11 @@ public struct SwiftBedrock: Sendable {
     public func converse(
         with model: BedrockModel,
         prompt: String,
-        history: [Message] = []
+        history: [Message] = [],
+        maxTokens: Int? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        stopSequences: [String]? = []
     ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
@@ -505,11 +539,30 @@ public struct SwiftBedrock: Sendable {
             let modality = try model.getTextModality()  // FIXME: ConverseModality?
             let parameters = modality.getParameters()
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+            let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue
+            try validateMaxTokens(maxTokens, max: parameters.maxTokens.maxValue)
+            let temperature = temperature ?? parameters.temperature.defaultValue
+            try validateTemperature(
+                temperature,
+                min: parameters.temperature.minValue,
+                max: parameters.temperature.maxValue
+            )
+            let topP = topP ?? parameters.topP.defaultValue
+            try validateTopP(topP, min: parameters.topP.minValue, max: parameters.topP.maxValue)
+            let stopSequences = stopSequences ?? parameters.stopSequences.defaultValue
+            try validateStopSequences(stopSequences, maxNrOfStopSequences: parameters.stopSequences.maxSequences)
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))
 
-            let converseRequest = ConverseRequest(model: model, messages: messages)
+            let converseRequest = ConverseRequest(
+                model: model,
+                messages: messages,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                topP: topP,
+                stopSequences: stopSequences
+            )
             let input = converseRequest.getConverseInput()
             logger.trace(
                 "Created ConverseInput",

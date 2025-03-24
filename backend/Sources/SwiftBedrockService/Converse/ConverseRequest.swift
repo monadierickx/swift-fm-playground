@@ -20,14 +20,29 @@ import SwiftBedrockTypes
 public struct ConverseRequest {
     let model: BedrockModel
     let messages: [Message]
+    let inferenceConfig: InferenceConfig
 
-    init(model: BedrockModel, messages: [Message] = []) {
+    init(
+        model: BedrockModel,
+        messages: [Message] = [],
+        maxTokens: Int,
+        temperature: Double,
+        topP: Double,
+        stopSequences: [String]
+    ) {
         self.messages = messages
         self.model = model
+        self.inferenceConfig = InferenceConfig(
+            maxTokens: maxTokens,
+            temperature: temperature,
+            topP: topP,
+            stopSequences: stopSequences
+        )
     }
 
     func getConverseInput() -> ConverseInput {
         ConverseInput(
+            inferenceConfig: inferenceConfig.getSDKInferenceConfig(),
             messages: getSDKMessages(),
             modelId: model.id
         )
@@ -35,5 +50,21 @@ public struct ConverseRequest {
 
     private func getSDKMessages() -> [BedrockRuntimeClientTypes.Message] {
         messages.map { $0.getSDKMessage() }
+    }
+
+    struct InferenceConfig {
+        let maxTokens: Int
+        let temperature: Double
+        let topP: Double
+        let stopSequences: [String]
+
+        func getSDKInferenceConfig() -> BedrockRuntimeClientTypes.InferenceConfiguration {
+            BedrockRuntimeClientTypes.InferenceConfiguration(
+                maxTokens: maxTokens,
+                stopSequences: stopSequences,
+                temperature: Float(temperature),
+                topp: Float(topP)
+            )
+        }
     }
 }

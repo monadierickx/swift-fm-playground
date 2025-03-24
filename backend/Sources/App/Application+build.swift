@@ -166,7 +166,15 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            let (reply, history) = try await bedrock.converse(with: model, prompt: input.prompt, history: input.history)
+            let (reply, history) = try await bedrock.converse(
+                with: model,
+                prompt: input.prompt,
+                history: input.history,
+                maxTokens: input.maxTokens,
+                temperature: input.temperature,
+                topP: input.topP,
+                stopSequences: input.stopSequences
+            )
             return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(

@@ -20,6 +20,8 @@ public enum SwiftBedrockError: Error {
     case invalidTemperature(String)
     case invalidNrOfImages(String)
     case invalidPrompt(String)
+    case invalidSimilarity(String)
+    case invalidStopSequences(String)
     case invalidRequest(String)
     case invalidResponse(String)
     case invalidResponseBody(Data?)
