@@ -24,6 +24,14 @@ components:
           type: integer
         temperature:
           type: number
+        topP:
+          type: number
+        topK:
+          type: integer
+        stopSequences:
+          type: array
+          items:
+            type: string
       required:
         - prompt
     TextCompletionOutput:
