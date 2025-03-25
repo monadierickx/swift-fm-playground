@@ -133,71 +133,106 @@
 ### Nova 
 [user guide](https://docs.aws.amazon.com/nova/latest/userguide/image-gen-req-resp-structure.html)
 
+#### General 
+
+| parameter  | minValue | maxValue    | defaultValue |
+| ---------- | -------- | ----------- | ------------ |
+| nrOfImages | 1        | 5           | 1            |
+| cfgScale   | 1.1      | 10          | 6.5          |
+| seed       | 0        | 858_993_459 | 12           |
+
 #### TEXT_IMAGE
+
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 1_024     |
+| negativePrompt | 1_024     |
+
+#### Conditioned TEXT_IMAGE
+
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | 1        | 5        | 1            |
+| similarity | 0        | 1.0      | 0.7          |
 
-| parameter | maxLength |
-| --------- | --------- |
-| prompt    | 1_024     |
-
-
-#### TEXT_VARIATION
+#### IMAGE_VARIATION
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | 1        | 5        | 1            |
 | similarity | 0.2      | 1.0      | ???          |
+| images     | 1        | 5        | ???          |
 
-| parameter | maxLength |
-| --------- | --------- |
-| prompt    | 1_024     |
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 1_024     |
+| negativePrompt | 1_024     |
+
+
+#### COLOR_GUIDED_GENERATION
+
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 1_024     |
+| negativePrompt | 1_024     |
+| colors         | 10        |
 
 #### TO DO
-| parameter | minValue | maxValue    | defaultValue |
-| --------- | -------- | ----------- | ------------ |
-| cfgScale  | 1.1      | 10          | 6.5          |
-| seed      | 0        | 858_993_459 | 12           |
+| parameter | minValue | maxValue | defaultValue |
+| --------- | -------- | -------- | ------------ |
 
-| parameter    | maxLength |
-| ------------ | --------- |
-| negativeText | 1_024     |
 
-width and height, quality ("standard" or "premium")
+| parameter | maxLength |
+| --------- | --------- |
+
 
 ### Titan 
 
 [user guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html)
 
+#### Algemeen
+| parameter  | minValue | maxValue      | defaultValue |
+| ---------- | -------- | ------------- | ------------ |
+| nrOfImages | 1        | 5             | 1            |
+| cfgScale   | 1.1      | 10.0          | 8.0          |
+| seed       | 0        | 2_147_483_646 | 42           |
 
 #### TEXT_IMAGE
+
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 512       |
+| negativePrompt | 512       |
+
+#### Conditioned TEXT_IMAGE
+
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | 1        | 5        | 1            |
+| similarity | 0        | 1.0      | 0.7          |
 
-| parameter | maxLength |
-| --------- | --------- |
-| prompt    | 512       |
-
-
-#### TEXT_VARIATION
+#### IMAGE_VARIATION
 | parameter  | minValue | maxValue | defaultValue |
 | ---------- | -------- | -------- | ------------ |
-| nrOfImages | 1        | 5        | 1            |
 | similarity | 0.2      | 1.0      | 0.7          |
+| images     | 1        | 5        | ???          |
 
-| parameter | maxLength |
-| --------- | --------- |
-| prompt    | 512       |
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 512       |
+| negativePrompt | 512       |
+
+#### COLOR_GUIDED_GENERATION
+
+| parameter      | maxLength |
+| -------------- | --------- |
+| prompt         | 512       |
+| negativePrompt | 512       |
+| colors         | 10        |
+
+
+
 
 #### TO DO
-| parameter | minValue | maxValue      | defaultValue |
-| --------- | -------- | ------------- | ------------ |
-| cfgScale  | 1.1      | 10.0          | 8.0          |
-| seed      | 0        | 2_147_483_646 | 42           |
+| parameter | minValue | maxValue | defaultValue |
+| --------- | -------- | -------- | ------------ |
 
-| parameter    | maxLength |
-| ------------ | --------- |
-| negativeText | 512       |
+| parameter | maxLength |
+| --------- | --------- |
 
-width and height, quality (default "standard")

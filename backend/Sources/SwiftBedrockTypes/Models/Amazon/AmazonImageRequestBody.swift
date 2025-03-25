@@ -19,6 +19,7 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
     let taskType: TaskType
     private let textToImageParams: TextToImageParams?
     private let imageVariationParams: ImageVariationParams?
+    private let colorGuidedGenerationParams: ColorGuidedGenerationParams?
     private let imageGenerationConfig: ImageGenerationConfig
 
     // MARK: - Initialization
@@ -26,17 +27,106 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
     /// Creates a text-to-image generation request body
     /// - Parameters:
     ///   - prompt: The text description of the image to generate
-    ///   - nrOfImages: The number of images to generate (default: 1)
+    ///   - nrOfImages: The number of images to generate
+    ///   - negativeText: The text description of what to exclude from the generated image
     /// - Returns: A configured AmazonImageRequestBody for text-to-image generation
-    public static func textToImage(prompt: String, nrOfImages: Int = 1) -> Self {
-        AmazonImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
+    public static func textToImage(
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) -> Self {
+        AmazonImageRequestBody(
+            prompt: prompt,
+            negativeText: negativeText,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
     }
 
-    private init(prompt: String, nrOfImages: Int) {
+    private init(
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) {
         self.taskType = .textToImage
-        self.textToImageParams = TextToImageParams(text: prompt)
+        self.textToImageParams = TextToImageParams.textToImage(prompt: prompt, negativeText: negativeText)
         self.imageVariationParams = nil
-        self.imageGenerationConfig = ImageGenerationConfig(nrOfImages: nrOfImages)
+        self.colorGuidedGenerationParams = nil
+        self.imageGenerationConfig = ImageGenerationConfig(
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
+    }
+
+    /// Creates a text-to-image conditioned generation request body
+    /// - Parameters:
+    ///   - prompt: The text description of the image to generate
+    ///   - nrOfImages: The number of images to generate
+    ///   - negativeText: The text description of what to exclude from the generated image
+    /// - Returns: A configured AmazonImageRequestBody for text-to-image generation
+    public static func conditionedTextToImage(
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) -> Self {
+        AmazonImageRequestBody(
+            prompt: prompt,
+            negativeText: negativeText,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
+    }
+
+    private init(
+        prompt: String,
+        negativeText: String?,
+        conditionImage: String?,
+        controlMode: ControlMode?,
+        similarity: Double?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) {
+        self.taskType = .textToImage
+        self.textToImageParams = TextToImageParams.conditionedTextToImage(
+            prompt: prompt,
+            negativeText: negativeText,
+            conditionImage: conditionImage,
+            controlMode: controlMode,
+            controlStrength: similarity
+        )
+        self.imageVariationParams = nil
+        self.colorGuidedGenerationParams = nil
+        self.imageGenerationConfig = ImageGenerationConfig(
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
     }
 
     /// Creates an image variation generation request
@@ -47,59 +137,168 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
     ///   - nrOfImages: The number of variations to generate (default: 1)
     /// - Returns: A configured AmazonImageRequestBody for image variation generation
     public static func imageVariation(
-        prompt: String,
-        referenceImage: String,
-        similarity: Double = 0.6,
-        nrOfImages: Int = 1
+        referenceImages: [String],
+        prompt: String?,
+        negativeText: String?,
+        similarity: Double?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
     ) -> Self {
         AmazonImageRequestBody(
+            referenceImages: referenceImages,
             prompt: prompt,
-            referenceImage: referenceImage,
+            negativeText: negativeText,
             similarity: similarity,
-            nrOfImages: nrOfImages
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
         )
     }
 
-    private init(prompt: String, referenceImage: String, similarity: Double, nrOfImages: Int) {
+    private init(
+        referenceImages: [String],
+        prompt: String?,
+        negativeText: String?,
+        similarity: Double?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) {
         self.taskType = .imageVariation
         self.textToImageParams = nil
         self.imageVariationParams = ImageVariationParams(
+            images: referenceImages,
             text: prompt,
-            referenceImage: referenceImage,
-            similarity: similarity
+            negativeText: negativeText,
+            similarityStrength: similarity
         )
-        self.imageGenerationConfig = ImageGenerationConfig(nrOfImages: nrOfImages)
+        self.colorGuidedGenerationParams = nil
+        self.imageGenerationConfig = ImageGenerationConfig(
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
+    }
+
+    /// Creates a color guided image generation request
+    /// - Parameters:
+    ///   - prompt: The text description to guide the variation generation
+    ///   - nrOfImages: The number of variations to generate (default: 1)
+    ///   - colors: A list of color codes that will be used in the image, expressed as hexadecimal values in the form “#RRGGBB”.
+    ///   - negativeText: The text description of what to exclude from the generated image
+    ///   - referenceImage: The base64-encoded string of the source image (colors in this image will also be used in the generated image)
+    /// - Returns: A configured AmazonImageRequestBody for color guided image generation
+    public static func colorGuidedGeneration(
+        prompt: String,
+        colors: [String],
+        negativeText: String?,
+        referenceImage: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) -> Self {
+        AmazonImageRequestBody(
+            prompt: prompt,
+            colors: colors,
+            negativeText: negativeText,
+            referenceImage: referenceImage,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
+    }
+
+    private init(
+        prompt: String,
+        colors: [String],
+        negativeText: String?,
+        referenceImage: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) {
+        self.taskType = .colorGuidedGeneration
+        self.textToImageParams = nil
+        self.imageVariationParams = nil
+        self.colorGuidedGenerationParams = ColorGuidedGenerationParams(
+            text: prompt,
+            negativeText: negativeText,
+            colors: colors,
+            referenceImage: referenceImage
+        )
+        self.imageGenerationConfig = ImageGenerationConfig(
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
     }
 
     // MARK: - Nested Types
 
+    // private struct
+
+    private struct ColorGuidedGenerationParams: Codable {
+        let text: String
+        let negativeText: String?
+        let colors: [String]  // list of hexadecimal color values
+        let referenceImage: String?  // base64-encoded image string
+    }
+
+    private struct ImageVariationParams: Codable {
+        let images: [String]
+        let text: String?
+        let negativeText: String?
+        let similarityStrength: Double?
+    }
+
     private struct TextToImageParams: Codable {
         let text: String
+        let negativeText: String?
         let conditionImage: String?
         let controlMode: ControlMode?
         let controlStrength: Double?
-        let negativeText: String?
 
-        init(text: String) {
-            self.text = text
-            self.conditionImage = nil
-            self.controlMode = nil
-            self.controlStrength = nil
-            self.negativeText = nil
+        static func textToImage(prompt: String, negativeText: String?) -> Self {
+            TextToImageParams(
+                text: prompt,
+                negativeText: negativeText,
+                conditionImage: nil,
+                controlMode: nil,
+                controlStrength: nil
+            )
         }
 
-        private init(
-            text: String,
-            conditionImage: String,
-            controlMode: ControlMode? = nil,
-            controlStrength: Double? = nil,
-            negativeText: String? = nil
-        ) {
-            self.text = text
-            self.conditionImage = conditionImage
-            self.controlMode = controlMode
-            self.controlStrength = controlStrength
-            self.negativeText = negativeText
+        static func conditionedTextToImage(
+            prompt: String,
+            negativeText: String?,
+            conditionImage: String?,
+            controlMode: ControlMode?,
+            controlStrength: Double?
+        ) -> Self {
+            TextToImageParams(
+                text: prompt,
+                negativeText: negativeText,
+                conditionImage: conditionImage,
+                controlMode: controlMode,
+                controlStrength: controlStrength
+            )
         }
     }
 
@@ -108,33 +307,37 @@ public struct AmazonImageRequestBody: BedrockBodyCodable {
         case segmentation = "SEGMENTATION"
     }
 
-    private struct ImageVariationParams: Codable {
-        let text: String
-        let images: [String]
-        let similarityStrength: Double
-
-        init(text: String, referenceImage: String, similarity: Double) {
-            self.text = text
-            self.images = [referenceImage]
-            self.similarityStrength = similarity
-        }
-    }
-
     private struct ImageGenerationConfig: Codable {
-        let cfgScale: Int
-        let seed: Int
-        let quality: String
-        let width: Int
-        let height: Int
-        let numberOfImages: Int
+        let numberOfImages: Int?
+        let cfgScale: Double?
+        let seed: Int?
+        let quality: ImageQuality?
+        let width: Int?
+        let height: Int?
 
-        init(nrOfImages: Int = 3) {
-            self.cfgScale = 8
-            self.seed = 42
-            self.quality = "standard"
-            self.width = 1024
-            self.height = 1024
+        init(
+            nrOfImages: Int? = nil,
+            cfgScale: Double? = nil,
+            seed: Int? = nil,
+            quality: ImageQuality? = nil,
+            resolution: ImageResolution? = nil
+        ) {
+            self.quality = quality
+            self.width = resolution?.width ?? nil
+            self.height = resolution?.height ?? nil
+            self.cfgScale = cfgScale
+            self.seed = seed
             self.numberOfImages = nrOfImages
         }
     }
+}
+
+public enum ImageQuality: String, Codable {
+    case standard = "standard"
+    case premium = "premium"
+}
+
+public struct ImageResolution: Codable, Equatable, Sendable {
+    let width: Int
+    let height: Int
 }

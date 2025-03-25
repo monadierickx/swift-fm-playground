@@ -126,9 +126,31 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     public func getImageModality() throws -> any ImageModality {
         guard let imageModality = modality as? any ImageModality else {
             throw SwiftBedrockError.invalidModel(
-                "Model \(id) does not support text generation"
+                "Model \(id) does not support image generation"
             )
         }
         return imageModality
+    }
+
+    /// Checks if the model supports text to image generation and returns TextToImageModality
+    /// - Returns: TextToImageModality if the model supports image modality
+    public func getTextToImageModality() throws -> any TextToImageModality {
+        guard let textToImageModality = modality as? any TextToImageModality else {
+            throw SwiftBedrockError.invalidModel(
+                "Model \(id) does not support text to image generation"
+            )
+        }
+        return textToImageModality
+    }
+
+    /// Checks if the model supports image variation and returns ImageVariationModality
+    /// - Returns: ImageVariationModality if the model supports image modality
+    public func getImageVariationModality() throws -> any ImageVariationModality {
+        guard let modality = modality as? any ImageVariationModality else {
+            throw SwiftBedrockError.invalidModel(
+                "Model \(id) does not support image variation"
+            )
+        }
+        return modality
     }
 }

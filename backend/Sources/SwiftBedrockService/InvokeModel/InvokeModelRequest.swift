@@ -96,16 +96,47 @@ struct InvokeModelRequest {
     public static func createTextToImageRequest(
         model: BedrockModel,
         prompt: String,
-        nrOfImages: Int
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
     ) throws -> InvokeModelRequest {
-        try .init(model: model, prompt: prompt, nrOfImages: nrOfImages)
+        try .init(
+            model: model,
+            prompt: prompt,
+            negativeText: negativeText,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
     }
 
-    private init(model: BedrockModel, prompt: String, nrOfImages: Int) throws {
-        let imageModality = try model.getImageModality()
+    private init(
+        model: BedrockModel,
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) throws {
+        let textToImageModality = try model.getTextToImageModality()
         self.init(
             model: model,
-            body: try imageModality.getTextToImageRequestBody(prompt: prompt, nrOfImages: nrOfImages)
+            body: try textToImageModality.getTextToImageRequestBody(
+                prompt: prompt,
+                negativeText: negativeText,
+                nrOfImages: nrOfImages,
+                cfgScale: cfgScale,
+                seed: seed,
+                quality: quality,
+                resolution: resolution
+            )
         )
     }
 
@@ -122,26 +153,52 @@ struct InvokeModelRequest {
     public static func createImageVariationRequest(
         model: BedrockModel,
         prompt: String,
+        negativeText: String?,
         image: String,
         similarity: Double,
-        nrOfImages: Int
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
     ) throws -> InvokeModelRequest {
-        try .init(model: model, prompt: prompt, image: image, similarity: similarity, nrOfImages: nrOfImages)
+        try .init(
+            model: model,
+            prompt: prompt,
+            negativeText: negativeText,
+            image: image,
+            similarity: similarity,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
     }
 
     private init(
         model: BedrockModel,
         prompt: String,
+        negativeText: String?,
         image: String,
         similarity: Double,
-        nrOfImages: Int
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
     ) throws {
-        let imageModality = try model.getImageModality()
-        let body = try imageModality.getImageVariationRequestBody(
+        let modality = try model.getImageVariationModality()
+        let body = try modality.getImageVariationRequestBody(
             prompt: prompt,
+            negativeText: negativeText,
             image: image,
             similarity: similarity,
-            nrOfImages: nrOfImages
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
         )
         self.init(model: model, body: body)
     }

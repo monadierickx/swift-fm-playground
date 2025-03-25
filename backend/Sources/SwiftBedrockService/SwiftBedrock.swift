@@ -350,8 +350,8 @@ public struct SwiftBedrock: Sendable {
             logger.trace(
                 "Creating InvokeModelRequest",
                 metadata: [
-                    "model": .string(model.id), 
-                    "prompt": "\(prompt)", 
+                    "model": .string(model.id),
+                    "prompt": "\(prompt)",
                     "maxTokens": "\(maxTokens)",
                     "temperature": "\(temperature)",
                     "topP": "\(topP)",
@@ -429,7 +429,12 @@ public struct SwiftBedrock: Sendable {
     public func generateImage(
         _ prompt: String,
         with model: BedrockModel,
-        nrOfImages: Int? = nil
+        negativeText: String? = nil,
+        nrOfImages: Int? = nil,
+        cfgScale: Double? = nil,
+        seed: Int? = nil,
+        quality: ImageQuality? = nil,
+        resolution: ImageResolution? = nil
     ) async throws -> ImageGenerationOutput {
         logger.trace(
             "Generating image(s)",
@@ -445,12 +450,17 @@ public struct SwiftBedrock: Sendable {
             let parameters = modality.getParameters()
             let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
             try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
-            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+            // try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: InvokeModelRequest = try InvokeModelRequest.createTextToImageRequest(
                 model: model,
                 prompt: prompt,
-                nrOfImages: nrOfImages
+                negativeText: negativeText,
+                nrOfImages: nrOfImages,
+                cfgScale: cfgScale,
+                seed: seed,
+                quality: quality,
+                resolution: resolution
             )
             let input: InvokeModelInput = try request.getInvokeModelInput()
             logger.trace(
@@ -498,8 +508,13 @@ public struct SwiftBedrock: Sendable {
         image: String,
         prompt: String,
         with model: BedrockModel,
+        negativeText: String? = nil,
         similarity: Double? = nil,
-        nrOfImages: Int? = nil
+        nrOfImages: Int? = nil,
+        cfgScale: Double? = nil,
+        seed: Int? = nil,
+        quality: ImageQuality? = nil,
+        resolution: ImageResolution? = nil
     ) async throws -> ImageGenerationOutput {
         logger.trace(
             "Generating image(s) from reference image",
@@ -516,16 +531,21 @@ public struct SwiftBedrock: Sendable {
             let parameters = modality.getParameters()
             let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
             try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
-            let similarity = similarity ?? parameters.similarity.defaultValue
-            try validateSimilarity(similarity, min: parameters.similarity.minValue, max: parameters.similarity.maxValue)
-            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+            let similarity = similarity ?? 0.6  // parameters.similarity.defaultValue
+            // try validateSimilarity(similarity, min: parameters.similarity.minValue, max: parameters.similarity.maxValue)
+            // try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: InvokeModelRequest = try InvokeModelRequest.createImageVariationRequest(
                 model: model,
                 prompt: prompt,
+                negativeText: negativeText,
                 image: image,
                 similarity: similarity,
-                nrOfImages: nrOfImages
+                nrOfImages: nrOfImages,
+                cfgScale: cfgScale,
+                seed: seed,
+                quality: quality,
+                resolution: resolution
             )
             let input: InvokeModelInput = try request.getInvokeModelInput()
             logger.trace(
@@ -558,7 +578,7 @@ public struct SwiftBedrock: Sendable {
         }
     }
 
-    /// tmp
+    /// Use Converse API
     public func converse(
         with model: BedrockModel,
         prompt: String,

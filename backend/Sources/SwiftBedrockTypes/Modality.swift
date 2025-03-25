@@ -32,20 +32,54 @@ public protocol TextModality: Modality {
         topK: Int?,
         stopSequences: [String]?
     ) throws -> BedrockBodyCodable
-    
+
     func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
 }
 
 public protocol ImageModality: Modality {
-    init(parameters: ImageGenerationParameters)
     func getParameters() -> ImageGenerationParameters
+    // func validateResolution(_ resolution: ImageResolution) throws
+    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
+}
 
-    func getTextToImageRequestBody(prompt: String, nrOfImages: Int) throws -> BedrockBodyCodable
+public protocol TextToImageModality: Modality {
+    func getTextToImageParameters() -> TextToImageParameters
+    func getTextToImageRequestBody(
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) throws -> BedrockBodyCodable
+}
+
+public protocol ConditionedTextToImageModality: Modality {
+    func getConditionedTextToImageParameters() -> ConditionedTextToImageParameters
+    func getConditionedTextToImageRequestBody(
+        prompt: String,
+        negativeText: String?,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) throws -> any BedrockBodyCodable
+}
+
+public protocol ImageVariationModality: Modality {
+    func getImageVariationParameters() -> ImageVariationParameters
+
     func getImageVariationRequestBody(
         prompt: String,
+        negativeText: String?,
         image: String,
-        similarity: Double, 
-        nrOfImages: Int
-    ) throws -> BedrockBodyCodable // FIXME: optionals and use defaults
-    func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
+        similarity: Double,
+        nrOfImages: Int?,
+        cfgScale: Double?,
+        seed: Int?,
+        quality: ImageQuality?,
+        resolution: ImageResolution?
+    ) throws -> BedrockBodyCodable
 }
