@@ -19,16 +19,26 @@ public struct TitanRequestBody: BedrockBodyCodable {
     private let inputText: String
     private let textGenerationConfig: TextGenerationConfig
 
-    public init(prompt: String, maxTokens: Int = 512, temperature: Double = 0.7) {
+    public init(
+        prompt: String,
+        maxTokens: Int,
+        temperature: Double,
+        topP: Double,
+        stopSequences: [String]
+    ) {
         self.inputText = "User: \(prompt)\nBot:"
         self.textGenerationConfig = TextGenerationConfig(
             maxTokenCount: maxTokens,
-            temperature: temperature
+            temperature: temperature,
+            topP: topP,
+            stopSequences: stopSequences
         )
     }
 
     private struct TextGenerationConfig: Codable {
         let maxTokenCount: Int
         let temperature: Double
+        let topP: Double
+        let stopSequences: [String]
     }
 }

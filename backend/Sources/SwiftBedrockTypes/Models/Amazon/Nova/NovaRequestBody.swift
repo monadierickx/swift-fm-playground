@@ -22,13 +22,14 @@ public struct NovaRequestBody: BedrockBodyCodable {
     public init(
         prompt: String,
         maxTokens: Int,
-        temperature: Double = 0.7,
+        temperature: Double,
         topP: Double,
         topK: Int,
         stopSequences: [String]
     ) {
         self.inferenceConfig = InferenceConfig(
             maxTokens: maxTokens,
+            temperature: temperature,
             topP: topP,
             topK: topK,
             stopSequences: stopSequences
@@ -38,6 +39,7 @@ public struct NovaRequestBody: BedrockBodyCodable {
 
     private struct InferenceConfig: Codable {
         let maxTokens: Int
+        let temperature: Double
         let topP: Double
         let topK: Int
         let stopSequences: [String]

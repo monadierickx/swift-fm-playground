@@ -22,6 +22,7 @@ public struct AnthropicRequestBody: BedrockBodyCodable {
     private let top_p: Double
     private let top_k: Int
     private let messages: [AnthropicMessage]
+    private let stop_sequences: [String]
 
     public init(
         prompt: String,
@@ -39,6 +40,7 @@ public struct AnthropicRequestBody: BedrockBodyCodable {
         ]
         self.top_p = topP
         self.top_k = topK
+        self.stop_sequences = stopSequences
     }
 
     private struct AnthropicMessage: Codable {
