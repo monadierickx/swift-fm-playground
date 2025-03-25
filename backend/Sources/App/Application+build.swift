@@ -100,7 +100,10 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 input.prompt,
                 with: model,
                 maxTokens: input.maxTokens,
-                temperature: input.temperature
+                temperature: input.temperature,
+                topP: input.topP,
+                topK: input.topK,
+                stopSequences: input.stopSequences
             )
         } catch {
             logger.info(

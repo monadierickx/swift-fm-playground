@@ -170,6 +170,19 @@ public struct SwiftBedrock: Sendable {
         }
     }
 
+    /// Validate maxTokens is at least a minimum value
+    private func validateTopK(_ topK: Int, min: Int, max: Int) throws {
+        guard topK >= min else {
+            logger.trace(
+                "Invalid topK",
+                metadata: ["topK": .stringConvertible(topK)]
+            )
+            throw SwiftBedrockError.invalidTopK(
+                "TopK should be between \(min) and \(max). TopK: \(topK)"
+            )
+        }
+    }
+
     /// Validate prompt is not empty and does not consist of only whitespaces, tabs or newlines
     /// Additionally validates that the prompt is not longer than the maxPromptTokens
     private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
@@ -297,7 +310,10 @@ public struct SwiftBedrock: Sendable {
         _ prompt: String,
         with model: BedrockModel,
         maxTokens: Int? = nil,
-        temperature: Double? = nil
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        topK: Int? = nil,
+        stopSequences: [String]? = nil
     ) async throws -> TextCompletion {
         logger.trace(
             "Generating text completion",
@@ -319,13 +335,22 @@ public struct SwiftBedrock: Sendable {
                 min: parameters.temperature.minValue,
                 max: parameters.temperature.maxValue
             )
+            let topP = topP ?? parameters.topP.defaultValue
+            try validateTopP(topP, min: parameters.topP.minValue, max: parameters.topP.maxValue)
+            let topK = topK ?? parameters.topK.defaultValue
+            try validateTopK(topK, min: parameters.topK.minValue, max: parameters.topK.maxValue)
+            let stopSequences = stopSequences ?? parameters.stopSequences.defaultValue
+            try validateStopSequences(stopSequences, maxNrOfStopSequences: parameters.stopSequences.maxSequences)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             let request: InvokeModelRequest = try InvokeModelRequest.createTextRequest(
                 model: model,
                 prompt: prompt,
                 maxTokens: maxTokens,
-                temperature: temperature
+                temperature: temperature,
+                topP: topP,
+                topK: topK,
+                stopSequences: stopSequences
             )
             let input: InvokeModelInput = try request.getInvokeModelInput()
             logger.trace(

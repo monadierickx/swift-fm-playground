@@ -39,10 +39,9 @@ struct TitanText: TextModality {
         TitanRequestBody(
             prompt: prompt,
             maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
-            temperature: temperature ?? parameters.temperature.defaultValue
-            // topP: topP ?? parameters.topP.defaultValue,
-            // topK: topK ?? parameters.topK.defaultValue,
-            // stopSequences: stopSequences ?? parameters.stopSequences.defaultValue
+            temperature: temperature ?? parameters.temperature.defaultValue,
+            topP: topP ?? parameters.topP.defaultValue,
+            stopSequences: stopSequences ?? parameters.stopSequences.defaultValue
         )
     }
 

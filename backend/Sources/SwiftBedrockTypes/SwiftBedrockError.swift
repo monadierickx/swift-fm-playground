@@ -22,6 +22,7 @@ public enum SwiftBedrockError: Error {
     case invalidPrompt(String)
     case invalidSimilarity(String)
     case invalidStopSequences(String)
+    case invalidTopK(String)
     case invalidRequest(String)
     case invalidResponse(String)
     case invalidResponseBody(Data?)

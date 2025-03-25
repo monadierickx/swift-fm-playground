@@ -48,25 +48,31 @@ struct InvokeModelRequest {
         model: BedrockModel,
         prompt: String,
         maxTokens: Int,
-        temperature: Double
+        temperature: Double,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
     ) throws -> InvokeModelRequest {
-        try .init(model: model, prompt: prompt, maxTokens: maxTokens, temperature: temperature)
+        try .init(model: model, prompt: prompt, maxTokens: maxTokens, temperature: temperature, topP: topP, topK: topK, stopSequences: stopSequences)
     }
 
     private init(
         model: BedrockModel,
         prompt: String,
         maxTokens: Int,
-        temperature: Double
+        temperature: Double,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
     ) throws {
         let textModality = try model.getTextModality()
         let body: BedrockBodyCodable = try textModality.getTextRequestBody(
             prompt: prompt,
             maxTokens: maxTokens,
             temperature: temperature,
-            topP: nil,
-            topK: nil,
-            stopSequences: nil
+            topP: topP,
+            topK: topK,
+            stopSequences: stopSequences
         )
         self.init(model: model, body: body)
     }

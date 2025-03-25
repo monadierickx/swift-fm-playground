@@ -23,4 +23,7 @@ struct TextCompletionInput: Codable {
     let prompt: String
     let maxTokens: Int?
     let temperature: Double?
+    let topP: Double?
+    let topK: Int?
+    let stopSequences: [String]?
 }
