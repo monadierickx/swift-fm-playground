@@ -74,11 +74,6 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
         .ok
     }
 
-    // Healthcheck
-    router.get("/health") { _, _ -> String in
-        "I am healthy!"
-    }
-
     // SwiftBedrock
     let bedrock = try await SwiftBedrock(useSSO: useSSO)
 
