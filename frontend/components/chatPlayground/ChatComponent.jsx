@@ -12,6 +12,7 @@ import NumericInput from "../NumericInput";
 
 export default function ChatContainer() {
     const [conversation, setConversation] = useState([]);
+    const [history, setHistory] = useState([]);
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [selectedModel, setSelectedModel] = useState(defaultModel);
@@ -60,30 +61,20 @@ export default function ChatContainer() {
         setStopSequences(stopSequences.filter((_, i) => i !== index));
     };
 
-    const extractPrompt = (body) => {
-        let conversationBuilder = '';
-        for (const message of body) {
-            conversationBuilder += `${message.sender}: ${message.message}\n\n`;
-        }
-        return conversationBuilder.trim();
-    }
-
     const sendMessage = async () => {
         const newMessage = { sender: "Human", message: inputValue };
         setConversation(prevConversation => [...prevConversation, newMessage]);
         setInputValue('');
 
         try {
-            const message = extractPrompt([...conversation, newMessage]);
-
             setIsLoading(true);
 
             const response = await fetch(api, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    prompt: message,
-                    history: [],
+                    prompt: inputValue,
+                    history: history,
                     maxTokens: parseInt(maxTokens, 10),
                     temperature: parseFloat(temperature),
                     topP: parseFloat(topP),
@@ -100,6 +91,7 @@ export default function ChatContainer() {
                     sender: "Assistant",
                     message: data.reply
                 }]);
+                setHistory(data.history);
             });
 
         } catch (error) {
@@ -174,7 +166,7 @@ export default function ChatContainer() {
                     <div className="ml-4">
                         <div className="relative">
                             <label htmlFor="stopSequences">
-                                Stop reading at:
+                                Stop Sequences
                             </label>
                         </div>
                     </div>

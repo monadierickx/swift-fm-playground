@@ -21,7 +21,13 @@ public struct NovaResponseBody: ContainsTextCompletion {
     private let usage: Usage
 
     public func getTextCompletion() throws -> TextCompletion {
-        TextCompletion(output.message.content[0].text)
+        guard output.message.content.count > 0 else {
+            throw SwiftBedrockError.completionNotFound("NovaResponseBody: No content found")
+        }
+        guard output.message.role == .assistant else {
+            throw SwiftBedrockError.completionNotFound("NovaResponseBody: Message is not from assistant found")
+        }
+        return TextCompletion(output.message.content[0].text)
     }
 
     private struct Output: Codable {

@@ -26,7 +26,10 @@ public struct AnthropicResponseBody: ContainsTextCompletion {
     private let usage: Usage
 
     public func getTextCompletion() throws -> TextCompletion {
-        guard let completion = self.content[0].text else {
+        guard content.count > 0 else {
+            throw SwiftBedrockError.completionNotFound("AnthropicResponseBody: content is empty")
+        }
+        guard let completion = content[0].text else {
             throw SwiftBedrockError.completionNotFound("AnthropicResponseBody: content[0].text is nil")
         }
         return TextCompletion(completion)

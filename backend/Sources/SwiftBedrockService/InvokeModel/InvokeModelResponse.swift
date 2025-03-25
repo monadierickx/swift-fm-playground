@@ -82,7 +82,7 @@ public struct InvokeModelResponse {
         do {
             guard let textCompletionBody = textCompletionBody else {
                 throw SwiftBedrockError.decodingError("No text completion body found in the response")
-            }
+            } 
             return try textCompletionBody.getTextCompletion()
         } catch {
             throw SwiftBedrockError.decodingError(

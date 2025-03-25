@@ -20,7 +20,10 @@ public struct TitanResponseBody: ContainsTextCompletion {
     private let results: [Result]
 
     public func getTextCompletion() throws -> TextCompletion {
-        TextCompletion(results[0].outputText)
+        guard results.count > 0 else {
+            throw SwiftBedrockError.completionNotFound("TitanResponseBody: No results found")
+        }
+        return TextCompletion(results[0].outputText)
     }
 
     private struct Result: Codable {

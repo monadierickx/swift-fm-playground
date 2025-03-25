@@ -322,6 +322,10 @@ public struct SwiftBedrock: Sendable {
                 "model.modality": .string(model.modality.getName()),
                 "prompt": .string(prompt),
                 "maxTokens": .stringConvertible(maxTokens ?? "not defined"),
+                "temperature": .stringConvertible(temperature ?? "not defined"),
+                "topP": .stringConvertible(topP ?? "not defined"),
+                "topK": .stringConvertible(topK ?? "not defined"),
+                "stopSequences": .stringConvertible(stopSequences ?? "not defined"),
             ]
         )
         do {
@@ -343,6 +347,18 @@ public struct SwiftBedrock: Sendable {
             try validateStopSequences(stopSequences, maxNrOfStopSequences: parameters.stopSequences.maxSequences)
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
+            logger.trace(
+                "Creating InvokeModelRequest",
+                metadata: [
+                    "model": .string(model.id), 
+                    "prompt": "\(prompt)", 
+                    "maxTokens": "\(maxTokens)",
+                    "temperature": "\(temperature)",
+                    "topP": "\(topP)",
+                    "topK": "\(topK)",
+                    "stopSequences": "\(stopSequences)",
+                ]
+            )
             let request: InvokeModelRequest = try InvokeModelRequest.createTextRequest(
                 model: model,
                 prompt: prompt,

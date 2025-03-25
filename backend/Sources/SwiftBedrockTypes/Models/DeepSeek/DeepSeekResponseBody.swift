@@ -24,8 +24,10 @@ public struct DeepSeekResponseBody: ContainsTextCompletion {
     }
 
     public func getTextCompletion() throws -> TextCompletion {
-        TextCompletion(self.choices[0].text)
-        // FIXME: do we want the first or the last?
+        guard choices.count > 0 else {
+            throw SwiftBedrockError.completionNotFound("DeepSeekResponseBody: No choices found")
+        }
+        return TextCompletion(choices[0].text)
     }
 
 }
