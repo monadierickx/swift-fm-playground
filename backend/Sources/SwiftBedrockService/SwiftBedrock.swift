@@ -164,13 +164,13 @@ public struct SwiftBedrock: Sendable {
                 "Invalid topP",
                 metadata: ["topP": "\(topP)"]
             )
-            throw SwiftBedrockError.invalidTemperature(
+            throw SwiftBedrockError.invalidTopP(
                 "TopP should be a value between \(min) and \(max). TopP: \(topP)"
             )
         }
     }
 
-    /// Validate maxTokens is at least a minimum value
+    /// Validate topK is at least a minimum value
     private func validateTopK(_ topK: Int, min: Int, max: Int) throws {
         guard topK >= min else {
             logger.trace(
@@ -228,6 +228,32 @@ public struct SwiftBedrock: Sendable {
             )
             throw SwiftBedrockError.invalidSimilarity(
                 "Similarity should be between \(min) and \(max). similarity: \(similarity)"
+            )
+        }
+    }
+
+    /// Validate cfgScale is between a minimum and a maximum value
+    private func validateCfgScale(_ cfgScale: Double, min: Double, max: Double) throws {
+        guard cfgScale >= min && cfgScale <= max else {
+            logger.trace(
+                "Invalid cfgScale",
+                metadata: ["cfgScale": .stringConvertible(cfgScale)]
+            )
+            throw SwiftBedrockError.invalidCfgScale(
+                "Similarity should be between \(min) and \(max). cfgScale: \(cfgScale)"
+            )
+        }
+    }
+
+    /// Validate seed is at least a minimum value
+    private func validateSeed(_ seed: Int, min: Int, max: Int) throws {
+        guard seed >= min else {
+            logger.trace(
+                "Invalid seed",
+                metadata: ["seed": .stringConvertible(seed)]
+            )
+            throw SwiftBedrockError.invalidSeed(
+                "Seed should be between \(min) and \(max). Seed: \(seed)"
             )
         }
     }
@@ -429,7 +455,7 @@ public struct SwiftBedrock: Sendable {
     public func generateImage(
         _ prompt: String,
         with model: BedrockModel,
-        negativeText: String? = nil,
+        negativePrompt: String? = nil,
         nrOfImages: Int? = nil,
         cfgScale: Double? = nil,
         seed: Int? = nil,
@@ -442,20 +468,50 @@ public struct SwiftBedrock: Sendable {
                 "model.id": .string(model.id),
                 "model.modality": .string(model.modality.getName()),
                 "prompt": .string(prompt),
+                "negativePrompt": .stringConvertible(negativePrompt ?? "not defined"),
                 "nrOfImages": .stringConvertible(nrOfImages ?? "not defined"),
+                "cfgScale": .stringConvertible(cfgScale ?? "not defined"),
+                "seed": .stringConvertible(seed ?? "not defined")
             ]
         )
         do {
             let modality = try model.getImageModality()
             let parameters = modality.getParameters()
-            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
-            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
-            // try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+            let textToImageModality = try model.getTextToImageModality()
+            let textToImageParameters = textToImageModality.getTextToImageParameters()
+            
+            try validatePrompt(prompt, maxPromptTokens: textToImageParameters.prompt.maxSize)
+
+            if negativePrompt != nil {
+                try validatePrompt(negativePrompt!, maxPromptTokens: textToImageParameters.negativePrompt.maxSize)
+            }
+            if nrOfImages != nil {
+                try validateNrOfImages(
+                    nrOfImages!,
+                    min: parameters.nrOfImages.minValue,
+                    max: parameters.nrOfImages.maxValue
+                )
+            }
+            if cfgScale != nil {
+                try validateCfgScale(
+                    cfgScale!,
+                    min: parameters.cfgScale.minValue,
+                    max: parameters.cfgScale.maxValue
+                )
+            }
+            if seed != nil {
+                try validateSeed(
+                    seed!,
+                    min: parameters.seed.minValue,
+                    max: parameters.seed.maxValue
+                )
+            }
+            // FIXME: check resolution
 
             let request: InvokeModelRequest = try InvokeModelRequest.createTextToImageRequest(
                 model: model,
                 prompt: prompt,
-                negativeText: negativeText,
+                negativeText: negativePrompt,
                 nrOfImages: nrOfImages,
                 cfgScale: cfgScale,
                 seed: seed,
@@ -508,7 +564,7 @@ public struct SwiftBedrock: Sendable {
         image: String,
         prompt: String,
         with model: BedrockModel,
-        negativeText: String? = nil,
+        negativePrompt: String? = nil,
         similarity: Double? = nil,
         nrOfImages: Int? = nil,
         cfgScale: Double? = nil,
@@ -524,21 +580,51 @@ public struct SwiftBedrock: Sendable {
                 "prompt": .string(prompt),
                 "nrOfImages": .stringConvertible(nrOfImages ?? "not defined"),
                 "similarity": .stringConvertible(similarity ?? "not defined"),
+                "negativePrompt": .stringConvertible(negativePrompt ?? "not defined"),
+                "cfgScale": .stringConvertible(cfgScale ?? "not defined"),
+                "seed": .stringConvertible(seed ?? "not defined")
             ]
         )
         do {
             let modality = try model.getImageModality()
             let parameters = modality.getParameters()
-            let nrOfImages = nrOfImages ?? parameters.nrOfImages.defaultValue
-            try validateNrOfImages(nrOfImages, min: parameters.nrOfImages.minValue, max: parameters.nrOfImages.maxValue)
-            let similarity = similarity ?? 0.6  // parameters.similarity.defaultValue
-            // try validateSimilarity(similarity, min: parameters.similarity.minValue, max: parameters.similarity.maxValue)
-            // try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+            let imageVariationModality = try model.getImageVariationModality()
+            let imageVariationParameters = imageVariationModality.getImageVariationParameters()
+            
+            try validatePrompt(prompt, maxPromptTokens: imageVariationParameters.prompt.maxSize)
+            if similarity != nil {
+                try validateSimilarity(similarity!, min: imageVariationParameters.similarity.minValue, max: imageVariationParameters.similarity.maxValue)
+            
+            }
+            if negativePrompt != nil {
+                try validatePrompt(negativePrompt!, maxPromptTokens: imageVariationParameters.negativePrompt.maxSize)
+            }
+            if nrOfImages != nil {
+                try validateNrOfImages(
+                    nrOfImages!,
+                    min: parameters.nrOfImages.minValue,
+                    max: parameters.nrOfImages.maxValue
+                )
+            }
+            if cfgScale != nil {
+                try validateCfgScale(
+                    cfgScale!,
+                    min: parameters.cfgScale.minValue,
+                    max: parameters.cfgScale.maxValue
+                )
+            }
+            if seed != nil {
+                try validateSeed(
+                    seed!,
+                    min: parameters.seed.minValue,
+                    max: parameters.seed.maxValue
+                )
+            }
 
             let request: InvokeModelRequest = try InvokeModelRequest.createImageVariationRequest(
                 model: model,
                 prompt: prompt,
-                negativeText: negativeText,
+                negativeText: negativePrompt,
                 image: image,
                 similarity: similarity,
                 nrOfImages: nrOfImages,

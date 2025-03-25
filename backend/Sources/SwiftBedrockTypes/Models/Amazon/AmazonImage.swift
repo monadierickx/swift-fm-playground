@@ -93,10 +93,10 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
     }
 
     func getImageVariationRequestBody(
-        prompt: String,
+        prompt: String?,
         negativeText: String?,
         image: String,
-        similarity: Double,
+        similarity: Double?,
         nrOfImages: Int?,
         cfgScale: Double?,
         seed: Int?,
