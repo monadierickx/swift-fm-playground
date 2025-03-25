@@ -18,6 +18,9 @@ export default function ChatContainer() {
     const [maxTokens, setMaxTokens] = useState(200);
     const [temperature, setTemperature] = useState(0.5);
     const [topP, setTopP] = useState(0.9);
+    const [stopSequences, setStopSequences] = useState([]);
+    const [stopSequenceInput, setStopSequenceInput] = useState('');
+
 
     const endpoint = `/foundation-models/chat/${selectedModel.modelId}`;
     const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
@@ -40,6 +43,21 @@ export default function ChatContainer() {
 
     const handleTopPChange = (value) => {
         setTopP(value);
+    };
+
+    const handleStopSequenceInputChange = (e) => {
+        setStopSequenceInput(e.target.value);
+    };
+
+    const addStopSequence = () => {
+        if (stopSequenceInput.trim()) {
+            setStopSequences([...stopSequences, stopSequenceInput.trim()]);
+            setStopSequenceInput('');
+        }
+    };
+
+    const removeStopSequence = (index) => {
+        setStopSequences(stopSequences.filter((_, i) => i !== index));
     };
 
     const extractPrompt = (body) => {
@@ -68,7 +86,8 @@ export default function ChatContainer() {
                     history: [],
                     maxTokens: parseInt(maxTokens, 10),
                     temperature: parseFloat(temperature),
-                    topP: parseFloat(topP)
+                    topP: parseFloat(topP),
+                    stopSequences: stopSequences
                 })
             });
 
@@ -118,7 +137,7 @@ export default function ChatContainer() {
                     {/* temperature */}
                     <div className="ml-4">
                         <div className="relative">
-                            <label htmlFor="nrOfImages">
+                            <label htmlFor="temperature">
                                 Temperature:
                             </label>
                         </div>
@@ -136,7 +155,7 @@ export default function ChatContainer() {
                     {/* topP */}
                     <div className="ml-4">
                         <div className="relative">
-                            <label htmlFor="nrOfImages">
+                            <label htmlFor="TopP">
                                 TopP:
                             </label>
                         </div>
@@ -151,6 +170,46 @@ export default function ChatContainer() {
                             callback={handleTopPChange}
                         />
                     </div>
+                    {/* Stop Sequences */}
+                    <div className="ml-4">
+                        <div className="relative">
+                            <label htmlFor="stopSequences">
+                                Stop reading at:
+                            </label>
+                        </div>
+                    </div>
+                    <div className="flex items-center px-4">
+                        <input
+                            type="text"
+                            value={stopSequenceInput}
+                            onChange={handleStopSequenceInputChange}
+                            className="flex border rounded-l focus:outline-none focus:border-indigo-300 pl-4 h-10"
+                            placeholder="Sequence"
+                        />
+                        <button
+                            onClick={addStopSequence}
+                            className="h-10 px-4 bg-indigo-500 text-white rounded-r hover:bg-indigo-600"
+                        >
+                            Add
+                        </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                        {stopSequences.map((sequence, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center bg-gray-200 rounded-full px-3 py-1"
+                            >
+                                <span className="mr-2">{sequence}</span>
+                                <button
+                                    onClick={() => removeStopSequence(index)}
+                                    className="text-gray-500 hover:text-gray-700"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+
                 </div>
             </div>
 
