@@ -24,6 +24,7 @@ public enum SwiftBedrockError: Error {
     case decodingError(String)
     case notImplemented(String)
     case notSupported(String)
+    case notFound(String)
 }
 
 public enum InvalidParameter: Sendable {

@@ -17,15 +17,15 @@ import Foundation
 
 public struct LlamaRequestBody: BedrockBodyCodable {
     let prompt: String
-    let max_gen_len: Int
-    let temperature: Double
-    let top_p: Double
+    let max_gen_len: Int?
+    let temperature: Double?
+    let top_p: Double?
 
     public init(
         prompt: String,
-        maxTokens: Int,
-        temperature: Double,
-        topP: Double
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?
     ) {
         self.prompt =
             "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\(prompt)<|eot_id|><|start_header_id|>assistant<|end_header_id|>"

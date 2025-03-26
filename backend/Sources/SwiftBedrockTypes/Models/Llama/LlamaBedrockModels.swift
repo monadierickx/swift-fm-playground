@@ -24,7 +24,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
         )
     )
@@ -34,7 +37,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
         )
     )
@@ -44,7 +50,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
         )
     )
@@ -54,9 +63,11 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
-
         )
     )
     public static let llama3_2_1b_instruct: BedrockModel = BedrockModel(
@@ -65,9 +76,11 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
-
         )
     )
     public static let llama3_2_3b_instruct: BedrockModel = BedrockModel(
@@ -76,9 +89,11 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
-
         )
     )
     public static let llama3_3_70b_instruct: BedrockModel = BedrockModel(
@@ -87,9 +102,11 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
-
         )
     )
     public static let llama3_8b_instruct: BedrockModel = BedrockModel(
@@ -98,9 +115,11 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
                 maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams.notSupported(),
+                maxPromptSize: nil
             )
-
         )
     )
 }

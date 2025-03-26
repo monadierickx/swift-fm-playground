@@ -18,19 +18,19 @@ import Foundation
 public struct AnthropicRequestBody: BedrockBodyCodable {
     private let anthropic_version: String
     private let max_tokens: Int
-    private let temperature: Double
-    private let top_p: Double
-    private let top_k: Int
+    private let temperature: Double?
+    private let top_p: Double?
+    private let top_k: Int?
     private let messages: [AnthropicMessage]
-    private let stop_sequences: [String]
+    private let stop_sequences: [String]?
 
     public init(
         prompt: String,
         maxTokens: Int,
-        temperature: Double,
-        topP: Double,
-        topK: Int,
-        stopSequences: [String]
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
     ) {
         self.anthropic_version = "bedrock-2023-05-31"
         self.max_tokens = maxTokens

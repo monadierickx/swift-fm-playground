@@ -36,12 +36,27 @@ struct TitanText: TextModality {
         topK: Int?,
         stopSequences: [String]?
     ) throws -> BedrockBodyCodable {
-        TitanRequestBody(
+        guard let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue else {
+            throw SwiftBedrockError.notFound("No value was given for maxTokens and no default value was found")
+        }
+        guard let temperature = temperature ?? parameters.temperature.defaultValue else {
+            throw SwiftBedrockError.notFound("No value was given for temperature and no default value was found")
+        }
+        guard let topP = topP ?? parameters.topP.defaultValue else {
+            throw SwiftBedrockError.notFound("No value was given for topP and no default value was found")
+        }
+        guard topK == nil else {
+            throw SwiftBedrockError.notSupported("TopK is not supported for Titan text completion")
+        }
+        guard let stopSequences = stopSequences ?? parameters.stopSequences.defaultValue else {
+            throw SwiftBedrockError.notFound("No value was given for stopSequences and no default value was found")
+        }
+        return TitanRequestBody(
             prompt: prompt,
-            maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
-            temperature: temperature ?? parameters.temperature.defaultValue,
-            topP: topP ?? parameters.topP.defaultValue,
-            stopSequences: stopSequences ?? parameters.stopSequences.defaultValue
+            maxTokens: maxTokens,
+            temperature: temperature,
+            topP: topP,
+            stopSequences: stopSequences
         )
     }
 

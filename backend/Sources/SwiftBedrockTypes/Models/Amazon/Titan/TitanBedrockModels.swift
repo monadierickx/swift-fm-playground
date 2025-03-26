@@ -29,11 +29,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(minValue: 0, maxValue: 3_072, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
-                // topK: Parameter(minValue: Int, maxValue: Int, defaultValue: Int),
-                // maxPromptSize: Int,
-                // maxStopSequences: Int,
-                // defaultStopSequences: [String]
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
+                maxPromptSize: nil
             )
         )
     )
@@ -43,7 +42,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(minValue: 0, maxValue: 8_192, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
+                maxPromptSize: nil
             )
         )
     )
@@ -53,7 +55,10 @@ extension BedrockModel {
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(minValue: 0, maxValue: 4_096, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9)
+                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
+                maxPromptSize: nil
             )
         )
     )

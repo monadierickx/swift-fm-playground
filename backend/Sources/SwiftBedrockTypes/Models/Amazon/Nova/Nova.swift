@@ -36,7 +36,10 @@ struct NovaText: TextModality {
         topK: Int?,
         stopSequences: [String]?
     ) throws -> BedrockBodyCodable {
-        NovaRequestBody(
+        if topP != nil && temperature != nil {
+            throw SwiftBedrockError.notSupported("Alter either topP or temperature, but not both.")
+        }
+        return NovaRequestBody(
             prompt: prompt,
             maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
             temperature: temperature ?? parameters.temperature.defaultValue,

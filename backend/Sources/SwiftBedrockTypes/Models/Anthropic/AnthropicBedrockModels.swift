@@ -34,12 +34,11 @@ extension BedrockModel {
         modality: ClaudeInstantV1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                // maxTokens: Parameter(minValue: 1, maxValue: Int, defaultValue: Int),
+                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -48,12 +47,11 @@ extension BedrockModel {
         modality: ClaudeV1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                // maxTokens: Parameter(minValue: 1, maxValue: Int, defaultValue: Int),
+                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -62,12 +60,11 @@ extension BedrockModel {
         modality: ClaudeV2(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                // maxTokens: Parameter(minValue: 1, maxValue: Int, defaultValue: Int),
+                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -76,16 +73,15 @@ extension BedrockModel {
         modality: ClaudeV2_1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                // maxTokens: Parameter(minValue: 1, maxValue: Int, defaultValue: Int),
+                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
-        public static let claudev3_opus: BedrockModel = BedrockModel(
+    public static let claudev3_opus: BedrockModel = BedrockModel(
         id: "us.anthropic.claude-3-opus-20240229-v1:0",
         modality: ClaudeV3Opus(
             parameters: TextGenerationParameters(
@@ -93,9 +89,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 4_096, defaultValue: 4_096),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -107,9 +102,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 4_096, defaultValue: 4_096),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -121,9 +115,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -135,9 +128,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -149,9 +141,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )
@@ -163,9 +154,8 @@ extension BedrockModel {
                 maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
                 topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
-                maxPromptSize: 200_000,
-                maxStopSequences: 8191,
-                defaultStopSequences: []
+                stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
+                maxPromptSize: 200_000
             )
         )
     )

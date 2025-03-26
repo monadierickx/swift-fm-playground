@@ -36,9 +36,15 @@ struct AnthropicText: TextModality {
         topK: Int?,
         stopSequences: [String]?
     ) throws -> BedrockBodyCodable {
-        AnthropicRequestBody(
+        guard let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue else {
+            throw SwiftBedrockError.notFound("No value was given for maxTokens and no default value was found")
+        }
+        if topP != nil && temperature != nil {
+            throw SwiftBedrockError.notSupported("Alter either topP or temperature, but not both.")
+        }
+        return AnthropicRequestBody(
             prompt: prompt,
-            maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
+            maxTokens: maxTokens,
             temperature: temperature ?? parameters.temperature.defaultValue,
             topP: topP ?? parameters.topP.defaultValue,
             topK: topK ?? parameters.topK.defaultValue,

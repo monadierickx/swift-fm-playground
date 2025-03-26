@@ -24,19 +24,18 @@ public struct TextGenerationParameters: Parameters {
     public let stopSequences: StopSequenceParams
 
     public init(
-        temperature: Parameter<Double> = Parameter<Double>(minValue: 0, maxValue: 1, defaultValue: 0.5),
-        maxTokens: Parameter<Int> = Parameter<Int>(minValue: 1, maxValue: 25_000, defaultValue: 512),
-        topP: Parameter<Double> = Parameter<Double>(minValue: 0, maxValue: 1, defaultValue: 0.9),
-        topK: Parameter<Int> = Parameter<Int>(minValue: 0, maxValue: 500, defaultValue: 250),
-        maxPromptSize: Int = 25_000,
-        maxStopSequences: Int = 10,
-        defaultStopSequences: [String] = []
+        temperature: Parameter<Double>,
+        maxTokens: Parameter<Int>,
+        topP: Parameter<Double>,
+        topK: Parameter<Int>,
+        stopSequences: StopSequenceParams,
+        maxPromptSize: Int?
     ) {
         self.temperature = temperature
         self.maxTokens = maxTokens
         self.topP = topP
         self.topK = topK
         self.prompt = PromptParams(maxSize: maxPromptSize)
-        self.stopSequences = StopSequenceParams(maxSequences: maxStopSequences, defaultValue: defaultStopSequences)
+        self.stopSequences = stopSequences
     }
 }

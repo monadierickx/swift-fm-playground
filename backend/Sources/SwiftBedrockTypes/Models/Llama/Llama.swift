@@ -36,12 +36,17 @@ struct LlamaText: TextModality {
         topK: Int?,
         stopSequences: [String]?
     ) throws -> BedrockBodyCodable {
-        LlamaRequestBody(
+        guard topK == nil else {
+            throw SwiftBedrockError.notSupported("TopK is not supported for Llama text completion")
+        }
+        guard stopSequences == nil else {
+            throw SwiftBedrockError.notSupported("stopSequences is not supported for Llama text completion")
+        }
+        return LlamaRequestBody(
             prompt: prompt,
             maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
             temperature: temperature ?? parameters.temperature.defaultValue,
             topP: topP ?? parameters.topP.defaultValue
-            // throw not supported 
         )
     }
 

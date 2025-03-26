@@ -25,8 +25,9 @@ extension BedrockModel {
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
                 maxTokens: Parameter(minValue: 1, maxValue: 32_768, defaultValue: 32_768),
                 topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxStopSequences: 10,
-                defaultStopSequences: []
+                topK: Parameter.notSupported(),
+                stopSequences: StopSequenceParams(maxSequences: 10, defaultValue: []),
+                maxPromptSize: nil
             )
         )
     )

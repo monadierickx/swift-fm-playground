@@ -30,7 +30,7 @@ extension SwiftBedrock {
     ) throws {
         let parameters = modality.getParameters()
         if maxTokens != nil {
-            try validateMaxTokens(maxTokens!, max: parameters.maxTokens.maxValue)
+            try validateMaxTokens(maxTokens!, min: parameters.maxTokens.minValue, max: parameters.maxTokens.maxValue)
         }
         if temperature != nil {
             try validateTemperature(
@@ -143,7 +143,7 @@ extension SwiftBedrock {
         let parameters = modality.getParameters()
         try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
         if maxTokens != nil {
-            try validateMaxTokens(maxTokens!, max: parameters.maxTokens.maxValue)
+            try validateMaxTokens(maxTokens!, min: parameters.maxTokens.minValue, max: parameters.maxTokens.maxValue)
         }
         if temperature != nil {
             try validateTemperature(
@@ -163,175 +163,356 @@ extension SwiftBedrock {
     // MARK: private helpers
 
     /// Validate images is at least a minimum value
-    private func validateImages(_ images: [String], min: Int, max: Int) throws {
-        guard images.count <= max else {
-            logger.trace(
-                "Invalid stopSequences",
-                metadata: [
-                    "stopSequences": "\(images)",
-                    "stopSequences.count": "\(images.count)",
-                    "stopSequences.min": "\(min)",
-                    "stopSequences.max": "\(max)",
-                ]
-            )
-            throw SwiftBedrockError.invalid(
-                .images,
-                "You should provide at least \(min) and at most \(max) images. Number of images provided: \(images.count)"
-            )
+    private func validateImages(_ images: [String], min: Int?, max: Int?) throws {
+        if let min = min {
+            guard images.count >= min else {
+                logger.trace(
+                    "Invalid images",
+                    metadata: [
+                        "images": "\(images)",
+                        "images.count": "\(images.count)",
+                        "images.min": "\(min)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .images,
+                    "You should provide at least \(min) images. Number of images provided: \(images.count)"
+                )
+            }
+        }
+        if let max = max {
+            guard images.count <= max else {
+                logger.trace(
+                    "Invalid images",
+                    metadata: [
+                        "images": "\(images)",
+                        "images.count": "\(images.count)",
+                        "images.max": "\(max)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .images,
+                    "You should provide at most \(max) images. Number of images provided: \(images.count)"
+                )
+            }
         }
     }
 
     /// Validate maxTokens is at least a minimum value
-    private func validateMaxTokens(_ maxTokens: Int, max: Int) throws {
-        guard maxTokens >= 1 else {
-            logger.trace(
-                "Invalid maxTokens",
-                metadata: ["maxTokens": .stringConvertible(maxTokens)]
-            )
-            throw SwiftBedrockError.invalid(
-                .maxTokens,
-                "MaxTokens should be between 1 and \(max). MaxTokens: \(maxTokens)"
-            )
+    private func validateMaxTokens(_ maxTokens: Int, min: Int?, max: Int?) throws {
+        if let min = min {
+            guard maxTokens >= min else {
+                logger.trace(
+                    "Invalid maxTokens",
+                    metadata: [
+                        "maxTokens": .stringConvertible(maxTokens),
+                        "maxTokens.min": .stringConvertible(min),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .maxTokens,
+                    "MaxTokens should be between at least \(min). MaxTokens: \(maxTokens)"
+                )
+            }
+        }
+        if let max = max {
+            guard maxTokens <= max else {
+                logger.trace(
+                    "Invalid maxTokens",
+                    metadata: [
+                        "maxTokens": .stringConvertible(maxTokens),
+                        "maxTokens.max": .stringConvertible(max),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .maxTokens,
+                    "MaxTokens should be between at most \(max). MaxTokens: \(maxTokens)"
+                )
+            }
         }
     }
 
     /// Validate temperature is between a minimum and a maximum value
-    private func validateTemperature(_ temperature: Double, min: Double, max: Double) throws {
-        guard temperature >= min && temperature <= max else {
-            logger.trace(
-                "Invalid temperature",
-                metadata: ["temperature": "\(temperature)"]
-            )
-            throw SwiftBedrockError.invalid(
-                .temperature,
-                "Temperature should be a value between \(min) and \(max). Temperature: \(temperature)"
-            )
+    private func validateTemperature(_ temperature: Double, min: Double?, max: Double?) throws {
+        if let min = min {
+            guard temperature >= min else {
+                logger.trace(
+                    "Invalid temperature",
+                    metadata: [
+                        "temperature": "\(temperature)",
+                        "temperature.min": "\(min)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .temperature,
+                    "Temperature should be at least \(min). Temperature: \(temperature)"
+                )
+            }
+        }
+        if let max = max {
+            guard temperature <= max else {
+                logger.trace(
+                    "Invalid temperature",
+                    metadata: [
+                        "temperature": "\(temperature)",
+                        "temperature.max": "\(max)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .temperature,
+                    "Temperature should be at most \(max). Temperature: \(temperature)"
+                )
+            }
         }
     }
 
     /// Validate topP is between a minimum and a maximum value
-    private func validateTopP(_ topP: Double, min: Double, max: Double) throws {
-        guard topP >= min && topP <= max else {
-            logger.trace(
-                "Invalid topP",
-                metadata: ["topP": "\(topP)"]
-            )
-            throw SwiftBedrockError.invalid(
-                .topP,
-                "TopP should be a value between \(min) and \(max). TopP: \(topP)"
-            )
+    private func validateTopP(_ topP: Double, min: Double?, max: Double?) throws {
+        if let min = min {
+            guard topP >= min else {
+                logger.trace(
+                    "Invalid topP",
+                    metadata: [
+                        "topP": "\(topP)",
+                        "topP.min": "\(min)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .topP,
+                    "TopP should be at least \(min). TopP: \(topP)"
+                )
+            }
+        }
+        if let max = max {
+            guard topP <= max else {
+                logger.trace(
+                    "Invalid topP",
+                    metadata: [
+                        "topP": "\(topP)",
+                        "topP.max": "\(max)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .topP,
+                    "TopP should be at most \(max). TopP: \(topP)"
+                )
+            }
         }
     }
 
     /// Validate topK is at least a minimum value
-    private func validateTopK(_ topK: Int, min: Int, max: Int) throws {
-        guard topK >= min else {
-            logger.trace(
-                "Invalid topK",
-                metadata: ["topK": .stringConvertible(topK)]
-            )
-            throw SwiftBedrockError.invalid(
-                .topK,
-                "TopK should be between \(min) and \(max). TopK: \(topK)"
-            )
+    private func validateTopK(_ topK: Int, min: Int?, max: Int?) throws {
+        if let min = min {
+            guard topK >= min else {
+                logger.trace(
+                    "Invalid topK",
+                    metadata: [
+                        "topK": "\(topK)",
+                        "topK.min": "\(min)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .topK,
+                    "TopK should be at least \(min). TopK: \(topK)"
+                )
+            }
+        }
+        if let max = max {
+            guard topK <= max else {
+                logger.trace(
+                    "Invalid topK",
+                    metadata: [
+                        "topK": "\(topK)",
+                        "topK.max": "\(max)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .topK,
+                    "TopK should be at most \(max). TopK: \(topK)"
+                )
+            }
         }
     }
 
     /// Validate prompt is not empty and does not consist of only whitespaces, tabs or newlines
     /// Additionally validates that the prompt is not longer than the maxPromptTokens
-    private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
+    private func validatePrompt(_ prompt: String, maxPromptTokens: Int?) throws {
         guard !prompt.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
             logger.trace("Invalid prompt", metadata: ["prompt": .string(prompt)])
             throw SwiftBedrockError.invalid(.prompt, "Prompt is not allowed to be empty.")
         }
-        let length = prompt.utf8.count
-        guard length <= maxPromptTokens else {
-            logger.trace(
-                "Invalid prompt",
-                metadata: [
-                    "prompt": .string(prompt),
-                    "prompt.length": "\(length)",
-                    "maxPromptTokens": "\(maxPromptTokens)",
-                ]
-            )
-            throw SwiftBedrockError.invalid(
-                .prompt,
-                "Prompt is not allowed to be longer than \(maxPromptTokens) tokens. Prompt length: \(length)"
-            )
+        if let maxPromptTokens = maxPromptTokens {
+            let length = prompt.utf8.count
+            guard length <= maxPromptTokens else {
+                logger.trace(
+                    "Invalid prompt",
+                    metadata: [
+                        "prompt": .string(prompt),
+                        "prompt.length": "\(length)",
+                        "maxPromptTokens": "\(maxPromptTokens)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .prompt,
+                    "Prompt is not allowed to be longer than \(maxPromptTokens) tokens. Prompt length: \(length)"
+                )
+            }
         }
     }
 
     /// Validate nrOfImages is between a minimum and a maximum value
-    private func validateNrOfImages(_ nrOfImages: Int, min: Int, max: Int) throws {
-        guard nrOfImages >= min && nrOfImages <= max else {
-            logger.trace(
-                "Invalid nrOfImages",
-                metadata: ["nrOfImages": .stringConvertible(nrOfImages)]
-            )
-            throw SwiftBedrockError.invalid(
-                .nrOfImages,
-                "NrOfImages should be between \(min) and \(max). nrOfImages: \(nrOfImages)"
-            )
+    private func validateNrOfImages(_ nrOfImages: Int, min: Int?, max: Int?) throws {
+        if let min = min {
+            guard nrOfImages >= min else {
+                logger.trace(
+                    "Invalid nrOfImages",
+                    metadata: [
+                        "nrOfImages": .stringConvertible(nrOfImages),
+                        "nrOfImages.min": .stringConvertible(min),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .nrOfImages,
+                    "NrOfImages should be at least \(min). nrOfImages: \(nrOfImages)"
+                )
+            }
+        }
+        if let max = max {
+            guard nrOfImages <= max else {
+                logger.trace(
+                    "Invalid nrOfImages",
+                    metadata: [
+                        "nrOfImages": .stringConvertible(nrOfImages),
+                        "nrOfImages.max": .stringConvertible(max),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .nrOfImages,
+                    "NrOfImages should be at most \(max). nrOfImages: \(nrOfImages)"
+                )
+            }
         }
     }
 
     /// Validate similarity is between a minimum and a maximum value
-    private func validateSimilarity(_ similarity: Double, min: Double, max: Double) throws {
-        guard similarity >= min && similarity <= max else {
-            logger.trace(
-                "Invalid similarity",
-                metadata: ["similarity": .stringConvertible(similarity)]
-            )
-            throw SwiftBedrockError.invalid(
-                .similarity,
-                "Similarity should be between \(min) and \(max). similarity: \(similarity)"
-            )
+    private func validateSimilarity(_ similarity: Double, min: Double?, max: Double?) throws {
+        if let min = min {
+            guard similarity >= min else {
+                logger.trace(
+                    "Invalid similarity",
+                    metadata: [
+                        "similarity": .stringConvertible(similarity),
+                        "similarity.min": .stringConvertible(min),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .similarity,
+                    "Similarity should be at least \(min). similarity: \(similarity)"
+                )
+            }
+        }
+        if let max = max {
+            guard similarity <= max else {
+                logger.trace(
+                    "Invalid similarity",
+                    metadata: [
+                        "similarity": .stringConvertible(similarity),
+                        "similarity.max": .stringConvertible(max),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .similarity,
+                    "Similarity should be at most \(max). similarity: \(similarity)"
+                )
+            }
         }
     }
 
     /// Validate cfgScale is between a minimum and a maximum value
-    private func validateCfgScale(_ cfgScale: Double, min: Double, max: Double) throws {
-        guard cfgScale >= min && cfgScale <= max else {
-            logger.trace(
-                "Invalid cfgScale",
-                metadata: ["cfgScale": .stringConvertible(cfgScale)]
-            )
-            throw SwiftBedrockError.invalid(
-                .cfgScale,
-                "Similarity should be between \(min) and \(max). cfgScale: \(cfgScale)"
-            )
+    private func validateCfgScale(_ cfgScale: Double, min: Double?, max: Double?) throws {
+        if let min = min {
+            guard cfgScale >= min else {
+                logger.trace(
+                    "Invalid cfgScale",
+                    metadata: [
+                        "cfgScale": .stringConvertible(cfgScale),
+                        "cfgScale.min": .stringConvertible(min),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .cfgScale,
+                    "Similarity should be at least \(min). cfgScale: \(cfgScale)"
+                )
+            }
+        }
+        if let max = max {
+            guard cfgScale <= max else {
+                logger.trace(
+                    "Invalid cfgScale",
+                    metadata: [
+                        "cfgScale": .stringConvertible(cfgScale),
+                        "cfgScale.max": .stringConvertible(max),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .cfgScale,
+                    "Similarity should be at most \(max). cfgScale: \(cfgScale)"
+                )
+            }
         }
     }
 
-    /// Validate seed is at least a minimum value
-    private func validateSeed(_ seed: Int, min: Int, max: Int) throws {
-        guard seed >= min else {
-            logger.trace(
-                "Invalid seed",
-                metadata: ["seed": .stringConvertible(seed)]
-            )
-            throw SwiftBedrockError.invalid(
-                .seed,
-                "Seed should be between \(min) and \(max). Seed: \(seed)"
-            )
+    /// Validate seed is at between a minimum and a maximum value
+    private func validateSeed(_ seed: Int, min: Int?, max: Int?) throws {
+        if let min = min {
+            guard seed >= min else {
+                logger.trace(
+                    "Invalid seed",
+                    metadata: [
+                        "seed": .stringConvertible(seed),
+                        "seed.min": .stringConvertible(min),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .seed,
+                    "Seed should be at least \(min). Seed: \(seed)"
+                )
+            }
+        }
+        if let max = max {
+            guard seed <= max else {
+                logger.trace(
+                    "Invalid seed",
+                    metadata: [
+                        "seed": .stringConvertible(seed),
+                        "seed.max": .stringConvertible(max),
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .seed,
+                    "Seed should be at most \(max). Seed: \(seed)"
+                )
+            }
         }
     }
 
     /// Validate that not more stopsequences than allowed were given
-    private func validateStopSequences(_ stopSequences: [String], maxNrOfStopSequences: Int) throws {
-        guard stopSequences.count <= maxNrOfStopSequences else {
-            logger.trace(
-                "Invalid stopSequences",
-                metadata: [
-                    "stopSequences": "\(stopSequences)",
-                    "stopSequences.count": "\(stopSequences.count)",
-                    "maxNrOfStopSequences": "\(maxNrOfStopSequences)",
-                ]
-            )
-            throw SwiftBedrockError.invalid(
-                .stopSequences,
-                "You can only provide up to \(maxNrOfStopSequences) stop sequences. Number of stop sequences: \(stopSequences.count)"
-            )
+    private func validateStopSequences(_ stopSequences: [String], maxNrOfStopSequences: Int?) throws {
+        if let maxNrOfStopSequences = maxNrOfStopSequences {
+            guard stopSequences.count <= maxNrOfStopSequences else {
+                logger.trace(
+                    "Invalid stopSequences",
+                    metadata: [
+                        "stopSequences": "\(stopSequences)",
+                        "stopSequences.count": "\(stopSequences.count)",
+                        "maxNrOfStopSequences": "\(maxNrOfStopSequences)",
+                    ]
+                )
+                throw SwiftBedrockError.invalid(
+                    .stopSequences,
+                    "You can only provide up to \(maxNrOfStopSequences) stop sequences. Number of stop sequences: \(stopSequences.count)"
+                )
+            }
         }
     }
 }

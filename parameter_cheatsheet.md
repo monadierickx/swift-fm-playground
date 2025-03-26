@@ -5,32 +5,32 @@
 ### Nova 
 [user guide](https://docs.aws.amazon.com/nova/latest/userguide/complete-request-schema.html)
 
-| parameter   | minValue | maxValue | defaultValue |
-| ----------- | -------- | -------- | ------------ |
-| temperature | 0.00001  | 1        | 0.7          |
-| maxTokens   | 1        | 5_000    | "dynamic"?   |
-| topP        | 0        | 1.0      | 0.9          |
-| topK        | 0        | ???      | 50           |
+| parameter   | minValue | maxValue  | defaultValue | optional or required |
+| ----------- | -------- | --------- | ------------ | -------------------- |
+| temperature | 0.00001  | 1         | 0.7          | optional             |
+| maxTokens   | 1        | 5_000     | "dynamic"?   | optional             |
+| topP        | 0        | 1.0       | 0.9          | optional             |
+| topK        | 0        | Not found | 50           | optional             |
 
 
 | parameter | maxLength |
 | --------- | --------- |
-| prompt    | ???       |
+| prompt    | Not found |
 
 
 | parameter     | maxSequences | defaultVal |
 | ------------- | ------------ | ---------- |
-| stopSequences | ???          | `[]`       |
+| stopSequences | Not found    | `[]`       |
 
 ### Titan 
 [user guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-text.html)
 
-| parameter   | minValue | maxValue         | defaultValue |
-| ----------- | -------- | ---------------- | ------------ |
-| temperature | 0.0      | 1.0              | 0.7          |
-| maxTokens   | 0        | depends on model | 512          |
-| topP        | 0        | 1                | 0.9          |
-| topK        | ???      | ???              | ???          |
+| parameter   | minValue      | maxValue         | defaultValue  | optional or required |
+| ----------- | ------------- | ---------------- | ------------- | -------------------- |
+| temperature | 0.0           | 1.0              | 0.7           | required             |
+| maxTokens   | 0             | depends on model | 512           | required             |
+| topP        | 0             | 1                | 0.9           | required             |
+| topK        | Not supported | Not supported    | Not supported | required             |
 
 | model              | max return tokens |
 | ------------------ | ----------------- |
@@ -52,12 +52,12 @@
 
 [user guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-anthropic-claude-messages.html)
 
-| parameter   | minValue | maxValue             | defaultValue          |
-| ----------- | -------- | -------------------- | --------------------- |
-| temperature | 0        | 1                    | 1                     |
-| maxTokens   | 1        | depends on the model | ???                   |
-| topP        | 0        | 1                    | 0.999                 |
-| topK        | 0        | 500                  | "disabled by default" |
+| parameter   | minValue | maxValue             | defaultValue          | optional or required |
+| ----------- | -------- | -------------------- | --------------------- | -------------------- |
+| temperature | 0        | 1                    | 1                     | optional             |
+| maxTokens   | 1        | depends on the model | Not found             | required             |
+| topP        | 0        | 1                    | 0.999                 | optional             |
+| topK        | 0        | 500                  | "disabled by default" | optional             |
 
 [model comparison](https://docs.anthropic.com/en/docs/about-claude/models/all-models#model-comparison)
 
@@ -84,17 +84,17 @@
 [user guide](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-deepseek.html)
 [deepseek docs](https://api-docs.deepseek.com/quick_start/parameter_settings)
 
-| parameter   | minValue | maxValue | defaultValue |
-| ----------- | -------- | -------- | ------------ |
-| temperature | 0        | 1        | 1            |
-| maxTokens   | 1        | 32_768   | ???          |
-| topP        | 0        | 1        | ???          |
-| topK        | /        | /        | /            |
+| parameter   | minValue      | maxValue      | defaultValue  | optional or required |
+| ----------- | ------------- | ------------- | ------------- | -------------------- |
+| temperature | 0             | 1             | 1             | required             |
+| maxTokens   | 1             | 32_768        | Not found     | required             |
+| topP        | 0             | 1             | Not found     | required             |
+| topK        | Not supported | Not supported | Not supported | required             |
 
 
 | parameter | maxLength |
 | --------- | --------- |
-| prompt    | ???       |
+| prompt    | Not found |
 
 
 | parameter     | maxSequences | defaultVal |
@@ -110,22 +110,22 @@
 - Llama 3.2 Instruct
 - Llama 3.3 Instruct
 
-| parameter   | minValue | maxValue | defaultValue |
-| ----------- | -------- | -------- | ------------ |
-| temperature | 0        | 1        | 0.5          |
-| maxTokens   | 1        | 2_048    | 512          |
-| topP        | 0        | 1        | 0.9          |
-| topK        | ???      | ???      | ???          |
+| parameter   | minValue      | maxValue      | defaultValue  | optional or required |
+| ----------- | ------------- | ------------- | ------------- | -------------------- |
+| temperature | 0             | 1             | 0.5           | optional             |
+| maxTokens   | 1             | 2_048         | 512           | optional             |
+| topP        | 0             | 1             | 0.9           | optional             |
+| topK        | Not supported | Not supported | Not supported | optional             |
 
 
 | parameter | maxLength |
 | --------- | --------- |
-| prompt    | ???       |
+| prompt    | Not found |
 
 
-| parameter     | maxSequences | defaultVal |
-| ------------- | ------------ | ---------- |
-| stopSequences | ???          | `[]`       |
+| parameter     | maxSequences  | defaultVal    |
+| ------------- | ------------- | ------------- |
+| stopSequences | Not supported | Not supported |
 
 
 ## Image Generation parameters
@@ -225,14 +225,4 @@
 | prompt         | 512       |
 | negativePrompt | 512       |
 | colors         | 10        |
-
-
-
-
-#### TO DO
-| parameter | minValue | maxValue | defaultValue |
-| --------- | -------- | -------- | ------------ |
-
-| parameter | maxLength |
-| --------- | --------- |
 
