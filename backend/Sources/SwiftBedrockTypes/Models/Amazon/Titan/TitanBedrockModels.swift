@@ -24,7 +24,7 @@ typealias TitanTextLiteV1 = TitanText
 
 extension BedrockModel {
     public static let titan_text_g1_premier: BedrockModel = BedrockModel(
-        id: "amazon.titan-text-premier-v1:0",
+        id: "amazon.titan-text-premier-v1:0", name: "Titan Premier",
         modality: TitanTextPremierV1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
@@ -37,7 +37,7 @@ extension BedrockModel {
         )
     )
     public static let titan_text_g1_express: BedrockModel = BedrockModel(
-        id: "amazon.titan-text-express-v1",
+        id: "amazon.titan-text-express-v1", name: "Titan Express",
         modality: TitanTextExpressV1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
@@ -50,7 +50,7 @@ extension BedrockModel {
         )
     )
     public static let titan_text_g1_lite: BedrockModel = BedrockModel(
-        id: "amazon.titan-text-lite-v1",
+        id: "amazon.titan-text-lite-v1", name: "Titan Lite",
         modality: TitanTextLiteV1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
@@ -72,7 +72,7 @@ typealias TitanImageG1V2 = AmazonImage
 
 extension BedrockModel {
     public static let titan_image_g1_v1: BedrockModel = BedrockModel(
-        id: "amazon.titan-image-generator-v1",
+        id: "amazon.titan-image-generator-v1", name: "Titan Image Generator",
         modality: TitanImageG1V1(
             parameters: ImageGenerationParameters(
                 nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
@@ -95,7 +95,7 @@ extension BedrockModel {
         )
     )
     public static let titan_image_g1_v2: BedrockModel = BedrockModel(
-        id: "amazon.titan-image-generator-v2:0",
+        id: "amazon.titan-image-generator-v2:0", name: "Titan Image Generator V2",
         modality: TitanImageG1V2(
             parameters: ImageGenerationParameters(
                 nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),

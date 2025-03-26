@@ -79,8 +79,16 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
 
     // List models
     // GET /foundation-models lists all models
-    router.get("/foundation-models") { request, _ -> [ModelInfo] in
-        try await bedrock.listModels()
+    router.get("/foundation-models") { request, _ -> [ModelSummary] in
+        do {
+            return try await bedrock.listModels()
+        } catch {
+            logger.info(
+                "An error occured while listing models",
+                metadata: ["url": "/foundation-models", "error": "\(error)"]
+            )
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
+        }
     }
 
     // POST /foundation-models/text/{modelId}

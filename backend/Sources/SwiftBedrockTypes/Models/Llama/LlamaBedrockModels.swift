@@ -19,7 +19,7 @@ import Foundation
 
 extension BedrockModel {
     public static let llama_3_8b_instruct: BedrockModel = BedrockModel(
-        id: "meta.llama3-8b-instruct-v1:0",
+        id: "meta.llama3-8b-instruct-v1:0", name: "Llama 3 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -32,7 +32,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_70b_instruct: BedrockModel = BedrockModel(
-        id: "meta.llama3-70b-instruct-v1:0",
+        id: "meta.llama3-70b-instruct-v1:0", name: "Llama 3 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -45,7 +45,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_1_8b_instruct: BedrockModel = BedrockModel(
-        id: "us.meta.llama3-1-8b-instruct-v1:0",
+        id: "us.meta.llama3-1-8b-instruct-v1:0", name: "Llama 3.1 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -58,7 +58,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_1_70b_instruct: BedrockModel = BedrockModel(
-        id: "us.meta.llama3-1-70b-instruct-v1:0",
+        id: "us.meta.llama3-1-70b-instruct-v1:0", name: "Llama 3.1 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -71,7 +71,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_2_1b_instruct: BedrockModel = BedrockModel(
-        id: "us.meta.llama3-2-1b-instruct-v1:0",
+        id: "us.meta.llama3-2-1b-instruct-v1:0", name: "Llama 3.2 1B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -84,7 +84,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_2_3b_instruct: BedrockModel = BedrockModel(
-        id: "us.meta.llama3-2-3b-instruct-v1:0",
+        id: "us.meta.llama3-2-3b-instruct-v1:0", name: "Llama 3.2 3B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -97,7 +97,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_3_70b_instruct: BedrockModel = BedrockModel(
-        id: "us.meta.llama3-3-70b-instruct-v1:0",
+        id: "us.meta.llama3-3-70b-instruct-v1:0", name: "Llama 3.3 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
@@ -110,7 +110,7 @@ extension BedrockModel {
         )
     )
     public static let llama3_8b_instruct: BedrockModel = BedrockModel(
-        id: "meta.llama3-8b-instruct-v1:0",
+        id: "meta.llama3-8b-instruct-v1:0", name: "Llama 3 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),

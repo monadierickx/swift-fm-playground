@@ -136,7 +136,7 @@ public struct SwiftBedrock: Sendable {
     /// Lists all available foundation models from Amazon Bedrock
     /// - Throws: SwiftBedrockError.invalidResponse
     /// - Returns: An array of ModelInfo objects containing details about each available model.
-    public func listModels() async throws -> [ModelInfo] {
+    public func listModels() async throws -> [ModelSummary] {
         logger.trace("Fetching foundation models")
         do {
             let response = try await bedrockClient.listFoundationModels(
@@ -148,20 +148,9 @@ public struct SwiftBedrock: Sendable {
                     "Something went wrong while extracting the modelSummaries from the response."
                 )
             }
-            var modelsInfo: [ModelInfo] = []
-            modelsInfo = models.compactMap { (model) -> ModelInfo? in
-                guard let modelId = model.modelId,
-                    let providerName = model.providerName,
-                    let modelName = model.modelName
-                else {
-                    logger.trace("Skipping model due to missing required properties")
-                    return nil
-                }
-                return ModelInfo(
-                    modelName: modelName,
-                    providerName: providerName,
-                    modelId: modelId
-                )
+            var modelsInfo: [ModelSummary] = []
+            modelsInfo = try models.compactMap { (sdkModelSummary) -> ModelSummary? in
+                try ModelSummary.getModelSummary(from: sdkModelSummary)
             }
             logger.trace(
                 "Fetched foundation models",
@@ -172,7 +161,7 @@ public struct SwiftBedrock: Sendable {
             )
             return modelsInfo
         } catch {
-            logger.trace("Error while completing text", metadata: ["error": "\(error)"])
+            logger.trace("Error while listing foundation models", metadata: ["error": "\(error)"])
             throw error
         }
     }

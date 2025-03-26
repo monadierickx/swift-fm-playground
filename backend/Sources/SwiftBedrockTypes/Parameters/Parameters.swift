@@ -32,10 +32,10 @@ public struct Parameter<T: Sendable & Hashable & Equatable>: Sendable, Hashable,
     }
 
     private init(minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil, isSupported: Bool) {
-        self.minValue = nil
-        self.maxValue = nil
-        self.defaultValue = nil
-        self.isSupported = false
+        self.minValue = minValue
+        self.maxValue = maxValue
+        self.defaultValue = defaultValue
+        self.isSupported = isSupported
     }
 }
 

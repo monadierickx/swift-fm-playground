@@ -19,6 +19,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {  /
     public var rawValue: String { id }  // FIXME: kill these two lines later
 
     public var id: String
+    public var name: String
     public let modality: any Modality
 
     /// Creates a new BedrockModel instance
@@ -27,10 +28,12 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {  /
     ///   - modality: The modality of the model
     public init(
         id: String,
+        name: String,
         modality: any Modality
     ) {
         self.id = id
         self.modality = modality
+        self.name = name
     }
 
     /// Creates an implemented BedrockModel instance from a raw string value
@@ -149,5 +152,23 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {  /
             )
         }
         return modality
+    }
+
+    /// Checks if the model supports text to image generation
+    /// - Returns: True if the model supports text to image generation
+    public func hasTextToImageModality() -> Bool {
+        modality as? any TextToImageModality != nil
+    }
+
+    /// Checks if the model supports image variation
+    /// - Returns: True if the model supports image variation
+    public func hasImageVariationModality() -> Bool {
+        modality as? any ImageVariationModality != nil
+    }
+
+    /// Checks if the model supports conditioned text to image generation
+    /// - Returns: True if the model supports conditioned text to image generation
+    public func hasConditionedTextToImageModality() -> Bool {
+        modality as? any ConditionedTextToImageModality != nil
     }
 }

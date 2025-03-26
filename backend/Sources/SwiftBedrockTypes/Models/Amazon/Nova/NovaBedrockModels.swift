@@ -22,7 +22,7 @@ typealias NovaMicro = NovaText
 
 extension BedrockModel {
     public static let nova_micro: BedrockModel = BedrockModel(
-        id: "amazon.nova-micro-v1:0",
+        id: "amazon.nova-micro-v1:0", name: "Nova Micro",
         modality: NovaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
@@ -42,7 +42,7 @@ typealias NovaCanvas = AmazonImage
 
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
-        id: "amazon.nova-canvas-v1:0",
+        id: "amazon.nova-canvas-v1:0", name: "Nova Canvas",
         modality: NovaCanvas(
             parameters: ImageGenerationParameters(
                 nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),

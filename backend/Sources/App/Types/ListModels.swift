@@ -14,20 +14,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import Hummingbird
+import SwiftBedrockService
 
-// comment to explain difference
-
-public struct ModelInfo: Codable {
-    let modelName: String
-    let providerName: String
-    let modelId: String
-    // add everything
-    // let modalitiesList: [ModalityName]
-    // let model: BedrockModel?
-
-    public init(modelName: String, providerName: String, modelId: String) {
-        self.modelName = modelName
-        self.providerName = providerName
-        self.modelId = modelId
-    }
-}
+extension ModelSummary: ResponseEncodable {}
