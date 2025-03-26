@@ -61,6 +61,11 @@ export default function ChatContainer() {
         setStopSequences(stopSequences.filter((_, i) => i !== index));
     };
 
+    const clearChat = () => {
+        setConversation([]);
+        setHistory([]);
+    };
+
     const sendMessage = async () => {
         const newMessage = { sender: "Human", message: inputValue };
         setConversation(prevConversation => [...prevConversation, newMessage]);
@@ -106,7 +111,16 @@ export default function ChatContainer() {
         <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 p-4 mt-8">
             {/* model and parameter selection */}
             <div className="sticky top-0 z-10 bg-gray-100 py-4">
-                <ChatModelSelector model={selectedModel} onModelChange={onModelChange} />
+                <div className="flex justify-between items-center mb-4">
+                    <ChatModelSelector model={selectedModel} onModelChange={onModelChange} />
+                    <button
+                        onClick={clearChat}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl"
+                    >
+                        Clear Chat
+                    </button>
+                </div>
+
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 sticky">
                     {/* maxTokens */}
                     <div className="ml-4">
