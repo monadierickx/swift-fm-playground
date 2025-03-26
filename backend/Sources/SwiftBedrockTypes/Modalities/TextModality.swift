@@ -15,19 +15,19 @@
 
 import Foundation
 
-// comment to explain difference
+public protocol TextModality: Modality {
 
-public struct ModelInfo: Codable {
-    let modelName: String
-    let providerName: String
-    let modelId: String
-    // add everything
-    // let modalitiesList: [ModalityName]
-    // let model: BedrockModel?
+    init(parameters: TextGenerationParameters)
+    func getParameters() -> TextGenerationParameters
 
-    public init(modelName: String, providerName: String, modelId: String) {
-        self.modelName = modelName
-        self.providerName = providerName
-        self.modelId = modelId
-    }
+    func getTextRequestBody(
+        prompt: String,
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
+    ) throws -> BedrockBodyCodable
+
+    func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
 }

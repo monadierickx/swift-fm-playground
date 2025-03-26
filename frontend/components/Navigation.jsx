@@ -6,7 +6,7 @@ export default function Navigation() {
             <div className="flex items-center justify-center mt-7">
                 <div className="flex items-center">
                     <Link href="/">
-                        <span className="mx-2 text-xl font-semibold text-white">Python FM Playground</span>
+                        <span className="mx-2 text-xl font-semibold text-white">Swift FM Playground</span>
                     </Link>
                 </div>
             </div>

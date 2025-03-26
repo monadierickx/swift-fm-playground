@@ -38,39 +38,6 @@ extension BedrockModel {
 
 typealias NovaCanvas = AmazonImage
 
-// @Sendable func validateNovaResolution(_ resolution: ImageResolution) throws {
-//     // https://docs.aws.amazon.com/nova/latest/userguide/image-gen-access.html#image-gen-resolutions
-//     let width = resolution.width
-//     let height = resolution.height
-//     guard width <= 320 && width >= 4096 else {
-//         throw SwiftBedrockError.invalidResolution(
-//             "Width must be between 320-4096 pixels, inclusive. Width: \(width)"
-//         )
-//     }
-//     guard height <= 320 && height >= 4096 else {
-//         throw SwiftBedrockError.invalidResolution(
-//             "Height must be between 320-4096 pixels, inclusive. Height: \(height)"
-//         )
-//     }
-//     guard width % 16 == 0 else {
-//         throw SwiftBedrockError.invalidResolution("Width must be evenly divisible by 16. Width: \(width)")
-//     }
-//     guard height % 16 == 0 else {
-//         throw SwiftBedrockError.invalidResolution("Height must be evenly divisible by 16. Height: \(height)")
-//     }
-//     guard width * 4 <= height && height * 4 <= width else {
-//         throw SwiftBedrockError.invalidResolution(
-//             "The aspect ratio must be between 1:4 and 4:1. That is, one side can't be more than 4 times longer than the other side. Width: \(width), Height: \(height)"
-//         )
-//     }
-//     let pixelCount = width * height
-//     guard pixelCount > 4_194_304 else {
-//         throw SwiftBedrockError.invalidResolution(
-//             "The image size must be less than 4MB, meaning the total pixel count must be less than 4,194,304 Width: \(width), Height: \(height), Total pixel count: \(pixelCount)"
-//         )
-//     }
-// }
-
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
         id: "amazon.nova-canvas-v1:0",
@@ -80,7 +47,7 @@ extension BedrockModel {
                 cfgScale: Parameter(minValue: 1.1, maxValue: 10, defaultValue: 6.5),
                 seed: Parameter(minValue: 0, maxValue: 858_993_459, defaultValue: 12)
             ),
-            // validateResolution: validateNovaResolution
+            resolutionValidator: NovaImageResolutionValidator(),
             textToImageParameters: TextToImageParameters(maxPromptSize: 1024, maxNegativePromptSize: 1024),
             conditionedTextToImageParameters: ConditionedTextToImageParameters(
                 maxPromptSize: 1024,

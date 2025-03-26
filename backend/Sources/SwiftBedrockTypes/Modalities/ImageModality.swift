@@ -15,30 +15,12 @@
 
 import Foundation
 
-public protocol Modality: Sendable, Hashable, Equatable {
-    func getName() -> String
+public protocol ImageResolutionValidator: Sendable {
+    func validateResolution(_ resolution: ImageResolution) throws
 }
 
-public protocol TextModality: Modality {
-
-    init(parameters: TextGenerationParameters)
-    func getParameters() -> TextGenerationParameters
-
-    func getTextRequestBody(
-        prompt: String,
-        maxTokens: Int?,
-        temperature: Double?,
-        topP: Double?,
-        topK: Int?,
-        stopSequences: [String]?
-    ) throws -> BedrockBodyCodable
-
-    func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion
-}
-
-public protocol ImageModality: Modality {
+public protocol ImageModality: Modality, ImageResolutionValidator {
     func getParameters() -> ImageGenerationParameters
-    // func validateResolution(_ resolution: ImageResolution) throws
     func getImageResponseBody(from: Data) throws -> ContainsImageGeneration
 }
 

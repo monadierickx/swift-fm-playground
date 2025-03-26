@@ -19,14 +19,14 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
     func getName() -> String { "Amazon Image Generation" }
 
     let parameters: ImageGenerationParameters
-    // let validateResolution: @Sendable (ImageResolution) throws -> Void
+    let resolutionValidator: any ImageResolutionValidator
     let textToImageParameters: TextToImageParameters
     let conditionedTextToImageParameters: ConditionedTextToImageParameters
     let imageVariationParameters: ImageVariationParameters
 
     init(
         parameters: ImageGenerationParameters,
-        // validateResolution: @Sendable (ImageResolution) throws -> Void,
+        resolutionValidator: any ImageResolutionValidator,
         textToImageParameters: TextToImageParameters,
         conditionedTextToImageParameters: ConditionedTextToImageParameters,
         imageVariationParameters: ImageVariationParameters
@@ -35,7 +35,7 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
         self.textToImageParameters = textToImageParameters
         self.conditionedTextToImageParameters = conditionedTextToImageParameters
         self.imageVariationParameters = imageVariationParameters
-        // self.validateResolution = validateResolution
+        self.resolutionValidator = resolutionValidator
     }
 
     func getParameters() -> ImageGenerationParameters { parameters }
@@ -43,9 +43,9 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
     func getConditionedTextToImageParameters() -> ConditionedTextToImageParameters { conditionedTextToImageParameters }
     func getImageVariationParameters() -> ImageVariationParameters { imageVariationParameters }
 
-    // func validateResolution(_ resolution: ImageResolution) throws {
-    //     try validateResolution(resolution)
-    // }
+    func validateResolution(_ resolution: ImageResolution) throws {
+        try resolutionValidator.validateResolution(resolution)
+    }
 
     func getImageResponseBody(from data: Data) throws -> ContainsImageGeneration {
         let decoder = JSONDecoder()

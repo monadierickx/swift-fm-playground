@@ -336,8 +336,3 @@ public enum ImageQuality: String, Codable {
     case standard = "standard"
     case premium = "premium"
 }
-
-public struct ImageResolution: Codable, Equatable, Sendable {
-    let width: Int
-    let height: Int
-}

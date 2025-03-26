@@ -471,7 +471,7 @@ public struct SwiftBedrock: Sendable {
                 "negativePrompt": .stringConvertible(negativePrompt ?? "not defined"),
                 "nrOfImages": .stringConvertible(nrOfImages ?? "not defined"),
                 "cfgScale": .stringConvertible(cfgScale ?? "not defined"),
-                "seed": .stringConvertible(seed ?? "not defined")
+                "seed": .stringConvertible(seed ?? "not defined"),
             ]
         )
         do {
@@ -479,7 +479,7 @@ public struct SwiftBedrock: Sendable {
             let parameters = modality.getParameters()
             let textToImageModality = try model.getTextToImageModality()
             let textToImageParameters = textToImageModality.getTextToImageParameters()
-            
+
             try validatePrompt(prompt, maxPromptTokens: textToImageParameters.prompt.maxSize)
 
             if negativePrompt != nil {
@@ -506,7 +506,9 @@ public struct SwiftBedrock: Sendable {
                     max: parameters.seed.maxValue
                 )
             }
-            // FIXME: check resolution
+            if resolution != nil {
+                try modality.validateResolution(resolution!)
+            }
 
             let request: InvokeModelRequest = try InvokeModelRequest.createTextToImageRequest(
                 model: model,
@@ -582,7 +584,7 @@ public struct SwiftBedrock: Sendable {
                 "similarity": .stringConvertible(similarity ?? "not defined"),
                 "negativePrompt": .stringConvertible(negativePrompt ?? "not defined"),
                 "cfgScale": .stringConvertible(cfgScale ?? "not defined"),
-                "seed": .stringConvertible(seed ?? "not defined")
+                "seed": .stringConvertible(seed ?? "not defined"),
             ]
         )
         do {
@@ -590,11 +592,14 @@ public struct SwiftBedrock: Sendable {
             let parameters = modality.getParameters()
             let imageVariationModality = try model.getImageVariationModality()
             let imageVariationParameters = imageVariationModality.getImageVariationParameters()
-            
+
             try validatePrompt(prompt, maxPromptTokens: imageVariationParameters.prompt.maxSize)
             if similarity != nil {
-                try validateSimilarity(similarity!, min: imageVariationParameters.similarity.minValue, max: imageVariationParameters.similarity.maxValue)
-            
+                try validateSimilarity(
+                    similarity!,
+                    min: imageVariationParameters.similarity.minValue,
+                    max: imageVariationParameters.similarity.maxValue
+                )
             }
             if negativePrompt != nil {
                 try validatePrompt(negativePrompt!, maxPromptTokens: imageVariationParameters.negativePrompt.maxSize)
@@ -619,6 +624,9 @@ public struct SwiftBedrock: Sendable {
                     min: parameters.seed.minValue,
                     max: parameters.seed.maxValue
                 )
+            }
+            if resolution != nil {
+                try modality.validateResolution(resolution!)
             }
 
             let request: InvokeModelRequest = try InvokeModelRequest.createImageVariationRequest(
@@ -672,7 +680,7 @@ public struct SwiftBedrock: Sendable {
         maxTokens: Int? = nil,
         temperature: Double? = nil,
         topP: Double? = nil,
-        stopSequences: [String]? = []
+        stopSequences: [String]? = []  // default nil
     ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
@@ -683,7 +691,7 @@ public struct SwiftBedrock: Sendable {
             ]
         )
         do {
-            let modality = try model.getTextModality()  // FIXME: ConverseModality?
+            let modality = try model.getTextModality()  // FIXME later: ConverseModality?
             let parameters = modality.getParameters()
             try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
             let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue

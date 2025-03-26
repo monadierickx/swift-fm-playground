@@ -19,7 +19,7 @@ import SwiftBedrockTypes
 
 extension Message {
 
-    public init(from sdkMessage: BedrockRuntimeClientTypes.Message) throws {
+    init(from sdkMessage: BedrockRuntimeClientTypes.Message) throws {
         guard let sdkRole = sdkMessage.role else {
             throw SwiftBedrockError.decodingError("Could not extract role from BedrockRuntimeClientTypes.Message")
         }
@@ -48,10 +48,10 @@ extension Content {
         switch sdkContentBlock {
         case .text(let text):
             self = .text(text)
-        case .sdkUnknown(let unknown):
+        case .sdkUnknown(let unknown): // FIXME: error not implemented by me 
             self = .unknown(unknown)
         default:
-            self = .unknown("Unknown content block type")  // FIXME: add all other options too
+            self = .unknown("Unknown content block type")  // FIXME: error
         }
     }
 
@@ -70,7 +70,7 @@ extension Role {
         switch sdkConversationRole {
         case .user: self = .user
         case .assistant: self = .assistant
-        case .sdkUnknown(_): self = .unknown  // .customRole(name)  // FIXME: should we allow for a custom role?
+        case .sdkUnknown(_): self = .unknown  // FIXME: soft crash = throw error
         }
     }
 

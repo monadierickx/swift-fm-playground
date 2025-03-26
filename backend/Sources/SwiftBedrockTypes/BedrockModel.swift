@@ -15,9 +15,8 @@
 
 import Foundation
 
-public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
+public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { // Encodable? -> only stuff we need
     public var rawValue: String { id }  // FIXME: kill these two lines later
-    public typealias RawValue = String
 
     public var id: String
     public let modality: any Modality

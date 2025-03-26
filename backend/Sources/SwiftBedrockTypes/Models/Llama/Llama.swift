@@ -41,6 +41,7 @@ struct LlamaText: TextModality {
             maxTokens: maxTokens ?? parameters.maxTokens.defaultValue,
             temperature: temperature ?? parameters.temperature.defaultValue,
             topP: topP ?? parameters.topP.defaultValue
+            // throw not supported 
         )
     }
 
