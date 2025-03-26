@@ -20,15 +20,15 @@ import SwiftBedrockTypes
 public struct ConverseRequest {
     let model: BedrockModel
     let messages: [Message]
-    let inferenceConfig: InferenceConfig
+    let inferenceConfig: InferenceConfig?
 
     init(
         model: BedrockModel,
         messages: [Message] = [],
-        maxTokens: Int,
-        temperature: Double,
-        topP: Double,
-        stopSequences: [String]
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        stopSequences: [String]?
     ) {
         self.messages = messages
         self.model = model
@@ -41,8 +41,14 @@ public struct ConverseRequest {
     }
 
     func getConverseInput() -> ConverseInput {
-        ConverseInput(
-            inferenceConfig: inferenceConfig.getSDKInferenceConfig(),
+        let sdkInferenceConfig: BedrockRuntimeClientTypes.InferenceConfiguration?
+        if inferenceConfig != nil {
+            sdkInferenceConfig = inferenceConfig!.getSDKInferenceConfig()
+        } else {
+            sdkInferenceConfig = nil
+        }
+        return ConverseInput(
+            inferenceConfig: sdkInferenceConfig,
             messages: getSDKMessages(),
             modelId: model.id
         )
@@ -53,17 +59,29 @@ public struct ConverseRequest {
     }
 
     struct InferenceConfig {
-        let maxTokens: Int
-        let temperature: Double
-        let topP: Double
-        let stopSequences: [String]
+        let maxTokens: Int?
+        let temperature: Double?
+        let topP: Double?
+        let stopSequences: [String]?
 
         func getSDKInferenceConfig() -> BedrockRuntimeClientTypes.InferenceConfiguration {
-            BedrockRuntimeClientTypes.InferenceConfiguration(
+            let temperatureFloat: Float?
+            if temperature != nil {
+                temperatureFloat = Float(temperature!)
+            } else {
+                temperatureFloat = nil
+            }
+            let topPFloat: Float?
+            if topP != nil {
+                topPFloat = Float(topP!)
+            } else {
+                topPFloat = nil
+            }
+            return BedrockRuntimeClientTypes.InferenceConfiguration(
                 maxTokens: maxTokens,
                 stopSequences: stopSequences,
-                temperature: Float(temperature),
-                topp: Float(topP)
+                temperature: temperatureFloat,
+                topp: topPFloat
             )
         }
     }

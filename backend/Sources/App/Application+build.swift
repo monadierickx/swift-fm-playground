@@ -134,7 +134,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             } else {
                 let referenceImage = input.referenceImage!.base64EncodedString()
                 output = try await bedrock.generateImageVariation(
-                    image: referenceImage,
+                    images: [referenceImage],
                     prompt: input.prompt,
                     with: model,
                     similarity: input.similarity,

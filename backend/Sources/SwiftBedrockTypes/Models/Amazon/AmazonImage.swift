@@ -95,7 +95,7 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
     func getImageVariationRequestBody(
         prompt: String?,
         negativeText: String?,
-        image: String,
+        images: [String],
         similarity: Double?,
         nrOfImages: Int?,
         cfgScale: Double?,
@@ -104,7 +104,7 @@ struct AmazonImage: ImageModality, TextToImageModality, ConditionedTextToImageMo
         resolution: ImageResolution?
     ) throws -> BedrockBodyCodable {
         AmazonImageRequestBody.imageVariation(
-            referenceImages: [image],
+            referenceImages: images,
             prompt: prompt,
             negativeText: negativeText,
             similarity: similarity,

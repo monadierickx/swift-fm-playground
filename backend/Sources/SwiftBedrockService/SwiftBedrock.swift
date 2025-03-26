@@ -131,150 +131,6 @@ public struct SwiftBedrock: Sendable {
         return BedrockRuntimeClient(config: config)
     }
 
-    /// Validate maxTokens is at least a minimum value
-    private func validateMaxTokens(_ maxTokens: Int, max: Int) throws {
-        guard maxTokens >= 1 else {
-            logger.trace(
-                "Invalid maxTokens",
-                metadata: ["maxTokens": .stringConvertible(maxTokens)]
-            )
-            throw SwiftBedrockError.invalidMaxTokens(
-                "MaxTokens should be between 1 and \(max). MaxTokens: \(maxTokens)"
-            )
-        }
-    }
-
-    /// Validate temperature is between a minimum and a maximum value
-    private func validateTemperature(_ temperature: Double, min: Double, max: Double) throws {
-        guard temperature >= min && temperature <= max else {
-            logger.trace(
-                "Invalid temperature",
-                metadata: ["temperature": "\(temperature)"]
-            )
-            throw SwiftBedrockError.invalidTemperature(
-                "Temperature should be a value between \(min) and \(max). Temperature: \(temperature)"
-            )
-        }
-    }
-
-    /// Validate topP is between a minimum and a maximum value
-    private func validateTopP(_ topP: Double, min: Double, max: Double) throws {
-        guard topP >= min && topP <= max else {
-            logger.trace(
-                "Invalid topP",
-                metadata: ["topP": "\(topP)"]
-            )
-            throw SwiftBedrockError.invalidTopP(
-                "TopP should be a value between \(min) and \(max). TopP: \(topP)"
-            )
-        }
-    }
-
-    /// Validate topK is at least a minimum value
-    private func validateTopK(_ topK: Int, min: Int, max: Int) throws {
-        guard topK >= min else {
-            logger.trace(
-                "Invalid topK",
-                metadata: ["topK": .stringConvertible(topK)]
-            )
-            throw SwiftBedrockError.invalidTopK(
-                "TopK should be between \(min) and \(max). TopK: \(topK)"
-            )
-        }
-    }
-
-    /// Validate prompt is not empty and does not consist of only whitespaces, tabs or newlines
-    /// Additionally validates that the prompt is not longer than the maxPromptTokens
-    private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
-        guard !prompt.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
-            logger.trace("Invalid prompt", metadata: ["prompt": .string(prompt)])
-            throw SwiftBedrockError.invalidPrompt("Prompt is not allowed to be empty.")
-        }
-        let length = prompt.utf8.count
-        guard length <= maxPromptTokens else {
-            logger.trace(
-                "Invalid prompt",
-                metadata: [
-                    "prompt": .string(prompt),
-                    "prompt.length": "\(length)",
-                    "maxPromptTokens": "\(maxPromptTokens)",
-                ]
-            )
-            throw SwiftBedrockError.invalidPrompt(
-                "Prompt is not allowed to be longer than \(maxPromptTokens) tokens. Prompt length: \(length)"
-            )
-        }
-    }
-
-    /// Validate nrOfImages is between a minimum and a maximum value
-    private func validateNrOfImages(_ nrOfImages: Int, min: Int, max: Int) throws {
-        guard nrOfImages >= min && nrOfImages <= max else {
-            logger.trace(
-                "Invalid nrOfImages",
-                metadata: ["nrOfImages": .stringConvertible(nrOfImages)]
-            )
-            throw SwiftBedrockError.invalidNrOfImages(
-                "NrOfImages should be between \(min) and \(max). nrOfImages: \(nrOfImages)"
-            )
-        }
-    }
-
-    /// Validate similarity is between a minimum and a maximum value
-    private func validateSimilarity(_ similarity: Double, min: Double, max: Double) throws {
-        guard similarity >= min && similarity <= max else {
-            logger.trace(
-                "Invalid similarity",
-                metadata: ["similarity": .stringConvertible(similarity)]
-            )
-            throw SwiftBedrockError.invalidSimilarity(
-                "Similarity should be between \(min) and \(max). similarity: \(similarity)"
-            )
-        }
-    }
-
-    /// Validate cfgScale is between a minimum and a maximum value
-    private func validateCfgScale(_ cfgScale: Double, min: Double, max: Double) throws {
-        guard cfgScale >= min && cfgScale <= max else {
-            logger.trace(
-                "Invalid cfgScale",
-                metadata: ["cfgScale": .stringConvertible(cfgScale)]
-            )
-            throw SwiftBedrockError.invalidCfgScale(
-                "Similarity should be between \(min) and \(max). cfgScale: \(cfgScale)"
-            )
-        }
-    }
-
-    /// Validate seed is at least a minimum value
-    private func validateSeed(_ seed: Int, min: Int, max: Int) throws {
-        guard seed >= min else {
-            logger.trace(
-                "Invalid seed",
-                metadata: ["seed": .stringConvertible(seed)]
-            )
-            throw SwiftBedrockError.invalidSeed(
-                "Seed should be between \(min) and \(max). Seed: \(seed)"
-            )
-        }
-    }
-
-    /// Validate that not more stopsequences than allowed were given
-    private func validateStopSequences(_ stopSequences: [String], maxNrOfStopSequences: Int) throws {
-        guard stopSequences.count <= maxNrOfStopSequences else {
-            logger.trace(
-                "Invalid stopSequences",
-                metadata: [
-                    "stopSequences": "\(stopSequences)",
-                    "stopSequences.count": "\(stopSequences.count)",
-                    "maxNrOfStopSequences": "\(maxNrOfStopSequences)",
-                ]
-            )
-            throw SwiftBedrockError.invalidStopSequences(
-                "You can only provide up to \(maxNrOfStopSequences) stop sequences. Number of stop sequences: \(stopSequences.count)"
-            )
-        }
-    }
-
     // MARK: Public Methods
 
     /// Lists all available foundation models from Amazon Bedrock
@@ -356,33 +212,21 @@ public struct SwiftBedrock: Sendable {
         )
         do {
             let modality = try model.getTextModality()
-            let parameters = modality.getParameters()
-            let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue
-            try validateMaxTokens(maxTokens, max: parameters.maxTokens.maxValue)
-            let temperature = temperature ?? parameters.temperature.defaultValue
-            try validateTemperature(
-                temperature,
-                min: parameters.temperature.minValue,
-                max: parameters.temperature.maxValue
+            try validateTextCompletionParams(
+                modality: modality,
+                prompt: prompt,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                topP: topP,
+                topK: topK,
+                stopSequences: stopSequences
             )
-            let topP = topP ?? parameters.topP.defaultValue
-            try validateTopP(topP, min: parameters.topP.minValue, max: parameters.topP.maxValue)
-            let topK = topK ?? parameters.topK.defaultValue
-            try validateTopK(topK, min: parameters.topK.minValue, max: parameters.topK.maxValue)
-            let stopSequences = stopSequences ?? parameters.stopSequences.defaultValue
-            try validateStopSequences(stopSequences, maxNrOfStopSequences: parameters.stopSequences.maxSequences)
-            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
 
             logger.trace(
                 "Creating InvokeModelRequest",
                 metadata: [
                     "model": .string(model.id),
                     "prompt": "\(prompt)",
-                    "maxTokens": "\(maxTokens)",
-                    "temperature": "\(temperature)",
-                    "topP": "\(topP)",
-                    "topK": "\(topK)",
-                    "stopSequences": "\(stopSequences)",
                 ]
             )
             let request: InvokeModelRequest = try InvokeModelRequest.createTextRequest(
@@ -476,39 +320,15 @@ public struct SwiftBedrock: Sendable {
         )
         do {
             let modality = try model.getImageModality()
-            let parameters = modality.getParameters()
+            try validateImageGenerationParams(
+                modality: modality,
+                nrOfImages: nrOfImages,
+                cfgScale: cfgScale,
+                resolution: resolution,
+                seed: seed
+            )
             let textToImageModality = try model.getTextToImageModality()
-            let textToImageParameters = textToImageModality.getTextToImageParameters()
-
-            try validatePrompt(prompt, maxPromptTokens: textToImageParameters.prompt.maxSize)
-
-            if negativePrompt != nil {
-                try validatePrompt(negativePrompt!, maxPromptTokens: textToImageParameters.negativePrompt.maxSize)
-            }
-            if nrOfImages != nil {
-                try validateNrOfImages(
-                    nrOfImages!,
-                    min: parameters.nrOfImages.minValue,
-                    max: parameters.nrOfImages.maxValue
-                )
-            }
-            if cfgScale != nil {
-                try validateCfgScale(
-                    cfgScale!,
-                    min: parameters.cfgScale.minValue,
-                    max: parameters.cfgScale.maxValue
-                )
-            }
-            if seed != nil {
-                try validateSeed(
-                    seed!,
-                    min: parameters.seed.minValue,
-                    max: parameters.seed.maxValue
-                )
-            }
-            if resolution != nil {
-                try modality.validateResolution(resolution!)
-            }
+            try validateTextToImageParams(modality: textToImageModality, prompt: prompt, negativePrompt: negativePrompt)
 
             let request: InvokeModelRequest = try InvokeModelRequest.createTextToImageRequest(
                 model: model,
@@ -563,7 +383,7 @@ public struct SwiftBedrock: Sendable {
     ///           SwiftBedrockError.invalidResponse if the response body is missing
     /// - Returns: a ImageGenerationOutput object containing an array of generated images
     public func generateImageVariation(
-        image: String,
+        images: [String],
         prompt: String,
         with model: BedrockModel,
         negativePrompt: String? = nil,
@@ -589,51 +409,26 @@ public struct SwiftBedrock: Sendable {
         )
         do {
             let modality = try model.getImageModality()
-            let parameters = modality.getParameters()
+            try validateImageGenerationParams(
+                modality: modality,
+                nrOfImages: nrOfImages,
+                cfgScale: cfgScale,
+                resolution: resolution,
+                seed: seed
+            )
             let imageVariationModality = try model.getImageVariationModality()
-            let imageVariationParameters = imageVariationModality.getImageVariationParameters()
-
-            try validatePrompt(prompt, maxPromptTokens: imageVariationParameters.prompt.maxSize)
-            if similarity != nil {
-                try validateSimilarity(
-                    similarity!,
-                    min: imageVariationParameters.similarity.minValue,
-                    max: imageVariationParameters.similarity.maxValue
-                )
-            }
-            if negativePrompt != nil {
-                try validatePrompt(negativePrompt!, maxPromptTokens: imageVariationParameters.negativePrompt.maxSize)
-            }
-            if nrOfImages != nil {
-                try validateNrOfImages(
-                    nrOfImages!,
-                    min: parameters.nrOfImages.minValue,
-                    max: parameters.nrOfImages.maxValue
-                )
-            }
-            if cfgScale != nil {
-                try validateCfgScale(
-                    cfgScale!,
-                    min: parameters.cfgScale.minValue,
-                    max: parameters.cfgScale.maxValue
-                )
-            }
-            if seed != nil {
-                try validateSeed(
-                    seed!,
-                    min: parameters.seed.minValue,
-                    max: parameters.seed.maxValue
-                )
-            }
-            if resolution != nil {
-                try modality.validateResolution(resolution!)
-            }
-
+            try validateImageVariationParams(
+                modality: imageVariationModality,
+                images: images,
+                prompt: prompt,
+                similarity: similarity,
+                negativePrompt: negativePrompt
+            )
             let request: InvokeModelRequest = try InvokeModelRequest.createImageVariationRequest(
                 model: model,
                 prompt: prompt,
                 negativeText: negativePrompt,
-                image: image,
+                images: images,
                 similarity: similarity,
                 nrOfImages: nrOfImages,
                 cfgScale: cfgScale,
@@ -680,7 +475,7 @@ public struct SwiftBedrock: Sendable {
         maxTokens: Int? = nil,
         temperature: Double? = nil,
         topP: Double? = nil,
-        stopSequences: [String]? = []  // default nil
+        stopSequences: [String]? = nil
     ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
@@ -692,20 +487,15 @@ public struct SwiftBedrock: Sendable {
         )
         do {
             let modality = try model.getTextModality()  // FIXME later: ConverseModality?
-            let parameters = modality.getParameters()
-            try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
-            let maxTokens = maxTokens ?? parameters.maxTokens.defaultValue
-            try validateMaxTokens(maxTokens, max: parameters.maxTokens.maxValue)
-            let temperature = temperature ?? parameters.temperature.defaultValue
-            try validateTemperature(
-                temperature,
-                min: parameters.temperature.minValue,
-                max: parameters.temperature.maxValue
+            try validateConverseParams(
+                modality: modality,
+                prompt: prompt,
+                history: history,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                topP: topP,
+                stopSequences: stopSequences
             )
-            let topP = topP ?? parameters.topP.defaultValue
-            try validateTopP(topP, min: parameters.topP.minValue, max: parameters.topP.maxValue)
-            let stopSequences = stopSequences ?? parameters.stopSequences.defaultValue
-            try validateStopSequences(stopSequences, maxNrOfStopSequences: parameters.stopSequences.maxSequences)
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))

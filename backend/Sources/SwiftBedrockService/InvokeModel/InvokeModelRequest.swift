@@ -47,11 +47,11 @@ struct InvokeModelRequest {
     static func createTextRequest(
         model: BedrockModel,
         prompt: String,
-        maxTokens: Int,
-        temperature: Double,
-        topP: Double,
-        topK: Int,
-        stopSequences: [String]
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
     ) throws -> InvokeModelRequest {
         try .init(
             model: model,
@@ -67,11 +67,11 @@ struct InvokeModelRequest {
     private init(
         model: BedrockModel,
         prompt: String,
-        maxTokens: Int,
-        temperature: Double,
-        topP: Double,
-        topK: Int,
-        stopSequences: [String]
+        maxTokens: Int?,
+        temperature: Double?,
+        topP: Double?,
+        topK: Int?,
+        stopSequences: [String]?
     ) throws {
         let textModality = try model.getTextModality()
         let body: BedrockBodyCodable = try textModality.getTextRequestBody(
@@ -154,7 +154,7 @@ struct InvokeModelRequest {
         model: BedrockModel,
         prompt: String,
         negativeText: String?,
-        image: String,
+        images: [String],
         similarity: Double?,
         nrOfImages: Int?,
         cfgScale: Double?,
@@ -166,7 +166,7 @@ struct InvokeModelRequest {
             model: model,
             prompt: prompt,
             negativeText: negativeText,
-            image: image,
+            images: images,
             similarity: similarity,
             nrOfImages: nrOfImages,
             cfgScale: cfgScale,
@@ -180,7 +180,7 @@ struct InvokeModelRequest {
         model: BedrockModel,
         prompt: String,
         negativeText: String?,
-        image: String,
+        images: [String],
         similarity: Double?,
         nrOfImages: Int?,
         cfgScale: Double?,
@@ -192,7 +192,7 @@ struct InvokeModelRequest {
         let body = try modality.getImageVariationRequestBody(
             prompt: prompt,
             negativeText: negativeText,
-            image: image,
+            images: images,
             similarity: similarity,
             nrOfImages: nrOfImages,
             cfgScale: cfgScale,

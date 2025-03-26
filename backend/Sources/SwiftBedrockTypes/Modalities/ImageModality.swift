@@ -56,7 +56,7 @@ public protocol ImageVariationModality: Modality {
     func getImageVariationRequestBody(
         prompt: String?,
         negativeText: String?,
-        image: String,
+        images: [String],
         similarity: Double?,
         nrOfImages: Int?,
         cfgScale: Double?,
