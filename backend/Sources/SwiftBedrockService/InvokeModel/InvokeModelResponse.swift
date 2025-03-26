@@ -56,7 +56,7 @@ public struct InvokeModelResponse {
             let textModality = try model.getTextModality()
             return self.init(model: model, textCompletionBody: try textModality.getTextResponseBody(from: data))
         } catch {
-            throw SwiftBedrockError.invalidResponseBody(data)
+            throw SwiftBedrockError.invalidSDKResponseBody(data)
         }
     }
 
@@ -71,7 +71,7 @@ public struct InvokeModelResponse {
             let imageModality = try model.getImageModality()
             return self.init(model: model, imageGenerationBody: try imageModality.getImageResponseBody(from: data))
         } catch {
-            throw SwiftBedrockError.invalidResponseBody(data)
+            throw SwiftBedrockError.invalidSDKResponseBody(data)
         }
     }
 

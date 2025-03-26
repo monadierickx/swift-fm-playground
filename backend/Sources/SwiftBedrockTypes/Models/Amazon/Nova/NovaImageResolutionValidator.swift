@@ -22,29 +22,33 @@ struct NovaImageResolutionValidator: ImageResolutionValidator {
         let width = resolution.width
         let height = resolution.height
         guard width <= 320 && width >= 4096 else {
-            throw SwiftBedrockError.invalidResolution(
+            throw SwiftBedrockError.invalid(
+                .resolution,
                 "Width must be between 320-4096 pixels, inclusive. Width: \(width)"
             )
         }
         guard height <= 320 && height >= 4096 else {
-            throw SwiftBedrockError.invalidResolution(
+            throw SwiftBedrockError.invalid(
+                .resolution,
                 "Height must be between 320-4096 pixels, inclusive. Height: \(height)"
             )
         }
         guard width % 16 == 0 else {
-            throw SwiftBedrockError.invalidResolution("Width must be evenly divisible by 16. Width: \(width)")
+            throw SwiftBedrockError.invalid(.resolution, "Width must be evenly divisible by 16. Width: \(width)")
         }
         guard height % 16 == 0 else {
-            throw SwiftBedrockError.invalidResolution("Height must be evenly divisible by 16. Height: \(height)")
+            throw SwiftBedrockError.invalid(.resolution, "Height must be evenly divisible by 16. Height: \(height)")
         }
         guard width * 4 <= height && height * 4 <= width else {
-            throw SwiftBedrockError.invalidResolution(
+            throw SwiftBedrockError.invalid(
+                .resolution,
                 "The aspect ratio must be between 1:4 and 4:1. That is, one side can't be more than 4 times longer than the other side. Width: \(width), Height: \(height)"
             )
         }
         let pixelCount = width * height
         guard pixelCount > 4_194_304 else {
-            throw SwiftBedrockError.invalidResolution(
+            throw SwiftBedrockError.invalid(
+                .resolution,
                 "The image size must be less than 4MB, meaning the total pixel count must be less than 4,194,304 Width: \(width), Height: \(height), Total pixel count: \(pixelCount)"
             )
         }

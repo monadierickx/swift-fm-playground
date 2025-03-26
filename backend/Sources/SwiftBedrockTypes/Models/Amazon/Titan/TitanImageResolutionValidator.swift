@@ -16,7 +16,7 @@
 import Foundation
 
 struct TitanImageResolutionValidator: ImageResolutionValidator {
-    
+
     func validateResolution(_ resolution: ImageResolution) throws {
         // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-titan-image.html
         let allowedResolutions: [ImageResolution] = [
@@ -51,7 +51,10 @@ struct TitanImageResolutionValidator: ImageResolutionValidator {
             ImageResolution(width: 1173, height: 640),
         ]
         guard allowedResolutions.contains(resolution) else {
-            throw SwiftBedrockError.invalidResolution("Resolution is not a permissible size. Resolution: \(resolution)")
+            throw SwiftBedrockError.invalid(
+                .resolution,
+                "Resolution is not a permissible size. Resolution: \(resolution)"
+            )
         }
     }
 }

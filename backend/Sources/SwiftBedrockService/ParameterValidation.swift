@@ -174,7 +174,8 @@ extension SwiftBedrock {
                     "stopSequences.max": "\(max)",
                 ]
             )
-            throw SwiftBedrockError.invalidStopSequences(
+            throw SwiftBedrockError.invalid(
+                .images,
                 "You should provide at least \(min) and at most \(max) images. Number of images provided: \(images.count)"
             )
         }
@@ -187,7 +188,8 @@ extension SwiftBedrock {
                 "Invalid maxTokens",
                 metadata: ["maxTokens": .stringConvertible(maxTokens)]
             )
-            throw SwiftBedrockError.invalidMaxTokens(
+            throw SwiftBedrockError.invalid(
+                .maxTokens,
                 "MaxTokens should be between 1 and \(max). MaxTokens: \(maxTokens)"
             )
         }
@@ -200,7 +202,8 @@ extension SwiftBedrock {
                 "Invalid temperature",
                 metadata: ["temperature": "\(temperature)"]
             )
-            throw SwiftBedrockError.invalidTemperature(
+            throw SwiftBedrockError.invalid(
+                .temperature,
                 "Temperature should be a value between \(min) and \(max). Temperature: \(temperature)"
             )
         }
@@ -213,7 +216,8 @@ extension SwiftBedrock {
                 "Invalid topP",
                 metadata: ["topP": "\(topP)"]
             )
-            throw SwiftBedrockError.invalidTopP(
+            throw SwiftBedrockError.invalid(
+                .topP,
                 "TopP should be a value between \(min) and \(max). TopP: \(topP)"
             )
         }
@@ -226,7 +230,8 @@ extension SwiftBedrock {
                 "Invalid topK",
                 metadata: ["topK": .stringConvertible(topK)]
             )
-            throw SwiftBedrockError.invalidTopK(
+            throw SwiftBedrockError.invalid(
+                .topK,
                 "TopK should be between \(min) and \(max). TopK: \(topK)"
             )
         }
@@ -237,7 +242,7 @@ extension SwiftBedrock {
     private func validatePrompt(_ prompt: String, maxPromptTokens: Int) throws {
         guard !prompt.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines).isEmpty else {
             logger.trace("Invalid prompt", metadata: ["prompt": .string(prompt)])
-            throw SwiftBedrockError.invalidPrompt("Prompt is not allowed to be empty.")
+            throw SwiftBedrockError.invalid(.prompt, "Prompt is not allowed to be empty.")
         }
         let length = prompt.utf8.count
         guard length <= maxPromptTokens else {
@@ -249,7 +254,8 @@ extension SwiftBedrock {
                     "maxPromptTokens": "\(maxPromptTokens)",
                 ]
             )
-            throw SwiftBedrockError.invalidPrompt(
+            throw SwiftBedrockError.invalid(
+                .prompt,
                 "Prompt is not allowed to be longer than \(maxPromptTokens) tokens. Prompt length: \(length)"
             )
         }
@@ -262,7 +268,8 @@ extension SwiftBedrock {
                 "Invalid nrOfImages",
                 metadata: ["nrOfImages": .stringConvertible(nrOfImages)]
             )
-            throw SwiftBedrockError.invalidNrOfImages(
+            throw SwiftBedrockError.invalid(
+                .nrOfImages,
                 "NrOfImages should be between \(min) and \(max). nrOfImages: \(nrOfImages)"
             )
         }
@@ -275,7 +282,8 @@ extension SwiftBedrock {
                 "Invalid similarity",
                 metadata: ["similarity": .stringConvertible(similarity)]
             )
-            throw SwiftBedrockError.invalidSimilarity(
+            throw SwiftBedrockError.invalid(
+                .similarity,
                 "Similarity should be between \(min) and \(max). similarity: \(similarity)"
             )
         }
@@ -288,7 +296,8 @@ extension SwiftBedrock {
                 "Invalid cfgScale",
                 metadata: ["cfgScale": .stringConvertible(cfgScale)]
             )
-            throw SwiftBedrockError.invalidCfgScale(
+            throw SwiftBedrockError.invalid(
+                .cfgScale,
                 "Similarity should be between \(min) and \(max). cfgScale: \(cfgScale)"
             )
         }
@@ -301,7 +310,8 @@ extension SwiftBedrock {
                 "Invalid seed",
                 metadata: ["seed": .stringConvertible(seed)]
             )
-            throw SwiftBedrockError.invalidSeed(
+            throw SwiftBedrockError.invalid(
+                .seed,
                 "Seed should be between \(min) and \(max). Seed: \(seed)"
             )
         }
@@ -318,7 +328,8 @@ extension SwiftBedrock {
                     "maxNrOfStopSequences": "\(maxNrOfStopSequences)",
                 ]
             )
-            throw SwiftBedrockError.invalidStopSequences(
+            throw SwiftBedrockError.invalid(
+                .stopSequences,
                 "You can only provide up to \(maxNrOfStopSequences) stop sequences. Number of stop sequences: \(stopSequences.count)"
             )
         }

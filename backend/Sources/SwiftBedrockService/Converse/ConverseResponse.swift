@@ -22,7 +22,7 @@ public struct ConverseResponse {
 
     public init(_ output: BedrockRuntimeClientTypes.ConverseOutput) throws {
         guard case .message(let sdkMessage) = output else {
-            throw SwiftBedrockError.invalidResponse("Could not extract message from ConverseOutput")
+            throw SwiftBedrockError.invalidSDKResponse("Could not extract message from ConverseOutput")
         }
         self.message = try Message(from: sdkMessage)
     }

@@ -144,7 +144,7 @@ public struct SwiftBedrock: Sendable {
             )
             guard let models = response.modelSummaries else {
                 logger.trace("Failed to extract modelSummaries from response")
-                throw SwiftBedrockError.invalidResponse(
+                throw SwiftBedrockError.invalidSDKResponse(
                     "Something went wrong while extracting the modelSummaries from the response."
                 )
             }
@@ -262,7 +262,7 @@ public struct SwiftBedrock: Sendable {
                         "hasBody": .stringConvertible(response.body != nil),
                     ]
                 )
-                throw SwiftBedrockError.invalidResponse(
+                throw SwiftBedrockError.invalidSDKResponse(
                     "Something went wrong while extracting body from response."
                 )
             }
@@ -356,7 +356,7 @@ public struct SwiftBedrock: Sendable {
                         "hasBody": .stringConvertible(response.body != nil),
                     ]
                 )
-                throw SwiftBedrockError.invalidResponse(
+                throw SwiftBedrockError.invalidSDKResponse(
                     "Something went wrong while extracting body from response."
                 )
             }
@@ -452,7 +452,7 @@ public struct SwiftBedrock: Sendable {
                         "hasBody": .stringConvertible(response.body != nil),
                     ]
                 )
-                throw SwiftBedrockError.invalidResponse(
+                throw SwiftBedrockError.invalidSDKResponse(
                     "Something went wrong while extracting body from response."
                 )
             }
@@ -524,7 +524,7 @@ public struct SwiftBedrock: Sendable {
                         "hasOutput": .stringConvertible(response.output != nil),
                     ]
                 )
-                throw SwiftBedrockError.invalidResponse(
+                throw SwiftBedrockError.invalidSDKResponse(
                     "Something went wrong while extracting ConverseOutput from response."
                 )
             }

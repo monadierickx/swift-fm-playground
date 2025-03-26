@@ -15,7 +15,7 @@
 
 import Foundation
 
-public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { // Encodable? -> only stuff we need
+public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {  // Encodable? -> only stuff we need
     public var rawValue: String { id }  // FIXME: kill these two lines later
 
     public var id: String
@@ -94,17 +94,15 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { //
     /// Checks if the model supports text generation
     /// - Returns: True if the model supports text generation
     public func hasTextModality() -> Bool {
-        guard let _ = modality as? any TextModality else {  // FIXME: one line here return  modality as? any TextModality == nil
-            return false
-        }
-        return true
+        modality as? any TextModality != nil
     }
 
     /// Checks if the model supports text generation and returns TextModality
     /// - Returns: TextModality if the model supports text modality
     public func getTextModality() throws -> any TextModality {
         guard let textModality = modality as? any TextModality else {
-            throw SwiftBedrockError.invalidModel(
+            throw SwiftBedrockError.invalid(
+                .modality,
                 "Model \(id) does not support text generation"
             )
         }
@@ -114,17 +112,15 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { //
     /// Checks if the model supports image generation
     /// - Returns: True if the model supports image generation
     public func hasImageModality() -> Bool {
-        guard let _ = modality as? any ImageModality else {
-            return false
-        }
-        return true
+        modality as? any ImageModality != nil
     }
 
     /// Checks if the model supports image generation and returns ImageModality
     /// - Returns: TextModality if the model supports image modality
     public func getImageModality() throws -> any ImageModality {
         guard let imageModality = modality as? any ImageModality else {
-            throw SwiftBedrockError.invalidModel(
+            throw SwiftBedrockError.invalid(
+                .modality,
                 "Model \(id) does not support image generation"
             )
         }
@@ -135,7 +131,8 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { //
     /// - Returns: TextToImageModality if the model supports image modality
     public func getTextToImageModality() throws -> any TextToImageModality {
         guard let textToImageModality = modality as? any TextToImageModality else {
-            throw SwiftBedrockError.invalidModel(
+            throw SwiftBedrockError.invalid(
+                .modality,
                 "Model \(id) does not support text to image generation"
             )
         }
@@ -146,7 +143,8 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable { //
     /// - Returns: ImageVariationModality if the model supports image modality
     public func getImageVariationModality() throws -> any ImageVariationModality {
         guard let modality = modality as? any ImageVariationModality else {
-            throw SwiftBedrockError.invalidModel(
+            throw SwiftBedrockError.invalid(
+                .modality,
                 "Model \(id) does not support image variation"
             )
         }
