@@ -26,8 +26,8 @@ extension Message {
         guard let sdkContent = sdkMessage.content else {
             throw SwiftBedrockError.decodingError("Could not extract content from BedrockRuntimeClientTypes.Message")
         }
-        let content = sdkContent.map { Content(from: $0) }
-        self = Message(from: Role(from: sdkRole), content: content)
+        let content: [Content] = try sdkContent.map { try Content(from: $0) }
+        self = Message(from: try Role(from: sdkRole), content: content)
     }
 
     func getSDKMessage() -> BedrockRuntimeClientTypes.Message {
@@ -44,14 +44,18 @@ extension Message {
 
 extension Content {
 
-    init(from sdkContentBlock: BedrockRuntimeClientTypes.ContentBlock) {
+    init(from sdkContentBlock: BedrockRuntimeClientTypes.ContentBlock) throws {
         switch sdkContentBlock {
         case .text(let text):
             self = .text(text)
-        case .sdkUnknown(let unknown): // FIXME: error not implemented by me 
-            self = .unknown(unknown)
+        case .sdkUnknown(let unknownContentBlock):
+            throw SwiftBedrockError.notImplemented(
+                "ContentBlock \(unknownContentBlock) is not implemented by BedrockRuntimeClientTypes"
+            )
         default:
-            self = .unknown("Unknown content block type")  // FIXME: error
+            throw SwiftBedrockError.notImplemented(
+                "\(sdkContentBlock.self) is not implemented by this library"
+            )
         }
     }
 
@@ -59,18 +63,19 @@ extension Content {
         switch self {
         case .text(let text):
             return BedrockRuntimeClientTypes.ContentBlock.text(text)
-        case .unknown(let unknown):
-            return BedrockRuntimeClientTypes.ContentBlock.sdkUnknown(unknown)
         }
     }
 }
 
 extension Role {
-    init(from sdkConversationRole: BedrockRuntimeClientTypes.ConversationRole) {
+    init(from sdkConversationRole: BedrockRuntimeClientTypes.ConversationRole) throws {
         switch sdkConversationRole {
         case .user: self = .user
         case .assistant: self = .assistant
-        case .sdkUnknown(_): self = .unknown  // FIXME: soft crash = throw error
+        case .sdkUnknown(let unknownRole):
+            throw SwiftBedrockError.notImplemented(
+                "Role \(unknownRole) is not implemented by BedrockRuntimeClientTypes"
+            )
         }
     }
 
@@ -78,7 +83,6 @@ extension Role {
         switch self {
         case .user: return .user
         case .assistant: return .assistant
-        case .unknown: return .sdkUnknown("Unknown")  // FIXME: if we allow a custom role we should call it that and give it a string so we know what it is
         }
     }
 }

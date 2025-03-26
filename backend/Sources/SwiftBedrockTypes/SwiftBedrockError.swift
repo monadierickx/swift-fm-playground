@@ -16,6 +16,8 @@
 import Foundation
 
 public enum SwiftBedrockError: Error {
+    case invalid(InvalidParameter, String)
+    case invalidModel(String)
     case invalidMaxTokens(String)
     case invalidTemperature(String)
     case invalidNrOfImages(String)
@@ -27,13 +29,30 @@ public enum SwiftBedrockError: Error {
     case invalidCfgScale(String)
     case invalidSeed(String)
     case invalidResolution(String)
+    
+    case invalidConverseOutput(String)
     case invalidRequest(String)
     case invalidResponse(String)
     case invalidResponseBody(Data?)
     case completionNotFound(String)
-    case invalidModel(String)
     case encodingError(String)
     case decodingError(String)
+
     case notImplemented(String)
-    case invalidConverseOutput(String)
+    case notSupported(String)
+}
+
+public enum InvalidParameter: Sendable {
+    case model
+    case maxTokens
+    case temperature
+    case nrOfImages
+    case prompt
+    case similarity
+    case stopSequences
+    case topK
+    case topP
+    case cfgScale
+    case seed
+    case resolution
 }

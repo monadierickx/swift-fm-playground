@@ -17,5 +17,4 @@ import Foundation
 
 public enum Content: Codable {
     case text(String)
-    case unknown(String)
 }
