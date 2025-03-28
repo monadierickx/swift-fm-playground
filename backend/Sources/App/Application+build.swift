@@ -15,8 +15,8 @@
 
 import Hummingbird
 import Logging
-import SwiftBedrockService
-import SwiftBedrockTypes
+import BedrockService
+import BedrockTypes
 
 /// Application arguments protocol. We use a protocol so we can call
 /// `buildApplication` inside Tests as well as in the App executable.
@@ -75,7 +75,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // SwiftBedrock
-    let bedrock = try await SwiftBedrock(useSSO: useSSO)
+    let bedrock = try await BedrockService(useSSO: useSSO)
 
     // List models
     // GET /foundation-models lists all models

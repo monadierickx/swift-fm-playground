@@ -14,16 +14,20 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import Hummingbird
-import BedrockTypes
 
-extension TextCompletion: ResponseCodable {}
+public struct DeepSeekResponseBody: ContainsTextCompletion {
+    private let choices: [Choice]
 
-struct TextCompletionInput: Codable {
-    let prompt: String
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let topK: Int?
-    let stopSequences: [String]?
+    private struct Choice: Codable {
+        let text: String
+        let stop_reason: String
+    }
+
+    public func getTextCompletion() throws -> TextCompletion {
+        guard choices.count > 0 else {
+            throw BedrockServiceError.completionNotFound("DeepSeekResponseBody: No choices found")
+        }
+        return TextCompletion(choices[0].text)
+    }
+
 }

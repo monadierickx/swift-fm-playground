@@ -15,7 +15,7 @@
 
 import Foundation
 import Hummingbird
-import SwiftBedrockTypes
+import BedrockTypes
 
 extension Message: ResponseCodable {}
 

@@ -15,6 +15,6 @@
 
 import Foundation
 import Hummingbird
-import SwiftBedrockService
+import BedrockService
 
 extension ModelSummary: ResponseEncodable {}

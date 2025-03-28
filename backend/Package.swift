@@ -21,35 +21,35 @@ let package = Package(
         .executableTarget(
             name: "App",
             dependencies: [
-                .target(name: "SwiftBedrockService"),
+                .target(name: "BedrockService"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Hummingbird", package: "hummingbird"),
             ],
             path: "Sources/App"
         ),
         .target(
-            name: "SwiftBedrockService",
+            name: "BedrockService",
             dependencies: [
-                .target(name: "SwiftBedrockTypes"),
+                .target(name: "BedrockTypes"),
                 .product(name: "AWSClientRuntime", package: "aws-sdk-swift"),
                 .product(name: "AWSBedrock", package: "aws-sdk-swift"),
                 .product(name: "AWSBedrockRuntime", package: "aws-sdk-swift"),
                 .product(name: "Smithy", package: "smithy-swift"),
                 .product(name: "Logging", package: "swift-log"),
             ],
-            path: "Sources/SwiftBedrockService"
+            path: "Sources/BedrockService"
         ),
         .target(
-            name: "SwiftBedrockTypes",
-            path: "Sources/SwiftBedrockTypes"
+            name: "BedrockTypes",
+            path: "Sources/BedrockTypes"
         ),
         .testTarget(
-            name: "SwiftBedrockServiceTests",
+            name: "BedrockServiceTests",
             dependencies: [
-                .target(name: "SwiftBedrockService"),
+                .target(name: "BedrockService"),
                 .product(name: "Testing", package: "swift-testing"),
             ],
-            path: "Tests/SwiftBedrockServiceTests"
+            path: "Tests/BedrockServiceTests"
         ),
         // .testTarget(name: "AppTests",
         //     dependencies: [

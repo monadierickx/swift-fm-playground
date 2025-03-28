@@ -13,17 +13,26 @@
 //
 //===----------------------------------------------------------------------===//
 
+@preconcurrency import AWSBedrockRuntime
 import Foundation
-import Hummingbird
 import BedrockTypes
 
-extension TextCompletion: ResponseCodable {}
+public struct ConverseResponse {
+    let message: Message
 
-struct TextCompletionInput: Codable {
-    let prompt: String
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let topK: Int?
-    let stopSequences: [String]?
+    public init(_ output: BedrockRuntimeClientTypes.ConverseOutput) throws {
+        guard case .message(let sdkMessage) = output else {
+            throw BedrockServiceError.invalidSDKResponse("Could not extract message from ConverseOutput")
+        }
+        self.message = try Message(from: sdkMessage)
+    }
+
+    func getReply() -> String {
+        switch message.content.first {
+        case .text(let text):
+            return text
+        default:
+            return "Not found"  // FIXME
+        }
+    }
 }

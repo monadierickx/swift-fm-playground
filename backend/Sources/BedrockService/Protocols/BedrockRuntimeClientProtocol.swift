@@ -13,17 +13,16 @@
 //
 //===----------------------------------------------------------------------===//
 
+@preconcurrency import AWSBedrockRuntime
+import AWSClientRuntime
+import AWSSDKIdentity
 import Foundation
-import Hummingbird
 import BedrockTypes
 
-extension TextCompletion: ResponseCodable {}
-
-struct TextCompletionInput: Codable {
-    let prompt: String
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let topK: Int?
-    let stopSequences: [String]?
+// Protocol allows writing mocks for unit tests
+public protocol BedrockRuntimeClientProtocol: Sendable {
+    func invokeModel(input: InvokeModelInput) async throws -> InvokeModelOutput
+    func converse(input: ConverseInput) async throws -> ConverseOutput
 }
+
+extension BedrockRuntimeClient: @retroactive @unchecked Sendable, BedrockRuntimeClientProtocol {}

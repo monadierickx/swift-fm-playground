@@ -14,16 +14,21 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import Hummingbird
-import BedrockTypes
 
-extension TextCompletion: ResponseCodable {}
+public struct TitanResponseBody: ContainsTextCompletion {
+    private let inputTextTokenCount: Int
+    private let results: [Result]
 
-struct TextCompletionInput: Codable {
-    let prompt: String
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let topK: Int?
-    let stopSequences: [String]?
+    public func getTextCompletion() throws -> TextCompletion {
+        guard results.count > 0 else {
+            throw BedrockServiceError.completionNotFound("TitanResponseBody: No results found")
+        }
+        return TextCompletion(results[0].outputText)
+    }
+
+    private struct Result: Codable {
+        let tokenCount: Int
+        let outputText: String
+        let completionReason: String
+    }
 }
