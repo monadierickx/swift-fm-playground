@@ -1,5 +1,6 @@
 # SwiftBedrockService
 
+Work in progress, feel free to open issue, but do not use in your projects. 
 
 ## How to add a new model family?
 

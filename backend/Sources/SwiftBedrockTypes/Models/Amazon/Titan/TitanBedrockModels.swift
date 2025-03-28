@@ -27,10 +27,10 @@ extension BedrockModel {
         id: "amazon.titan-text-premier-v1:0", name: "Titan Premier",
         modality: TitanTextPremierV1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
-                maxTokens: Parameter(minValue: 0, maxValue: 3_072, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 3_072, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             )
@@ -40,10 +40,10 @@ extension BedrockModel {
         id: "amazon.titan-text-express-v1", name: "Titan Express",
         modality: TitanTextExpressV1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
-                maxTokens: Parameter(minValue: 0, maxValue: 8_192, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 8_192, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             )
@@ -53,10 +53,10 @@ extension BedrockModel {
         id: "amazon.titan-text-lite-v1", name: "Titan Lite",
         modality: TitanTextLiteV1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.7),
-                maxTokens: Parameter(minValue: 0, maxValue: 4_096, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 4_096, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             )
@@ -75,22 +75,22 @@ extension BedrockModel {
         id: "amazon.titan-image-generator-v1", name: "Titan Image Generator",
         modality: TitanImageG1V1(
             parameters: ImageGenerationParameters(
-                nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
-                cfgScale: Parameter(minValue: 1.1, maxValue: 10, defaultValue: 8.0),
-                seed: Parameter(minValue: 0, maxValue: 2_147_483_646, defaultValue: 42)
+                nrOfImages: Parameter(.nrOfImages, minValue: 1, maxValue: 5, defaultValue: 1),
+                cfgScale: Parameter(.cfgScale, minValue: 1.1, maxValue: 10, defaultValue: 8.0),
+                seed: Parameter(.seed, minValue: 0, maxValue: 2_147_483_646, defaultValue: 42)
             ),
             resolutionValidator: TitanImageResolutionValidator(),
             textToImageParameters: TextToImageParameters(maxPromptSize: 512, maxNegativePromptSize: 512),
             conditionedTextToImageParameters: ConditionedTextToImageParameters(
                 maxPromptSize: 512,
                 maxNegativePromptSize: 512,
-                similarity: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.7)
+                similarity: Parameter(.similarity, minValue: 0, maxValue: 1.0, defaultValue: 0.7)
             ),
             imageVariationParameters: ImageVariationParameters(
-                images: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
+                images: Parameter(.images, minValue: 1, maxValue: 5, defaultValue: 1),
                 maxPromptSize: 512,
                 maxNegativePromptSize: 512,
-                similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.7)
+                similarity: Parameter(.similarity, minValue: 0.2, maxValue: 1.0, defaultValue: 0.7)
             )
         )
     )
@@ -98,22 +98,22 @@ extension BedrockModel {
         id: "amazon.titan-image-generator-v2:0", name: "Titan Image Generator V2",
         modality: TitanImageG1V2(
             parameters: ImageGenerationParameters(
-                nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
-                cfgScale: Parameter(minValue: 1.1, maxValue: 10, defaultValue: 8.0),
-                seed: Parameter(minValue: 0, maxValue: 2_147_483_646, defaultValue: 42)
+                nrOfImages: Parameter(.nrOfImages, minValue: 1, maxValue: 5, defaultValue: 1),
+                cfgScale: Parameter(.cfgScale, minValue: 1.1, maxValue: 10, defaultValue: 8.0),
+                seed: Parameter(.seed, minValue: 0, maxValue: 2_147_483_646, defaultValue: 42)
             ),
             resolutionValidator: TitanImageResolutionValidator(),
             textToImageParameters: TextToImageParameters(maxPromptSize: 512, maxNegativePromptSize: 512),
             conditionedTextToImageParameters: ConditionedTextToImageParameters(
                 maxPromptSize: 512,
                 maxNegativePromptSize: 512,
-                similarity: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.7)
+                similarity: Parameter(.similarity, minValue: 0, maxValue: 1.0, defaultValue: 0.7)
             ),
             imageVariationParameters: ImageVariationParameters(
-                images: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
+                images: Parameter(.images, minValue: 1, maxValue: 5, defaultValue: 1),
                 maxPromptSize: 512,
                 maxNegativePromptSize: 512,
-                similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.7)
+                similarity: Parameter(.similarity, minValue: 0.2, maxValue: 1.0, defaultValue: 0.7)
             )
         )
     )

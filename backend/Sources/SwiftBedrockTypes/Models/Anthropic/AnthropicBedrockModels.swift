@@ -33,10 +33,10 @@ extension BedrockModel {
         id: "anthropic.claude-instant-v1", name: "Claude Instant",
         modality: ClaudeInstantV1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: nil, defaultValue: nil),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -46,10 +46,10 @@ extension BedrockModel {
         id: "anthropic.claude-v1", name: "Claude V1",
         modality: ClaudeV1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: nil, defaultValue: nil),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -59,10 +59,10 @@ extension BedrockModel {
         id: "anthropic.claude-v2", name: "Claude V2",
         modality: ClaudeV2(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: nil, defaultValue: nil),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -72,10 +72,10 @@ extension BedrockModel {
         id: "anthropic.claude-v2:1", name: "Claude V2.1",
         modality: ClaudeV2_1(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: nil, defaultValue: nil),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: nil, defaultValue: nil),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -85,10 +85,10 @@ extension BedrockModel {
         id: "us.anthropic.claude-3-opus-20240229-v1:0", name: "Claude V3 Opus",
         modality: ClaudeV3Opus(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 4_096, defaultValue: 4_096),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 4_096, defaultValue: 4_096),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -98,10 +98,10 @@ extension BedrockModel {
         id: "anthropic.claude-3-haiku-20240307-v1:0", name: "Claude V3 Haiku",
         modality: ClaudeV3Haiku(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 4_096, defaultValue: 4_096),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 4_096, defaultValue: 4_096),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -111,10 +111,10 @@ extension BedrockModel {
         id: "us.anthropic.claude-3-5-haiku-20241022-v1:0", name: "Claude V3.5 Haiku",
         modality: ClaudeV3_5Haiku(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 8_192, defaultValue: 8_192),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -124,10 +124,10 @@ extension BedrockModel {
         id: "us.anthropic.claude-3-5-sonnet-20240620-v1:0", name: "Claude V3.5 Sonnet",
         modality: ClaudeV3_5Sonnet(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 8_192, defaultValue: 8_192),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -137,10 +137,10 @@ extension BedrockModel {
         id: "us.anthropic.claude-3-5-sonnet-20241022-v2:0", name: "Claude V3.5 Sonnet V2",
         modality: ClaudeV3_5Sonnet(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 8_192, defaultValue: 8_192),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )
@@ -150,10 +150,10 @@ extension BedrockModel {
         id: "us.anthropic.claude-3-7-sonnet-20250219-v1:0", name: "Claude V3.7 Sonnet",
         modality: ClaudeV3_7Sonnet(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 1),
-                maxTokens: Parameter(minValue: 1, maxValue: 8_192, defaultValue: 8_192),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.999),
-                topK: Parameter(minValue: 0, maxValue: 500, defaultValue: 0),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 8_192, defaultValue: 8_192),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.999),
+                topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
             )

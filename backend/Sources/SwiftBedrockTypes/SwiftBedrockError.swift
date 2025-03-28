@@ -16,7 +16,11 @@
 import Foundation
 
 public enum SwiftBedrockError: Error {
-    case invalid(InvalidParameter, String)
+    case invalidParameter(ParameterName, String)
+    case invalidModality(BedrockModel, Modality, String)
+    // case invalidModel(BedrockModel, String)
+    case invalidPrompt(String)
+    case invalidStopSequences([String], String)
     case invalidSDKResponse(String)
     case invalidSDKResponseBody(Data?)
     case completionNotFound(String)
@@ -25,21 +29,4 @@ public enum SwiftBedrockError: Error {
     case notImplemented(String)
     case notSupported(String)
     case notFound(String)
-}
-
-public enum InvalidParameter: Sendable {
-    case model
-    case modality
-    case prompt
-    case maxTokens
-    case temperature
-    case topK
-    case topP
-    case nrOfImages
-    case images
-    case similarity
-    case stopSequences
-    case cfgScale
-    case seed
-    case resolution
 }

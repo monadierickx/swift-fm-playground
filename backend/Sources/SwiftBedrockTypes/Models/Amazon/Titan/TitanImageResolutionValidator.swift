@@ -51,7 +51,7 @@ struct TitanImageResolutionValidator: ImageResolutionValidator {
             ImageResolution(width: 1173, height: 640),
         ]
         guard allowedResolutions.contains(resolution) else {
-            throw SwiftBedrockError.invalid(
+            throw SwiftBedrockError.invalidParameter(
                 .resolution,
                 "Resolution is not a permissible size. Resolution: \(resolution)"
             )

@@ -25,10 +25,10 @@ extension BedrockModel {
         id: "amazon.nova-micro-v1:0", name: "Nova Micro",
         modality: NovaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
-                maxTokens: Parameter(minValue: 1, maxValue: 5_000, defaultValue: 5_000),
-                topP: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.9),
-                topK: Parameter(minValue: 0, maxValue: nil, defaultValue: 50),
+                temperature: Parameter(.temperature, minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 5_000, defaultValue: 5_000),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1.0, defaultValue: 0.9),
+                topK: Parameter(.topK, minValue: 0, maxValue: nil, defaultValue: 50),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             )
@@ -45,22 +45,22 @@ extension BedrockModel {
         id: "amazon.nova-canvas-v1:0", name: "Nova Canvas",
         modality: NovaCanvas(
             parameters: ImageGenerationParameters(
-                nrOfImages: Parameter(minValue: 1, maxValue: 5, defaultValue: 1),
-                cfgScale: Parameter(minValue: 1.1, maxValue: 10, defaultValue: 6.5),
-                seed: Parameter(minValue: 0, maxValue: 858_993_459, defaultValue: 12)
+                nrOfImages: Parameter(.nrOfImages, minValue: 1, maxValue: 5, defaultValue: 1),
+                cfgScale: Parameter(.cfgScale, minValue: 1.1, maxValue: 10, defaultValue: 6.5),
+                seed: Parameter(.seed, minValue: 0, maxValue: 858_993_459, defaultValue: 12)
             ),
             resolutionValidator: NovaImageResolutionValidator(),
             textToImageParameters: TextToImageParameters(maxPromptSize: 1024, maxNegativePromptSize: 1024),
             conditionedTextToImageParameters: ConditionedTextToImageParameters(
                 maxPromptSize: 1024,
                 maxNegativePromptSize: 1024,
-                similarity: Parameter(minValue: 0, maxValue: 1.0, defaultValue: 0.7)
+                similarity: Parameter(.similarity, minValue: 0, maxValue: 1.0, defaultValue: 0.7)
             ),
             imageVariationParameters: ImageVariationParameters(
-                images: Parameter(minValue: 1, maxValue: 10, defaultValue: 1),
+                images: Parameter(.images, minValue: 1, maxValue: 10, defaultValue: 1),
                 maxPromptSize: 1024,
                 maxNegativePromptSize: 1024,
-                similarity: Parameter(minValue: 0.2, maxValue: 1.0, defaultValue: 0.6)
+                similarity: Parameter(.similarity, minValue: 0.2, maxValue: 1.0, defaultValue: 0.6)
             )
         )
     )

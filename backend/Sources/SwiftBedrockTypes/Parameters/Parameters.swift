@@ -17,26 +17,41 @@ import Foundation
 
 public protocol Parameters: Sendable, Hashable, Equatable {}
 
-public struct Parameter<T: Sendable & Hashable & Equatable>: Sendable, Hashable, Equatable {
+public struct Parameter<T: Sendable & Hashable & Equatable & Numeric>: Sendable, Hashable, Equatable {
     public let minValue: T?
     public let maxValue: T?
     public let defaultValue: T?
-    public let isSupported: Bool 
+    public let isSupported: Bool
+    public let name: ParameterName
 
-    public init(minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil) {
-        self = Self(minValue: minValue, maxValue: maxValue, defaultValue: defaultValue, isSupported: true)
+    public init(_ name: ParameterName, minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil) {
+        self = Self(name: name, minValue: minValue, maxValue: maxValue, defaultValue: defaultValue, isSupported: true)
     }
 
-    public static func notSupported() -> Self {
-        Self(minValue: nil, maxValue: nil, defaultValue: nil, isSupported: false)
+    public static func notSupported(_ name: ParameterName) -> Self {
+        Self(name: name, minValue: nil, maxValue: nil, defaultValue: nil, isSupported: false)
     }
 
-    private init(minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil, isSupported: Bool) {
+    private init(name: ParameterName, minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil, isSupported: Bool) {
         self.minValue = minValue
         self.maxValue = maxValue
         self.defaultValue = defaultValue
         self.isSupported = isSupported
+        self.name = name
     }
+}
+
+public enum ParameterName: Sendable {
+    case maxTokens
+    case temperature
+    case topK
+    case topP
+    case nrOfImages
+    case images
+    case similarity
+    case cfgScale
+    case seed
+    case resolution
 }
 
 public struct PromptParams: Parameters {

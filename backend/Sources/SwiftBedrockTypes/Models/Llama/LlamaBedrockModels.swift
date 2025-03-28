@@ -22,10 +22,10 @@ extension BedrockModel {
         id: "meta.llama3-8b-instruct-v1:0", name: "Llama 3 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -35,10 +35,10 @@ extension BedrockModel {
         id: "meta.llama3-70b-instruct-v1:0", name: "Llama 3 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -48,10 +48,10 @@ extension BedrockModel {
         id: "us.meta.llama3-1-8b-instruct-v1:0", name: "Llama 3.1 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -61,10 +61,10 @@ extension BedrockModel {
         id: "us.meta.llama3-1-70b-instruct-v1:0", name: "Llama 3.1 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -74,10 +74,10 @@ extension BedrockModel {
         id: "us.meta.llama3-2-1b-instruct-v1:0", name: "Llama 3.2 1B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -87,10 +87,10 @@ extension BedrockModel {
         id: "us.meta.llama3-2-3b-instruct-v1:0", name: "Llama 3.2 3B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -100,10 +100,10 @@ extension BedrockModel {
         id: "us.meta.llama3-3-70b-instruct-v1:0", name: "Llama 3.3 70B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )
@@ -113,10 +113,10 @@ extension BedrockModel {
         id: "meta.llama3-8b-instruct-v1:0", name: "Llama 3 8B Instruct",
         modality: LlamaText(
             parameters: TextGenerationParameters(
-                temperature: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.5),
-                maxTokens: Parameter(minValue: 0, maxValue: 2_048, defaultValue: 512),
-                topP: Parameter(minValue: 0, maxValue: 1, defaultValue: 0.9),
-                topK: Parameter.notSupported(),
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.5),
+                maxTokens: Parameter(.maxTokens, minValue: 0, maxValue: 2_048, defaultValue: 512),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1, defaultValue: 0.9),
+                topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams.notSupported(),
                 maxPromptSize: nil
             )

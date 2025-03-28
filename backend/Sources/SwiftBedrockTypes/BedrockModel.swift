@@ -104,8 +104,9 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: TextModality if the model supports text modality
     public func getTextModality() throws -> any TextModality {
         guard let textModality = modality as? any TextModality else {
-            throw SwiftBedrockError.invalid(
-                .modality,
+            throw SwiftBedrockError.invalidModality(
+                self,
+                modality,
                 "Model \(id) does not support text generation"
             )
         }
@@ -122,8 +123,9 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: TextModality if the model supports image modality
     public func getImageModality() throws -> any ImageModality {
         guard let imageModality = modality as? any ImageModality else {
-            throw SwiftBedrockError.invalid(
-                .modality,
+            throw SwiftBedrockError.invalidModality(
+                self,
+                modality,
                 "Model \(id) does not support image generation"
             )
         }
@@ -134,8 +136,9 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: TextToImageModality if the model supports image modality
     public func getTextToImageModality() throws -> any TextToImageModality {
         guard let textToImageModality = modality as? any TextToImageModality else {
-            throw SwiftBedrockError.invalid(
-                .modality,
+            throw SwiftBedrockError.invalidModality(
+                self,
+                modality,
                 "Model \(id) does not support text to image generation"
             )
         }
@@ -146,8 +149,9 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: ImageVariationModality if the model supports image modality
     public func getImageVariationModality() throws -> any ImageVariationModality {
         guard let modality = modality as? any ImageVariationModality else {
-            throw SwiftBedrockError.invalid(
-                .modality,
+            throw SwiftBedrockError.invalidModality(
+                self,
+                modality,
                 "Model \(id) does not support image variation"
             )
         }
