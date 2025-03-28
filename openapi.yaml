@@ -1,0 +1,215 @@
+openapi: 3.1.0
+
+info:
+  title: SwiftBackend
+  version: 1.0.0
+
+components:
+  schemas:
+    ModelInfo:
+      type: object
+      properties:
+        modelId:
+          type: string
+        providerName:
+          type: string
+        modelName:
+          type: string
+    TextCompletionInput:
+      type: object
+      properties:
+        prompt:
+          type: string
+        maxTokens:
+          type: integer
+        temperature:
+          type: number
+        topP:
+          type: number
+        topK:
+          type: integer
+        stopSequences:
+          type: array
+          items:
+            type: string
+      required:
+        - prompt
+    TextCompletionOutput:
+      type: object
+      properties:
+        completion:
+          type: string
+    ImageGenerationInput:
+      type: object
+      properties:
+        prompt:
+          type: string
+        nrOfImages:
+          type: integer
+        similarity:
+          type: number
+        referenceImage:
+          type: string
+          format: base64
+      required:
+        - prompt
+    ImageGenerationOutput:
+      type: object
+      properties:
+        images:
+          type: array
+          items:
+            type: string
+            format: base64
+    ChatInput:
+      type: object
+      properties:
+        prompt:
+          type: string
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [user, assistant, unknown]
+              content:
+                type: string # FIXME: will not always be a string
+                enum: [text, unknown]
+        maxTokens:
+          type: integer
+        temperature:
+          type: number
+        topP:
+          type: number
+        stopSequences:
+          type: array
+          items:
+            type: string
+      required:
+        - prompt
+        - history
+    ChatOutput:
+      type: object
+      properties:
+        reply:
+          type: string
+        history:
+          type: array
+          items:
+            type: object
+            properties:
+              role:
+                type: string
+                enum: [user, assistant, unknown]
+              content:
+                type: string # FIXME: will not always be a string
+                enum: [text, unknown]
+
+paths:
+  /:
+    get:
+      responses:
+        "200":
+          description: Status ok, without message
+
+  /foundation-models:
+    get:
+      operationId: getFoundationModels
+      summary: Get all available models
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ModelInfo"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /foundation-models/text/{modelId}:
+    post:
+      summary: Invoke a specific text generation model by ID
+      parameters:
+        - name: modelId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextCompletionInput"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TextCompletionOutput"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /foundation-models/chat/{modelId}:
+    post:
+      summary: Chat with a specific model.
+      operationId: chatWithModel
+      parameters:
+        - name: modelId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatInput"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatOutput"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+
+  /foundation-models/image/{modelId}:
+    post:
+      summary: Invoke a specific image generation model by ID
+      parameters:
+        - name: modelId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImageGenerationInput"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ImageGenerationOutput"
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
