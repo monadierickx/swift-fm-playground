@@ -48,6 +48,8 @@ extension Content {
         switch sdkContentBlock {
         case .text(let text):
             self = .text(text)
+        // case .image(let image): // TODO
+        //     self = .image(image)
         case .sdkUnknown(let unknownContentBlock):
             throw BedrockServiceError.notImplemented(
                 "ContentBlock \(unknownContentBlock) is not implemented by BedrockRuntimeClientTypes"
@@ -63,6 +65,8 @@ extension Content {
         switch self {
         case .text(let text):
             return BedrockRuntimeClientTypes.ContentBlock.text(text)
+        // case .image(let format, let source):
+        //     return BedrockRuntimeClientTypes.ContentBlock.image(BedrockRuntimeClientTypes.ImageBlock(format: format, source: source))
         }
     }
 }

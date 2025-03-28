@@ -17,4 +17,12 @@ import Foundation
 
 public enum Content: Codable {
     case text(String)
+    // case image(ImageFormat, String) //string are the bytes
+
+    public enum ImageFormat: Codable {
+        case gif
+        case jpeg
+        case png
+        case webp
+    }
 }
