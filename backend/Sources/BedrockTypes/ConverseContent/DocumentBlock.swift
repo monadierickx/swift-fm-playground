@@ -15,10 +15,16 @@
 
 import Foundation
 
-struct DocumentBlock: Codable {
-    let name: String
-    let format: DocumentFormat
-    let source: String  // 64 encoded
+public struct DocumentBlock: Codable {
+    public let name: String
+    public let format: DocumentFormat
+    public let source: String  // 64 encoded
+
+    public init(name: String, format: DocumentFormat, source: String) {
+        self.name = name
+        self.format = format
+        self.source = source
+    }
 }
 
 public enum DocumentFormat: Codable {

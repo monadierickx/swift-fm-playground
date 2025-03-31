@@ -17,15 +17,47 @@
 import BedrockTypes
 import Foundation
 
-// extension DocumentBlock {
-//     init(from sdkDocumentBlock: BedrockRuntimeClientTypes.DocumentBlock) throws {
-//         return BedrockRuntimeClientTypes.DocumentBlock(
-//             format: format,
-//             name: ,
-//             source: ,
-//         )
-//     }
-// }
+extension DocumentBlock {
+    init(from sdkDocumentBlock: BedrockRuntimeClientTypes.DocumentBlock) throws {
+        guard let sdkDocumentSource = sdkDocumentBlock.source else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract source from BedrockRuntimeClientTypes.DocumentBlock"
+            )
+        }
+        guard let name = sdkDocumentBlock.name else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract name from BedrockRuntimeClientTypes.DocumentBlock"
+            )
+        }
+        guard let sdkFormat = sdkDocumentBlock.format else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract format from BedrockRuntimeClientTypes.DocumentBlock"
+            )
+        }
+        let format = try DocumentFormat(from: sdkFormat)
+        switch sdkDocumentSource {
+        case .bytes(let data):
+            self = DocumentBlock(name: name, format: format, source: data.base64EncodedString())
+        case .sdkUnknown(let unknownImageSource):
+            throw BedrockServiceError.notImplemented(
+                "ImageSource \(unknownImageSource) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKDocumentBlock() throws -> BedrockRuntimeClientTypes.DocumentBlock {
+        guard let data = Data(base64Encoded: source) else {
+            throw BedrockServiceError.decodingError(
+                "Could not decode document source from base64 string. String: \(source)"
+            )
+        }
+        return BedrockRuntimeClientTypes.DocumentBlock(
+            format: format.getSDKDocumentFormat(),
+            name: name,
+            source: BedrockRuntimeClientTypes.DocumentSource.bytes(data)
+        )
+    }
+}
 
 extension DocumentFormat {
     init(from sdkDocumentFormat: BedrockRuntimeClientTypes.DocumentFormat) throws {
