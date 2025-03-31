@@ -13,21 +13,21 @@
 //
 //===----------------------------------------------------------------------===//
 
+@preconcurrency import AWSBedrockRuntime
+import BedrockTypes
 import Foundation
 
-public enum BedrockServiceError: Error {
-    case invalidParameter(ParameterName, String)
-    case invalidModality(BedrockModel, Modality, String)
-    // case invalidModel(BedrockModel, String)
-    case invalidPrompt(String)
-    case invalidStopSequences([String], String)
-    case invalidURI(String)
-    case invalidSDKResponse(String)
-    case invalidSDKResponseBody(Data?)
-    case completionNotFound(String)
-    case encodingError(String)
-    case decodingError(String)
-    case notImplemented(String)
-    case notSupported(String)
-    case notFound(String)
+extension S3Location {
+    init(from sdkS3Location: BedrockRuntimeClientTypes.S3Location) throws {
+        guard let uri = sdkS3Location.uri else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract URI from BedrockRuntimeClientTypes.S3Location"
+            )
+        }
+        guard uri.hasPrefix("") else {
+            throw BedrockServiceError.invalidURI("URI should start with \"s3://\". Your URI: \(uri)")
+        }
+        self = S3Location(bucketOwner: sdkS3Location.bucketOwner, uri: uri)
+    }
 }
+
