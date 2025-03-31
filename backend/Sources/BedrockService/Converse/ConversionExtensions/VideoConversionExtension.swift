@@ -30,8 +30,28 @@ extension VideoFormat {
 extension VideoSource {
     init(from sdkVideoSource: BedrockRuntimeClientTypes.VideoSource) throws {
         switch sdkVideoSource {
-        case .bytes(let data): self = .bytes(data.base64EncodedString())
-        case .s3location(let sdkS3Location): .s3()
+        case .bytes(let data):
+            self = .bytes(data.base64EncodedString())
+        case .s3location(let sdkS3Location):
+            self = .s3(try S3Location(from: sdkS3Location))
+        case .sdkUnknown(let unknownVideoSource):
+            throw BedrockServiceError.notImplemented(
+                "VideoSource \(unknownVideoSource) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKVideoSource() throws -> BedrockRuntimeClientTypes.VideoSource {
+        switch self {
+        case .bytes(let data):
+            guard let sdkData = Data(base64Encoded: data) else {
+                throw BedrockServiceError.decodingError(
+                    "Could not decode video source from base64 string. String: \(data)"
+                )
+            }
+            return .bytes(sdkData)
+        case .s3(let s3Location):
+            return .s3location(s3Location.getSDKS3Location())
         }
     }
 }

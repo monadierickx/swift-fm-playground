@@ -16,8 +16,8 @@
 import Foundation
 
 public struct S3Location: Codable, Sendable {
-    let bucketOwner: String?
-    let uri: String
+    public let bucketOwner: String?
+    public let uri: String
 
     public init(bucketOwner: String? = nil, uri: String) {
         self.bucketOwner = bucketOwner

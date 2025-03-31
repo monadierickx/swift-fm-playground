@@ -29,5 +29,9 @@ extension S3Location {
         }
         self = S3Location(bucketOwner: sdkS3Location.bucketOwner, uri: uri)
     }
+
+    func getSDKS3Location() -> BedrockRuntimeClientTypes.S3Location {
+        BedrockRuntimeClientTypes.S3Location(bucketOwner: self.bucketOwner, uri: self.uri)
+    }
 }
 

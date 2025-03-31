@@ -37,7 +37,7 @@ extension DocumentBlock {
         let format = try DocumentFormat(from: sdkFormat)
         switch sdkDocumentSource {
         case .bytes(let data):
-            self = DocumentBlock(name: name, format: format, source: data.base64EncodedString())
+            self = DocumentBlock(name: name,format: format, source: data.base64EncodedString())
         case .sdkUnknown(let unknownImageSource):
             throw BedrockServiceError.notImplemented(
                 "ImageSource \(unknownImageSource) is not implemented by BedrockRuntimeClientTypes"
