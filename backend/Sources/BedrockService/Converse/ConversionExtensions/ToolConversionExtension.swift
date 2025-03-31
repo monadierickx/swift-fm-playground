@@ -45,6 +45,7 @@ extension ToolUseBlock {
     }
 }
 
+
 extension ToolStatus {
     init(from sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus) throws {
         switch sdkToolStatus {
@@ -59,8 +60,33 @@ extension ToolStatus {
 
     func getSDKToolStatus() -> BedrockRuntimeClientTypes.ToolResultStatus {
         switch self {
-            case .success: .success
-            case .error: .error
+        case .success: .success
+        case .error: .error
+        }
+    }
+}
+
+extension ToolResultContent {
+    init(from sdkToolResultContent: BedrockRuntimeClientTypes.ToolResultContentBlock) throws {
+        switch sdkToolResultContent {
+        case .document(let sdkDocumentBlock):
+            self = .document(try DocumentBlock(from: sdkDocumentBlock))
+        case .image(let sdkImageBlock):
+            self = .image(try ImageBlock(from: sdkImageBlock))
+        case .text(let text):
+            self = .text(text)
+        case .video(let sdkVideoBlock):
+            self = .video(try VideoBlock(from: sdkVideoBlock))
+        // case .json(let sdkJSON):
+        //     self = .json()
+        case .sdkUnknown(let unknownToolResultContent):
+            throw BedrockServiceError.notImplemented(
+                "ToolResultContentBlock \(unknownToolResultContent) is not implemented by BedrockRuntimeClientTypes"
+            )
+        default:
+            throw BedrockServiceError.notImplemented(
+                "ToolResultContentBlock \(sdkToolResultContent) is not implemented by BedrockTypes"
+            )
         }
     }
 }
