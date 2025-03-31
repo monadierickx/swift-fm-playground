@@ -27,20 +27,20 @@ public struct ToolUseBlock: Codable {
 }
 
 public struct ToolResultBlock: Codable {
-    let content: String
-    let status: Status  // currently only supported by Anthropic Claude 3 models
-    let toolUseId: String
+    public let content: String
+    public let status: ToolStatus  // currently only supported by Anthropic Claude 3 models
+    public let toolUseId: String
+}
 
-    enum Status: Codable {
-        case success
-        case error
-    }
+public enum ToolStatus: Codable {
+    case success
+    case error
+}
 
-    enum ToolResultContent: Codable {
-        // case json([String: Any])
-        case text(String)
-        case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
-        case document(DocumentBlock)
-        case video(VideoBlock)
-    }
+public enum ToolResultContent: Codable {
+    // case json([String: Any])
+    case text(String)
+    case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
+    case document(DocumentBlock)
+    case video(VideoBlock)
 }

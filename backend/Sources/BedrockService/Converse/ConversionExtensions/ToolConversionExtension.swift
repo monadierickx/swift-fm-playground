@@ -32,7 +32,7 @@ extension ToolUseBlock {
         self = ToolUseBlock(
             id: sdkId,
             name: sdkName
-            // input: sdkToolUseBlock.input
+                // input: sdkToolUseBlock.input
         )
     }
 
@@ -40,7 +40,27 @@ extension ToolUseBlock {
         .init(
             name: name,
             toolUseId: id
-            // input: input
+                // input: input
         )
+    }
+}
+
+extension ToolStatus {
+    init(from sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus) throws {
+        switch sdkToolStatus {
+        case .success: self = .success
+        case .error: self = .error
+        case .sdkUnknown(let unknownToolStatus):
+            throw BedrockServiceError.notImplemented(
+                "ToolResultStatus \(unknownToolStatus) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKToolStatus() -> BedrockRuntimeClientTypes.ToolResultStatus {
+        switch self {
+            case .success: .success
+            case .error: .error
+        }
     }
 }
