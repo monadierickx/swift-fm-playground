@@ -27,6 +27,12 @@ extension Content {
             self = .image(try ImageBlock(from: sdkImage))
         case .document(let sdkDocumentBlock):
             self = .document(try DocumentBlock(from: sdkDocumentBlock))
+        case .tooluse(let sdkToolUseBlock):
+            self = .toolUse(try ToolUseBlock(from: sdkToolUseBlock))
+        case .toolresult(let sdkToolResultBlock):
+            self = .toolResult(try ToolResultBlock(from: sdkToolResultBlock))
+        case .video(let sdkVideoBlock):
+            self = .video(try VideoBlock(from: sdkVideoBlock))
         case .sdkUnknown(let unknownContentBlock):
             throw BedrockServiceError.notImplemented(
                 "ContentBlock \(unknownContentBlock) is not implemented by BedrockRuntimeClientTypes"
