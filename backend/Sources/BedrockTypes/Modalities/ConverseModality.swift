@@ -22,8 +22,6 @@ public protocol ConverseModality: Modality {
 
     func getConverseParameters() -> ConverseParameters
     func getConverseFeatures() -> [ConverseFeature]
-
-    init(parameters: ConverseParameters, features: [ConverseFeature])
 }
 
 // https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html
@@ -35,11 +33,8 @@ public enum ConverseFeature: String, Codable, Sendable {
     case systemPrompts = "system-prompts"
 }
 
-// defualt implementation
+// default implementation
 extension ConverseModality {
-    init(parameters: ConverseParameters, features: [ConverseFeature]) {
-        self = .init(parameters: parameters, features: features)
-    }
 
     func getConverseParameters() -> ConverseParameters {
         converseParameters
@@ -49,21 +44,3 @@ extension ConverseModality {
         converseFeatures
     }
 }
-// extension ConverseModality {
-//     // func getConverseParameters() -> ConverseParameters {
-//     //     ConverseParameters(textGenerationParameters: parameters)
-//     // }
-
-//     func getConverseFeatures() -> [ConverseFeature] {
-//         [.textGeneration]
-//     }
-// }
-
-// // Vision
-// public protocol ConverseVisionModality: ConverseModality {}
-
-// // Document
-// public protocol ConverseDocumentModality: ConverseModality {}
-
-// // Tool use
-// public protocol ConverseToolModality: ConverseModality {}

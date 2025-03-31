@@ -20,6 +20,11 @@ struct NovaConverse: ConverseModality {
 
     let converseParameters: ConverseParameters
     let converseFeatures: [ConverseFeature]
+
+    init(parameters: ConverseParameters, features: [ConverseFeature]) {
+        self.converseParameters = parameters
+        self.converseFeatures = features
+    }
 }
 
 struct NovaText: TextModality, ConverseModality {
