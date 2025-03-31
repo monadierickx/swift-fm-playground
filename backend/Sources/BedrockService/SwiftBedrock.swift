@@ -494,7 +494,7 @@ public struct BedrockService: Sendable {
             if let imageFormat: Content.ImageFormat = imageFormat,
                let imageBytes: String = imageBytes
             {
-                guard model.hasConverseVisionModality() else {
+                guard model.hasConverseModality(.vision) else {
                     throw BedrockServiceError.invalidModality(
                         model, modality,
                         "This model does not support converse vision."

@@ -33,7 +33,8 @@ extension BedrockModel {
                 topK: Parameter.notSupported(.topK),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
-            )
+            ),
+            features: [.textGeneration]
         )
     )
     public static let titan_text_g1_express: BedrockModel = BedrockModel(

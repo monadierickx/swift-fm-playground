@@ -78,6 +78,8 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
             self = BedrockModel.nova_micro
         case BedrockModel.nova_lite.id:
             self = BedrockModel.nova_lite
+        case BedrockModel.nova_pro.id:
+            self = BedrockModel.nova_pro
         case BedrockModel.nova_canvas.id:
             self = BedrockModel.nova_canvas
         // deepseek
@@ -213,19 +215,23 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         modality as? any ConverseModality != nil
     }
 
-    /// Checks if the model supports converse vision
-    /// - Returns: True if the model supports converse vision
-    public func hasConverseVisionModality() -> Bool {
-        modality as? any ConverseVisionModality != nil
+    // /// Checks if the model supports converse vision
+    // /// - Returns: True if the model supports converse vision
+    public func hasConverseModality(_ feature: ConverseFeature = .textGeneration) -> Bool {
+        if let converseModality = modality as? any ConverseModality {
+            let features = converseModality.getConverseFeatures()
+            return features.contains(feature)
+        }
+        return false
     }
 
-    public func hasConverseDocumentModality() -> Bool {
-        modality as? any ConverseDocumentModality != nil
-    }
+    // public func hasConverseDocumentModality() -> Bool {
+    //     modality as? any ConverseDocumentModality != nil
+    // }
 
-    public func hasConverseToolModality() -> Bool {
-        modality as? any ConverseToolModality != nil
-    }
+    // public func hasConverseToolModality() -> Bool {
+    //     modality as? any ConverseToolModality != nil
+    // }
 }
 
 extension BedrockModel: Encodable {

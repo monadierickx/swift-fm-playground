@@ -39,7 +39,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: []
         )
     )
     public static let claudev1: BedrockModel = BedrockModel(
@@ -52,7 +53,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: []
         )
     )
     public static let claudev2: BedrockModel = BedrockModel(
@@ -65,7 +67,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document]
         )
     )
     public static let claudev2_1: BedrockModel = BedrockModel(
@@ -78,7 +81,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document]
         )
     )
     public static let claudev3_opus: BedrockModel = BedrockModel(
@@ -91,7 +95,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .vision, .toolUse]
         )
     )
     public static let claudev3_haiku: BedrockModel = BedrockModel(
@@ -104,7 +109,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .vision, .toolUse]
         )
     )
     public static let claudev3_5_haiku: BedrockModel = BedrockModel(
@@ -117,7 +123,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .toolUse]
         )
     )
     public static let claudev3_5_sonnet: BedrockModel = BedrockModel(
@@ -130,7 +137,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .vision, .toolUse]
         )
     )
     public static let claudev3_5_sonnet_v2: BedrockModel = BedrockModel(
@@ -143,7 +151,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .vision, .toolUse]
         )
     )
     public static let claudev3_7_sonnet: BedrockModel = BedrockModel(
@@ -156,7 +165,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: 500, defaultValue: 0),
                 stopSequences: StopSequenceParams(maxSequences: 8191, defaultValue: []),
                 maxPromptSize: 200_000
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .vision, .toolUse]
         )
     )
 }

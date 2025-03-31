@@ -15,17 +15,25 @@
 
 import Foundation
 
-struct AnthropicText: TextModality {
+struct AnthropicText: TextModality, ConverseModality {
     let parameters: TextGenerationParameters
+    let converseParameters: ConverseParameters
+    let converseFeatures: [ConverseFeature]
 
     func getName() -> String { "Anthropic Text Generation" }
 
-    init(parameters: TextGenerationParameters) {
+    init(parameters: TextGenerationParameters, features: [ConverseFeature] = [.textGeneration, .systemPrompts, .document]) {
         self.parameters = parameters
+        self.converseFeatures = features
+        self.converseParameters = ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getParameters() -> TextGenerationParameters {
         parameters
+    }
+
+    func getConverseParameters() -> ConverseParameters {
+        ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getTextRequestBody(

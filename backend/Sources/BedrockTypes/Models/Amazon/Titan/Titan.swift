@@ -15,17 +15,25 @@
 
 import Foundation
 
-struct TitanText: TextModality {
+struct TitanText: TextModality, ConverseModality {
     func getName() -> String { "Titan Text Generation" }
     
     let parameters: TextGenerationParameters
+    let converseParameters: ConverseParameters
+    let converseFeatures: [ConverseFeature]
 
-    init(parameters: TextGenerationParameters) {
+    init(parameters: TextGenerationParameters, features: [ConverseFeature] = [.textGeneration, .document]) {
         self.parameters = parameters
+        self.converseFeatures = features
+        self.converseParameters = ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getParameters() -> TextGenerationParameters {
         parameters
+    }
+
+    func getConverseParameters() -> ConverseParameters {
+        ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getTextRequestBody(

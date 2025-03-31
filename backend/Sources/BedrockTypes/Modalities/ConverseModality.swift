@@ -17,14 +17,53 @@ import Foundation
 
 // Text
 public protocol ConverseModality: Modality {
+    var converseParameters: ConverseParameters { get }
+    var converseFeatures: [ConverseFeature] { get }
+
     func getConverseParameters() -> ConverseParameters
+    func getConverseFeatures() -> [ConverseFeature]
+
+    init(parameters: ConverseParameters, features: [ConverseFeature])
 }
 
-// Vision
-public protocol ConverseVisionModality: ConverseModality {}
+// https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html
+public enum ConverseFeature: String, Codable, Sendable {
+    case textGeneration = "text-generation"
+    case vision = "vision"
+    case document = "document"
+    case toolUse = "tool-use"
+    case systemPrompts = "system-prompts"
+}
 
-// Document
-public protocol ConverseDocumentModality: ConverseModality {}
+// defualt implementation
+extension ConverseModality {
+    init(parameters: ConverseParameters, features: [ConverseFeature]) {
+        self = .init(parameters: parameters, features: features)
+    }
 
-// Tool use
-public protocol ConverseToolModality: ConverseModality {}
+    func getConverseParameters() -> ConverseParameters {
+        converseParameters
+    }
+
+    func getConverseFeatures() -> [ConverseFeature] {
+        converseFeatures
+    }
+}
+// extension ConverseModality {
+//     // func getConverseParameters() -> ConverseParameters {
+//     //     ConverseParameters(textGenerationParameters: parameters)
+//     // }
+
+//     func getConverseFeatures() -> [ConverseFeature] {
+//         [.textGeneration]
+//     }
+// }
+
+// // Vision
+// public protocol ConverseVisionModality: ConverseModality {}
+
+// // Document
+// public protocol ConverseDocumentModality: ConverseModality {}
+
+// // Tool use
+// public protocol ConverseToolModality: ConverseModality {}

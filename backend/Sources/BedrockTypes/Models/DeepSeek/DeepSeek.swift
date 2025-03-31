@@ -15,13 +15,20 @@
 
 import Foundation
 
-struct DeepSeekText: TextModality {
+struct DeepSeekText: TextModality, ConverseModality {
     let parameters: TextGenerationParameters
+    let converseFeatures: [ConverseFeature]
+    let converseParameters: ConverseParameters
 
     func getName() -> String { "DeepSeek Text Generation" }
 
-    init(parameters: TextGenerationParameters) {
+    init(
+        parameters: TextGenerationParameters,
+        features: [ConverseFeature] = [.textGeneration, .systemPrompts, .document]
+    ) {
         self.parameters = parameters
+        self.converseFeatures = features
+        self.converseParameters = ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getParameters() -> TextGenerationParameters {

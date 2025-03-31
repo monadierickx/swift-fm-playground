@@ -17,7 +17,6 @@ import Foundation
 
 public protocol TextModality: Modality {
 
-    init(parameters: TextGenerationParameters)
     func getParameters() -> TextGenerationParameters
 
     func getTextRequestBody(

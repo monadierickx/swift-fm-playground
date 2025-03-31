@@ -15,13 +15,20 @@
 
 import Foundation
 
-struct LlamaText: TextModality {
+struct LlamaText: TextModality, ConverseModality {
     func getName() -> String { "Llama Text Generation" }
 
     let parameters: TextGenerationParameters
+    let converseParameters: ConverseParameters
+    let converseFeatures: [ConverseFeature]
 
-    init(parameters: TextGenerationParameters) {
+    init(
+        parameters: TextGenerationParameters,
+        features: [ConverseFeature] = [.textGeneration, .systemPrompts, .document]
+    ) {
         self.parameters = parameters
+        self.converseFeatures = features
+        self.converseParameters = ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getParameters() -> TextGenerationParameters {
