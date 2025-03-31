@@ -23,8 +23,41 @@ extension VideoBlock {
 }
 
 extension VideoFormat {
-    // init(from sdkVideoFormat: BedrockRuntimeClientTypes.VideoFormat) throws
-    // func getSDKVideoFormat() throws -> BedrockRuntimeClientTypes.VideoFormat
+    init(from sdkVideoFormat: BedrockRuntimeClientTypes.VideoFormat) throws {
+        switch sdkVideoFormat {
+        case .flv: self = .flv
+        case .mkv: self = .mkv
+        case .mov: self = .mov
+        case .mp4: self = .mp4
+        case .mpeg: self = .mpeg
+        case .mpg: self = .mpg
+        case .threeGp: self = .threeGp
+        case .webm: self = .webm
+        case .wmv: self = .wmv
+        case .sdkUnknown(let unknownVideoFormat):
+            throw BedrockServiceError.notImplemented(
+                "VideoFormat \(unknownVideoFormat) is not implemented by BedrockRuntimeClientTypes"
+            )
+        // default: // in case new video formats get added to the sdk
+        //     throw BedrockServiceError.notSupported(
+        //         "VideoFormat \(sdkVideoFormat) is not supported by BedrockTypes"
+        //     )
+        }
+    }
+
+    func getSDKVideoFormat() throws -> BedrockRuntimeClientTypes.VideoFormat {
+        switch self {
+        case .flv: return .flv
+        case .mkv: return .mkv
+        case .mov: return .mov
+        case .mp4: return .mp4
+        case .mpeg: return .mpeg
+        case .mpg: return .mpg
+        case .threeGp: return .threeGp
+        case .webm: return .webm
+        case .wmv: return .wmv
+        }
+    }
 }
 
 extension VideoSource {
