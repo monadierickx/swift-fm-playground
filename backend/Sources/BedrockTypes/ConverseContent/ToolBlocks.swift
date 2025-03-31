@@ -27,9 +27,15 @@ public struct ToolUseBlock: Codable {
 }
 
 public struct ToolResultBlock: Codable {
-    public let content: String
-    public let status: ToolStatus  // currently only supported by Anthropic Claude 3 models
-    public let toolUseId: String
+    public let id: String
+    public let content: [ToolResultContent]
+    public let status: ToolStatus?  // currently only supported by Anthropic Claude 3 models
+
+    public init(id: String, content: [ToolResultContent], status: ToolStatus? = nil) {
+        self.id = id
+        self.content = content
+        self.status = status
+    }
 }
 
 public enum ToolStatus: Codable {

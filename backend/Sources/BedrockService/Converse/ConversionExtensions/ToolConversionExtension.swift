@@ -45,6 +45,27 @@ extension ToolUseBlock {
     }
 }
 
+extension ToolResultBlock {
+    init(from sdkToolResultBlock: BedrockRuntimeClientTypes.ToolResultBlock) throws {
+        guard let sdkToolResultContent = sdkToolResultBlock.content else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract content from BedrockRuntimeClientTypes.ToolResultBlock"
+            )
+        }
+        guard let id = sdkToolResultBlock.toolUseId else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract toolUseId from BedrockRuntimeClientTypes.ToolResultBlock"
+            )
+        }
+        let sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus? = sdkToolResultBlock.status
+        var status: ToolStatus? = nil
+        if let sdkToolStatus = sdkToolStatus {
+            status = try ToolStatus(from: sdkToolStatus)
+        }
+        let toolContents = try sdkToolResultContent.map { try ToolResultContent(from: $0) }
+        self = ToolResultBlock(id: id, content: toolContents, status: status)
+    }
+}
 
 extension ToolStatus {
     init(from sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus) throws {
