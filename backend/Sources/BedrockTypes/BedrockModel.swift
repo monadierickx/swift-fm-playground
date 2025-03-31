@@ -40,6 +40,10 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Parameter rawValue: The model identifier string
     /// - Returns: The corresponding BedrockModel instance or nil if the model is not implemented
     public init?(rawValue: String) {
+        print("Attempting initializing")
+        print("Do I know what BedrockModel.mistral_large_2402.id is ? \(BedrockModel.mistral_large_2402.id)")
+        print("The modelId I want to use as rawValue: \(rawValue)")
+        print("Are they the same? \(BedrockModel.mistral_large_2402.id == rawValue)")
         switch rawValue {
         // claude
         case BedrockModel.instant.id:
@@ -76,13 +80,13 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         // nova
         case BedrockModel.nova_micro.id:
             self = BedrockModel.nova_micro
-        case BedrockModel.nova_lite.id:
-            self = BedrockModel.nova_lite
-        case BedrockModel.nova_pro.id:
-            self = BedrockModel.nova_pro
+        // case BedrockModel.nova_lite.id:
+        //     self = BedrockModel.nova_lite
+        // case BedrockModel.nova_pro.id:
+        //     self = BedrockModel.nova_pro
         case BedrockModel.nova_canvas.id:
             self = BedrockModel.nova_canvas
-        // deepseek
+        // // deepseek
         case BedrockModel.deepseek_r1_v1.id:
             self = BedrockModel.deepseek_r1_v1
         // llama
@@ -93,6 +97,13 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         case BedrockModel.llama3_2_1b_instruct.id: self = BedrockModel.llama3_2_1b_instruct
         case BedrockModel.llama3_2_3b_instruct.id: self = BedrockModel.llama3_2_3b_instruct
         case BedrockModel.llama3_3_70b_instruct.id: self = BedrockModel.llama3_3_70b_instruct
+        // mistral
+        case BedrockModel.mistral_large_2402.id:
+            print("FOUND YOU")
+            self = BedrockModel.mistral_large_2402
+        case BedrockModel.mistral_small_2402.id: self = BedrockModel.mistral_small_2402
+        case BedrockModel.mistral_7B_instruct.id: self = BedrockModel.mistral_7B_instruct
+        case BedrockModel.mistral_8x7B_instruct.id: self = BedrockModel.mistral_8x7B_instruct
         default:
             return nil
         }

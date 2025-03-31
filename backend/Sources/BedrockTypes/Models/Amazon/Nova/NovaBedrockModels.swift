@@ -32,7 +32,8 @@ extension BedrockModel {
                 topK: Parameter(.topK, minValue: 0, maxValue: nil, defaultValue: 50),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
-            )
+            ),
+            features: [.textGeneration, .systemPrompts, .toolUse]
         )
     )
     public static let nova_lite: BedrockModel = BedrockModel(

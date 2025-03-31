@@ -165,9 +165,13 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
             }
+            print("Received modelId: \(modelId)")
             guard let model = BedrockModel(rawValue: modelId) else {
+                print("Invalid modelId")
+                print("Invalid modelId: \(modelId)")
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
+            print("Hier geraak je niet he?")
             guard model.hasConverseModality() else {
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }

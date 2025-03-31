@@ -102,6 +102,34 @@ export const models = [
         }
     },
     {
+        modelName: "Mistral Large (24.02)",
+        modelId: "mistral.mistral-large-2402-v1:0",
+        temperatureRange: {
+            min: 0,
+            max: 1,
+            default: 0.7
+        },
+        maxTokenRange: {
+            min: 0,
+            max: 8191,
+            default: 8191
+        }
+    },
+    {
+        modelName: "Mistral Small (24.02)",
+        modelId: "mistral.mistral-small-2402-v1:0",
+        temperatureRange: {
+            min: 0,
+            max: 1,
+            default: 0.7
+        },
+        maxTokenRange: {
+            min: 0,
+            max: 8191,
+            default: 8191
+        }
+    },
+    {
         modelName: "Amazon Titan Text Express",
         modelId: "amazon.titan-text-express-v1",
         temperatureRange: {
