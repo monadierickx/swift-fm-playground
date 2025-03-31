@@ -40,7 +40,7 @@ public struct ConverseRequest {
         )
     }
 
-    func getConverseInput() -> ConverseInput {
+    func getConverseInput() throws -> ConverseInput {
         let sdkInferenceConfig: BedrockRuntimeClientTypes.InferenceConfiguration?
         if inferenceConfig != nil {
             sdkInferenceConfig = inferenceConfig!.getSDKInferenceConfig()
@@ -49,13 +49,13 @@ public struct ConverseRequest {
         }
         return ConverseInput(
             inferenceConfig: sdkInferenceConfig,
-            messages: getSDKMessages(),
+            messages: try getSDKMessages(),
             modelId: model.id
         )
     }
 
-    private func getSDKMessages() -> [BedrockRuntimeClientTypes.Message] {
-        messages.map { $0.getSDKMessage() }
+    private func getSDKMessages() throws -> [BedrockRuntimeClientTypes.Message] {
+        try messages.map { try $0.getSDKMessage() }
     }
 
     struct InferenceConfig {

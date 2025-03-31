@@ -460,6 +460,8 @@ public struct BedrockService: Sendable {
     public func converse(
         with model: BedrockModel,
         prompt: String,
+        imageFormat: Content.ImageFormat? = nil,
+        imageBytes: String? = nil, 
         history: [Message] = [],
         maxTokens: Int? = nil,
         temperature: Double? = nil,
@@ -475,7 +477,7 @@ public struct BedrockService: Sendable {
             ]
         )
         do {
-            let modality = try model.getTextModality()  // FIXME later: ConverseModality?
+            let modality: ConverseModality = try model.getConverseModality()
             try validateConverseParams(
                 modality: modality,
                 prompt: prompt,
@@ -488,6 +490,11 @@ public struct BedrockService: Sendable {
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))
+            if let imageFormat: Content.ImageFormat = imageFormat,
+               let imageBytes: String = imageBytes
+            {
+                messages.append(Message(from: .user, content: [.image(format: imageFormat, source: imageBytes)]))
+            }
 
             let converseRequest = ConverseRequest(
                 model: model,
@@ -497,7 +504,7 @@ public struct BedrockService: Sendable {
                 topP: topP,
                 stopSequences: stopSequences
             )
-            let input = converseRequest.getConverseInput()
+            let input = try converseRequest.getConverseInput()
             logger.trace(
                 "Created ConverseInput",
                 metadata: ["messages.count": "\(messages.count)", "model": "\(model.id)"]

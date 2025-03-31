@@ -15,7 +15,7 @@
 
 import Foundation
 
-struct NovaText: TextModality {
+struct NovaText: TextModality, ConverseModality {
     func getName() -> String { "Nova Text Generation" }
     
     let parameters: TextGenerationParameters
@@ -26,6 +26,10 @@ struct NovaText: TextModality {
 
     func getParameters() -> TextGenerationParameters {
         parameters
+    }
+
+    func getConverseParameters() -> ConverseParameters {
+        ConverseParameters(textGenerationParameters: parameters)
     }
 
     func getTextRequestBody(

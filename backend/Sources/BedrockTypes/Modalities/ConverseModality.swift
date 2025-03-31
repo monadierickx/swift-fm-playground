@@ -15,14 +15,9 @@
 
 import Foundation
 
-public enum Content: Codable {
-    case text(String)
-    case image(format: ImageFormat, source: String) // String are the 64 encoded bytes
-
-    public enum ImageFormat: Codable {
-        case gif
-        case jpeg
-        case png
-        case webp
-    }
+public protocol ConverseModality: Modality {
+    // init(textGenerationParameters: TextGenerationParameters?, imageGenerationparameters: ImageGenerationParameters?)
+    // init(parameters: ConverseParameters)
+    
+    func getConverseParameters() -> ConverseParameters
 }

@@ -14,8 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import Foundation
 import BedrockTypes
+import Foundation
 
 extension Message {
 
@@ -30,10 +30,10 @@ extension Message {
         self = Message(from: try Role(from: sdkRole), content: content)
     }
 
-    func getSDKMessage() -> BedrockRuntimeClientTypes.Message {
-        let contentBlocks: [BedrockRuntimeClientTypes.ContentBlock] = content.map {
+    func getSDKMessage() throws -> BedrockRuntimeClientTypes.Message {
+        let contentBlocks: [BedrockRuntimeClientTypes.ContentBlock] = try content.map {
             content -> BedrockRuntimeClientTypes.ContentBlock in
-            return content.getSDKContentBlock()
+            return try content.getSDKContentBlock()
         }
         return BedrockRuntimeClientTypes.Message(
             content: contentBlocks,
@@ -48,8 +48,25 @@ extension Content {
         switch sdkContentBlock {
         case .text(let text):
             self = .text(text)
-        // case .image(let image): // TODO
-        //     self = .image(image)
+        case .image(let sdkImage):
+            guard let sdkFormat = sdkImage.format else {
+                throw BedrockServiceError.decodingError(
+                    "Could not extract format from BedrockRuntimeClientTypes.ImageBlock"
+                )
+            }
+            guard let sdkImageSource = sdkImage.source else {
+                throw BedrockServiceError.decodingError(
+                    "Could not extract source from BedrockRuntimeClientTypes.ImageBlock"
+                )
+            }
+            switch sdkImageSource {
+            case .bytes(let data):
+                self = .image(format: try Content.ImageFormat(from: sdkFormat), source: data.base64EncodedString())
+            case .sdkUnknown(let unknownImageSource):
+            throw BedrockServiceError.notImplemented(
+                    "ImageSource \(unknownImageSource) is not implemented by BedrockRuntimeClientTypes"
+                )
+            }
         case .sdkUnknown(let unknownContentBlock):
             throw BedrockServiceError.notImplemented(
                 "ContentBlock \(unknownContentBlock) is not implemented by BedrockRuntimeClientTypes"
@@ -61,14 +78,50 @@ extension Content {
         }
     }
 
-    func getSDKContentBlock() -> BedrockRuntimeClientTypes.ContentBlock {
+    func getSDKContentBlock() throws -> BedrockRuntimeClientTypes.ContentBlock {
         switch self {
         case .text(let text):
             return BedrockRuntimeClientTypes.ContentBlock.text(text)
-        // case .image(let format, let source):
-        //     return BedrockRuntimeClientTypes.ContentBlock.image(BedrockRuntimeClientTypes.ImageBlock(format: format, source: source))
+        case .image(let format, let source):
+            guard let data = Data(base64Encoded: source) else {
+                throw BedrockServiceError.decodingError(
+                    "Could not decode image source from base64 string. String: \(source)"
+                )
+            }
+            return BedrockRuntimeClientTypes.ContentBlock.image(
+                BedrockRuntimeClientTypes.ImageBlock(
+                    format: format.getSDKImageFormat(),
+                    source: BedrockRuntimeClientTypes.ImageSource.bytes(data)
+                )
+            )
         }
     }
+}
+
+extension Content.ImageFormat {
+
+    init(from sdkImageFormat: BedrockRuntimeClientTypes.ImageFormat) throws {
+        switch sdkImageFormat {
+        case .gif: self = .gif
+        case .jpeg: self = .jpeg
+        case .png: self = .png
+        case .webp: self = .webp
+        case .sdkUnknown(let unknownImageFormat):
+            throw BedrockServiceError.notImplemented(
+                "ImageFormat \(unknownImageFormat) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKImageFormat() -> BedrockRuntimeClientTypes.ImageFormat {
+        switch self {
+        case .gif: return .gif
+        case .jpeg: return .jpeg
+        case .png: return .png
+        case .webp: return .webp
+        }
+    }
+
 }
 
 extension Role {

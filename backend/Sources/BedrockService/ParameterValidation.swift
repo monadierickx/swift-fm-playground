@@ -108,7 +108,7 @@ extension BedrockService {
 
     /// Validate parameters for a converse request
     public func validateConverseParams(
-        modality: any TextModality,
+        modality: any ConverseModality,
         prompt: String,
         history: [Message],
         maxTokens: Int?,
@@ -116,7 +116,7 @@ extension BedrockService {
         topP: Double?,
         stopSequences: [String]?
     ) throws {
-        let parameters = modality.getParameters()
+        let parameters = modality.getConverseParameters()
         try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
         if maxTokens != nil {
             try validateParameterValue(maxTokens!, parameter: parameters.maxTokens)

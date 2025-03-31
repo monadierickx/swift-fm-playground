@@ -113,6 +113,35 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         return textModality
     }
 
+    /// Checks if the model supports text generation and returns ConverseModality
+    /// - Returns: ConverseModality if the model supports text modality
+    public func getConverseModality() throws -> any ConverseModality {
+        guard let modality = modality as? any ConverseModality else {
+            throw BedrockServiceError.invalidModality(
+                self,
+                modality,
+                "Model \(id) does not support text generation"
+            )
+        }
+        return modality
+    }
+
+    // FIXME: this would be cleaner
+    // Error: Only concrete types such as structs, enums and classes can conform to protocols
+    public func getModality<M: Modality>() throws -> M {
+        guard let modality = modality as? M else {
+            throw BedrockServiceError.invalidModality(
+                self,
+                modality,
+                "Model \(id) does not support \(M.self)"
+            )
+        }
+        return modality
+    }
+    public func hasModality<M: Modality>(_ type: M.Type) -> Bool {
+        modality as? M != nil
+    }
+
     /// Checks if the model supports image generation
     /// - Returns: True if the model supports image generation
     public func hasImageModality() -> Bool {
