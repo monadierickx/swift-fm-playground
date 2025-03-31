@@ -15,14 +15,24 @@
 
 import Foundation
 
-public enum Content: Codable {
-    case text(String)
-    case image(format: ImageFormat, source: String) // String are the 64 encoded bytes
+public struct VideoBlock: Codable {
+    let format: Format
+    let source: Source
 
-    public enum ImageFormat: Codable {
-        case gif
-        case jpeg
-        case png
-        case webp
+    enum Source: Codable {
+        case bytes(String)  // base64
+        case s3(S3Location)
+    }
+
+    enum Format: Codable {
+        case flv
+        case mkv
+        case mov
+        case mp4
+        case mpeg
+        case mpg
+        case threeGp
+        case webm
+        case wmv
     }
 }

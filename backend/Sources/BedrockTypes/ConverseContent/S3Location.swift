@@ -14,23 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import Hummingbird
-import BedrockTypes
 
-extension Message: ResponseCodable {}
-
-struct ChatInput: Codable {
-    let prompt: String
-    let history: [Message]
-    let imageFormat: ImageFormat?
-    let imageBytes: String?
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let stopSequences: [String]?
-}
-
-struct ChatOutput: ResponseCodable {
-    let reply: String
-    let history: [Message]
+public struct S3Location: Codable {
+    let bucketOwner: String
+    let uri: String
 }

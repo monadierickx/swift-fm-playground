@@ -1,0 +1,79 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift Foundation Models Playground open source project
+//
+// Copyright (c) 2025 Amazon.com, Inc. or its affiliates
+//                    and the Swift Foundation Models Playground project authors
+// Licensed under Apache License v2.0
+//
+// See LICENSE.txt for license information
+// See CONTRIBUTORS.txt for the list of Swift Foundation Models Playground project authors
+//
+// SPDX-License-Identifier: Apache-2.0
+//
+//===----------------------------------------------------------------------===//
+
+@preconcurrency import AWSBedrockRuntime
+import BedrockTypes
+import Foundation
+
+extension ImageBlock {
+    init(from sdkImageBlock: BedrockRuntimeClientTypes.ImageBlock) throws {
+        guard let sdkFormat = sdkImageBlock.format else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract format from BedrockRuntimeClientTypes.ImageBlock"
+            )
+        }
+        guard let sdkImageSource = sdkImageBlock.source else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract source from BedrockRuntimeClientTypes.ImageBlock"
+            )
+        }
+        let format = try ImageFormat(from: sdkFormat)
+        switch sdkImageSource {
+        case .bytes(let data):
+            self = ImageBlock(format: format, source: data.base64EncodedString())
+        case .sdkUnknown(let unknownImageSource):
+            throw BedrockServiceError.notImplemented(
+                "ImageSource \(unknownImageSource) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKImageBlock() throws -> BedrockRuntimeClientTypes.ImageBlock {
+        guard let data = Data(base64Encoded: source) else {
+            throw BedrockServiceError.decodingError(
+                "Could not decode image source from base64 string. String: \(source)"
+            )
+        }
+        return BedrockRuntimeClientTypes.ImageBlock(
+            format: format.getSDKImageFormat(),
+            source: BedrockRuntimeClientTypes.ImageSource.bytes(data)
+        )
+    }
+}
+
+extension ImageFormat {
+
+    init(from sdkImageFormat: BedrockRuntimeClientTypes.ImageFormat) throws {
+        switch sdkImageFormat {
+        case .gif: self = .gif
+        case .jpeg: self = .jpeg
+        case .png: self = .png
+        case .webp: self = .webp
+        case .sdkUnknown(let unknownImageFormat):
+            throw BedrockServiceError.notImplemented(
+                "ImageFormat \(unknownImageFormat) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    func getSDKImageFormat() -> BedrockRuntimeClientTypes.ImageFormat {
+        switch self {
+        case .gif: return .gif
+        case .jpeg: return .jpeg
+        case .png: return .png
+        case .webp: return .webp
+        }
+    }
+}

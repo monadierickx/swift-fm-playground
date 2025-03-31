@@ -14,23 +14,20 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import Hummingbird
-import BedrockTypes
 
-extension Message: ResponseCodable {}
+public struct ImageBlock: Codable {
+    public let format: ImageFormat
+    public let source: String  // 64 encoded
 
-struct ChatInput: Codable {
-    let prompt: String
-    let history: [Message]
-    let imageFormat: ImageFormat?
-    let imageBytes: String?
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let stopSequences: [String]?
+    public init(format: ImageFormat, source: String) {
+        self.format = format
+        self.source = source
+    }
 }
 
-struct ChatOutput: ResponseCodable {
-    let reply: String
-    let history: [Message]
+public enum ImageFormat: Codable {
+    case gif
+    case jpeg
+    case png
+    case webp
 }

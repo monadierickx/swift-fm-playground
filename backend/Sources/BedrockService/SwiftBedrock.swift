@@ -460,7 +460,7 @@ public struct BedrockService: Sendable {
     public func converse(
         with model: BedrockModel,
         prompt: String,
-        imageFormat: Content.ImageFormat? = nil,
+        imageFormat: ImageFormat? = nil,
         imageBytes: String? = nil, 
         history: [Message] = [],
         maxTokens: Int? = nil,
@@ -491,7 +491,7 @@ public struct BedrockService: Sendable {
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))
-            if let imageFormat: Content.ImageFormat = imageFormat,
+            if let imageFormat: ImageFormat = imageFormat,
                let imageBytes: String = imageBytes
             {
                 guard model.hasConverseModality(.vision) else {
@@ -500,8 +500,7 @@ public struct BedrockService: Sendable {
                         "This model does not support converse vision."
                     )
                 }
-                messages.append(Message(from: .user, content: [.image(format: imageFormat, source: imageBytes)]))
-                print("HIER!")
+                messages.append(Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))]))
             }
 
             let converseRequest = ConverseRequest(

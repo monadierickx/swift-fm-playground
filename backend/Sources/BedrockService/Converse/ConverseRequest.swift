@@ -21,6 +21,7 @@ public struct ConverseRequest {
     let model: BedrockModel
     let messages: [Message]
     let inferenceConfig: InferenceConfig?
+    // let toolConfig: ToolConfig?
 
     init(
         model: BedrockModel,
