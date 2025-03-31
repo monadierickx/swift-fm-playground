@@ -22,6 +22,8 @@ extension Message: ResponseCodable {}
 struct ChatInput: Codable {
     let prompt: String
     let history: [Message]
+    let imageFormat: Content.ImageFormat?
+    let imageBytes: String?
     let maxTokens: Int?
     let temperature: Double?
     let topP: Double?

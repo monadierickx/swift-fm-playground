@@ -481,6 +481,7 @@ public struct BedrockService: Sendable {
             try validateConverseParams(
                 modality: modality,
                 prompt: prompt,
+                // FIXME: add image 
                 history: history,
                 maxTokens: maxTokens,
                 temperature: temperature,
@@ -493,7 +494,14 @@ public struct BedrockService: Sendable {
             if let imageFormat: Content.ImageFormat = imageFormat,
                let imageBytes: String = imageBytes
             {
+                guard model.hasConverseVisionModality() else {
+                    throw BedrockServiceError.invalidModality(
+                        model, modality,
+                        "This model does not support converse vision."
+                    )
+                }
                 messages.append(Message(from: .user, content: [.image(format: imageFormat, source: imageBytes)]))
+                print("HIER!")
             }
 
             let converseRequest = ConverseRequest(

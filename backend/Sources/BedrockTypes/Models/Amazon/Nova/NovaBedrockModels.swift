@@ -22,13 +22,27 @@ typealias NovaMicro = NovaText
 
 extension BedrockModel {
     public static let nova_micro: BedrockModel = BedrockModel(
-        id: "amazon.nova-micro-v1:0", name: "Nova Micro",
+        id: "amazon.nova-micro-v1:0",
+        name: "Nova Micro",
         modality: NovaText(
             parameters: TextGenerationParameters(
                 temperature: Parameter(.temperature, minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 5_000, defaultValue: 5_000),
                 topP: Parameter(.topP, minValue: 0, maxValue: 1.0, defaultValue: 0.9),
                 topK: Parameter(.topK, minValue: 0, maxValue: nil, defaultValue: 50),
+                stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
+                maxPromptSize: nil
+            )
+        )
+    )
+    public static let nova_lite: BedrockModel = BedrockModel(
+        id: "amazon.nova-lite-v1:0",
+        name: "Nova Lite",
+        modality: NovaConverse(
+            parameters: ConverseParameters(
+                temperature: Parameter(.temperature, minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 5_000, defaultValue: 5_000),
+                topP: Parameter(.topP, minValue: 0, maxValue: 1.0, defaultValue: 0.9),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             )
@@ -42,7 +56,8 @@ typealias NovaCanvas = AmazonImage
 
 extension BedrockModel {
     public static let nova_canvas: BedrockModel = BedrockModel(
-        id: "amazon.nova-canvas-v1:0", name: "Nova Canvas",
+        id: "amazon.nova-canvas-v1:0",
+        name: "Nova Canvas",
         modality: NovaCanvas(
             parameters: ImageGenerationParameters(
                 nrOfImages: Parameter(.nrOfImages, minValue: 1, maxValue: 5, defaultValue: 1),

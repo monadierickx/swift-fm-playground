@@ -15,9 +15,16 @@
 
 import Foundation
 
+// Text
 public protocol ConverseModality: Modality {
-    // init(textGenerationParameters: TextGenerationParameters?, imageGenerationparameters: ImageGenerationParameters?)
-    // init(parameters: ConverseParameters)
-    
     func getConverseParameters() -> ConverseParameters
 }
+
+// Vision
+public protocol ConverseVisionModality: ConverseModality {}
+
+// Document
+public protocol ConverseDocumentModality: ConverseModality {}
+
+// Tool use
+public protocol ConverseToolModality: ConverseModality {}

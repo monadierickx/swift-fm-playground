@@ -168,13 +168,15 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            guard model.hasTextModality() else {
-                throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
+            guard model.hasConverseModality() else {
+                throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
             let (reply, history) = try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
+                imageFormat: input.imageFormat ?? .jpeg, // default to simplify frontend
+                imageBytes: input.imageBytes,
                 history: input.history,
                 maxTokens: input.maxTokens,
                 temperature: input.temperature,

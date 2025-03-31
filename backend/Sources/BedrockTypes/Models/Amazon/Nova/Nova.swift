@@ -15,6 +15,20 @@
 
 import Foundation
 
+struct NovaConverse: ConverseVisionModality, ConverseDocumentModality, ConverseToolModality {
+    func getName() -> String { "Nova Lite Converse Modality" }
+
+    let converseParameters: ConverseParameters
+
+    init(parameters: ConverseParameters) {
+        self.converseParameters = parameters
+    }
+
+    func getConverseParameters() -> ConverseParameters {
+        converseParameters
+    }
+}
+
 struct NovaText: TextModality, ConverseModality {
     func getName() -> String { "Nova Text Generation" }
     

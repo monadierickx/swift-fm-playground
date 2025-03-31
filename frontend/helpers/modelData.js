@@ -88,6 +88,20 @@ export const models = [
         }
     },
     {
+        modelName: "Amazon Nova Lite",
+        modelId: "amazon.nova-lite-v1:0",
+        temperatureRange: {
+            min: 0,
+            max: 1,
+            default: 0.5
+        },
+        maxTokenRange: {
+            min: 0,
+            max: 8191,
+            default: 200
+        }
+    },
+    {
         modelName: "Amazon Titan Text Express",
         modelId: "amazon.titan-text-express-v1",
         temperatureRange: {

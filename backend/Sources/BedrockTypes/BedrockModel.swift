@@ -69,13 +69,15 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
             self = BedrockModel.titan_text_g1_express
         case BedrockModel.titan_text_g1_lite.id:
             self = BedrockModel.titan_text_g1_lite
-        // nova
-        case BedrockModel.nova_micro.id:
-            self = BedrockModel.nova_micro
         case BedrockModel.titan_image_g1_v2.id:
             self = BedrockModel.titan_image_g1_v2
         case BedrockModel.titan_image_g1_v1.id:
             self = BedrockModel.titan_image_g1_v1
+        // nova
+        case BedrockModel.nova_micro.id:
+            self = BedrockModel.nova_micro
+        case BedrockModel.nova_lite.id:
+            self = BedrockModel.nova_lite
         case BedrockModel.nova_canvas.id:
             self = BedrockModel.nova_canvas
         // deepseek
@@ -203,6 +205,26 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
     /// - Returns: True if the model supports conditioned text to image generation
     public func hasConditionedTextToImageModality() -> Bool {
         modality as? any ConditionedTextToImageModality != nil
+    }
+
+    /// Checks if the model supports converse
+    /// - Returns: True if the model supports converse
+    public func hasConverseModality() -> Bool {
+        modality as? any ConverseModality != nil
+    }
+
+    /// Checks if the model supports converse vision
+    /// - Returns: True if the model supports converse vision
+    public func hasConverseVisionModality() -> Bool {
+        modality as? any ConverseVisionModality != nil
+    }
+
+    public func hasConverseDocumentModality() -> Bool {
+        modality as? any ConverseDocumentModality != nil
+    }
+
+    public func hasConverseToolModality() -> Bool {
+        modality as? any ConverseToolModality != nil
     }
 }
 
