@@ -21,7 +21,7 @@ struct DocumentBlock: Codable {
     let source: String  // 64 encoded
 }
 
-enum DocumentFormat: Codable {
+public enum DocumentFormat: Codable {
     case csv
     case doc
     case docx
