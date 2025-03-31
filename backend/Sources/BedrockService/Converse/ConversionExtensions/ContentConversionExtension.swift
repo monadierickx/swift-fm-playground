@@ -25,6 +25,8 @@ extension Content {
             self = .text(text)
         case .image(let sdkImage):
             self = .image(try ImageBlock(from: sdkImage))
+        case .document(let sdkDocumentBlock):
+            self = .document(try DocumentBlock(from: sdkDocumentBlock))
         case .sdkUnknown(let unknownContentBlock):
             throw BedrockServiceError.notImplemented(
                 "ContentBlock \(unknownContentBlock) is not implemented by BedrockRuntimeClientTypes"
@@ -42,6 +44,8 @@ extension Content {
             return BedrockRuntimeClientTypes.ContentBlock.text(text)
         case .image(let imageBlock):
             return BedrockRuntimeClientTypes.ContentBlock.image(try imageBlock.getSDKImageBlock())
+        case .document(let documentBlock):
+            return BedrockRuntimeClientTypes.ContentBlock.document(try documentBlock.getSDKDocumentBlock())
         default:
             print("TODO")
             return BedrockRuntimeClientTypes.ContentBlock.text("TODO")

@@ -20,5 +20,6 @@ public enum Content: Codable {
     case image(ImageBlock)  // String are the 64 encoded bytes
     case toolUse(ToolUseBlock)
     case toolresult(ToolResultBlock)
-    // case reasoningcontent(String)
+    case document(DocumentBlock)
+    // case reasoningcontent(ReasoningBlock)
 }
