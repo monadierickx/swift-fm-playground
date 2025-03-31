@@ -45,4 +45,18 @@ extension DocumentFormat {
             )
         }
     }
+
+    func getSDKDocumentFormat() -> BedrockRuntimeClientTypes.DocumentFormat {
+        switch self {
+        case .csv: return .csv
+        case .doc: return .doc
+        case .docx: return .docx
+        case .html: return .html
+        case .md: return .md
+        case .pdf: return .pdf
+        case .txt: return .txt
+        case .xls: return .xls
+        case .xlsx: return .xlsx
+        }
+    }
 }
