@@ -18,6 +18,11 @@ import Foundation
 public struct VideoBlock: Codable {
     public let format: VideoFormat
     public let source: VideoSource
+
+    public init(format: VideoFormat, source: VideoSource) {
+        self.format = format
+        self.source = source
+    }
 }
 
 public enum VideoSource: Codable {

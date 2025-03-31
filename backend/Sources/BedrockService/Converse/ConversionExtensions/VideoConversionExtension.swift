@@ -18,8 +18,29 @@ import BedrockTypes
 import Foundation
 
 extension VideoBlock {
-    // init(from sdkVideoBlock: BedrockRuntimeClientTypes.VideoBlock) throws
-    // func getSDKVideoBlock() throws -> BedrockRuntimeClientTypes.VideoBlock
+    init(from sdkVideoBlock: BedrockRuntimeClientTypes.VideoBlock) throws {
+        guard let sdkFormat = sdkVideoBlock.format else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract format from BedrockRuntimeClientTypes.VideoBlock"
+            )
+        }
+        guard let sdkSource = sdkVideoBlock.source else {
+            throw BedrockServiceError.decodingError(
+                "Could not extract source from BedrockRuntimeClientTypes.VideoBlock"
+            )
+        }
+        self = VideoBlock(
+            format: try VideoFormat(from: sdkFormat),
+            source: try VideoSource(from: sdkSource)
+        )
+    }
+
+    func getSDKVideoBlock() throws -> BedrockRuntimeClientTypes.VideoBlock {
+        BedrockRuntimeClientTypes.VideoBlock(
+            format: try format.getSDKVideoFormat(),
+            source: try source.getSDKVideoSource()
+        )
+    }
 }
 
 extension VideoFormat {
