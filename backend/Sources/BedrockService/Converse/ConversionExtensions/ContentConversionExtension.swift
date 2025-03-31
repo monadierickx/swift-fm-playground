@@ -52,9 +52,15 @@ extension Content {
             return BedrockRuntimeClientTypes.ContentBlock.image(try imageBlock.getSDKImageBlock())
         case .document(let documentBlock):
             return BedrockRuntimeClientTypes.ContentBlock.document(try documentBlock.getSDKDocumentBlock())
-        default:
-            print("TODO")
-            return BedrockRuntimeClientTypes.ContentBlock.text("TODO")
+        case .toolResult(let toolResultBlock):
+            return BedrockRuntimeClientTypes.ContentBlock.toolresult(try toolResultBlock.getSDKToolResultBlock())
+        case .toolUse(let toolUseBlock):
+            return BedrockRuntimeClientTypes.ContentBlock.tooluse(try toolUseBlock.getSDKToolUseBlock())
+        case .video(let videoBlock):
+            return BedrockRuntimeClientTypes.ContentBlock.video(try videoBlock.getSDKVideoBlock())
+        // default:
+        //     print("TODO")
+        //     return BedrockRuntimeClientTypes.ContentBlock.text("TODO")
         }
     }
 }

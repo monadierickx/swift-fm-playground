@@ -65,6 +65,15 @@ extension ToolResultBlock {
         let toolContents = try sdkToolResultContent.map { try ToolResultContent(from: $0) }
         self = ToolResultBlock(id: id, content: toolContents, status: status)
     }
+
+    func getSDKToolResultBlock() throws -> BedrockRuntimeClientTypes.ToolResultBlock {
+        BedrockRuntimeClientTypes.ToolResultBlock(
+            content: try content.map { try $0.getSDKToolResultContentBlock() },
+            status: status?.getSDKToolStatus(),
+            toolUseId: id
+        )
+    
+    }
 }
 
 extension ToolStatus {
@@ -108,6 +117,19 @@ extension ToolResultContent {
             throw BedrockServiceError.notImplemented(
                 "ToolResultContentBlock \(sdkToolResultContent) is not implemented by BedrockTypes"
             )
+        }
+    }
+
+    func getSDKToolResultContentBlock() throws -> BedrockRuntimeClientTypes.ToolResultContentBlock {
+        switch self {
+        case .document(let documentBlock):
+            .document(try documentBlock.getSDKDocumentBlock())
+        case .image(let imageBlock):
+            .image(try imageBlock.getSDKImageBlock())
+        case .text(let text):
+            .text(text)
+        case .video(let videoBlock):
+            .video(try videoBlock.getSDKVideoBlock())
         }
     }
 }
