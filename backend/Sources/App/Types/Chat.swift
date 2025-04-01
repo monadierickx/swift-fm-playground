@@ -28,6 +28,7 @@ struct ChatInput: Codable {
     let temperature: Double?
     let topP: Double?
     let stopSequences: [String]?
+    let systemPrompts: [String]?
 }
 
 struct ChatOutput: ResponseCodable {

@@ -17,9 +17,9 @@
 @preconcurrency import AWSBedrockRuntime
 import AWSClientRuntime
 import AWSSDKIdentity
+import BedrockTypes
 import Foundation
 import Logging
-import BedrockTypes
 
 public struct BedrockService: Sendable {
     let region: Region
@@ -461,12 +461,13 @@ public struct BedrockService: Sendable {
         with model: BedrockModel,
         prompt: String,
         imageFormat: ImageBlock.Format? = nil,
-        imageBytes: String? = nil, 
+        imageBytes: String? = nil,
         history: [Message] = [],
         maxTokens: Int? = nil,
         temperature: Double? = nil,
         topP: Double? = nil,
         stopSequences: [String]? = nil,
+        systemPrompts: [String]? = nil,
         tools: [Tool]? = nil
     ) async throws -> (String, [Message]) {
         logger.trace(
@@ -482,26 +483,31 @@ public struct BedrockService: Sendable {
             try validateConverseParams(
                 modality: modality,
                 prompt: prompt,
-                // FIXME: add image 
+                // FIXME: add image
                 history: history,
                 maxTokens: maxTokens,
                 temperature: temperature,
                 topP: topP,
                 stopSequences: stopSequences
+                // FIXME: add systemPrompts
+                // FIXME: add tools
             )
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))
             if let imageFormat: ImageBlock.Format = imageFormat,
-               let imageBytes: String = imageBytes
+                let imageBytes: String = imageBytes
             {
                 guard model.hasConverseModality(.vision) else {
                     throw BedrockServiceError.invalidModality(
-                        model, modality,
+                        model,
+                        modality,
                         "This model does not support converse vision."
                     )
                 }
-                messages.append(Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))]))
+                messages.append(
+                    Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))])
+                )
             }
 
             let converseRequest = ConverseRequest(
@@ -510,7 +516,8 @@ public struct BedrockService: Sendable {
                 maxTokens: maxTokens,
                 temperature: temperature,
                 topP: topP,
-                stopSequences: stopSequences
+                stopSequences: stopSequences,
+                systemPrompts: systemPrompts
             )
             let input = try converseRequest.getConverseInput()
             logger.trace(

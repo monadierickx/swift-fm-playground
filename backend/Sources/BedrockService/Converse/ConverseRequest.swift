@@ -22,6 +22,7 @@ public struct ConverseRequest {
     let messages: [Message]
     let inferenceConfig: InferenceConfig?
     // let toolConfig: ToolConfig?
+    let systemPrompts: [String]?
 
     init(
         model: BedrockModel,
@@ -29,8 +30,9 @@ public struct ConverseRequest {
         maxTokens: Int?,
         temperature: Double?,
         topP: Double?,
-        stopSequences: [String]?
-        // tools: [Tool]
+        stopSequences: [String]?,
+        systemPrompts: [String]?
+            // tools: [Tool]
     ) {
         self.messages = messages
         self.model = model
@@ -40,6 +42,7 @@ public struct ConverseRequest {
             topP: topP,
             stopSequences: stopSequences
         )
+        self.systemPrompts = systemPrompts
         // self.toolConfig = ToolConfig(tools: tools)
     }
 
@@ -53,12 +56,19 @@ public struct ConverseRequest {
         return ConverseInput(
             inferenceConfig: sdkInferenceConfig,
             messages: try getSDKMessages(),
-            modelId: model.id
+            modelId: model.id,
+            system: getSDKSystemPrompts()
         )
     }
 
     private func getSDKMessages() throws -> [BedrockRuntimeClientTypes.Message] {
         try messages.map { try $0.getSDKMessage() }
+    }
+
+    private func getSDKSystemPrompts() -> [BedrockRuntimeClientTypes.SystemContentBlock]? {
+        return systemPrompts?.map {
+            BedrockRuntimeClientTypes.SystemContentBlock.text($0)
+        }
     }
 
     struct InferenceConfig {
