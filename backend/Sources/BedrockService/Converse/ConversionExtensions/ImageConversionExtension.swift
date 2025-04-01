@@ -29,7 +29,7 @@ extension ImageBlock {
                 "Could not extract source from BedrockRuntimeClientTypes.ImageBlock"
             )
         }
-        let format = try ImageFormat(from: sdkFormat)
+        let format = try ImageBlock.Format(from: sdkFormat)
         switch sdkImageSource {
         case .bytes(let data):
             self = ImageBlock(format: format, source: data.base64EncodedString())
@@ -53,7 +53,7 @@ extension ImageBlock {
     }
 }
 
-extension ImageFormat {
+extension ImageBlock.Format {
 
     init(from sdkImageFormat: BedrockRuntimeClientTypes.ImageFormat) throws {
         switch sdkImageFormat {

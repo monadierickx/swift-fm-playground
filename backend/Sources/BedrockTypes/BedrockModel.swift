@@ -229,14 +229,6 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         }
         return false
     }
-
-    // public func hasConverseDocumentModality() -> Bool {
-    //     modality as? any ConverseDocumentModality != nil
-    // }
-
-    // public func hasConverseToolModality() -> Bool {
-    //     modality as? any ConverseToolModality != nil
-    // }
 }
 
 extension BedrockModel: Encodable {

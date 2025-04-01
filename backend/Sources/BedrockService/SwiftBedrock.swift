@@ -460,13 +460,14 @@ public struct BedrockService: Sendable {
     public func converse(
         with model: BedrockModel,
         prompt: String,
-        imageFormat: ImageFormat? = nil,
+        imageFormat: ImageBlock.Format? = nil,
         imageBytes: String? = nil, 
         history: [Message] = [],
         maxTokens: Int? = nil,
         temperature: Double? = nil,
         topP: Double? = nil,
-        stopSequences: [String]? = nil
+        stopSequences: [String]? = nil,
+        tools: [Tool]? = nil
     ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
@@ -491,7 +492,7 @@ public struct BedrockService: Sendable {
 
             var messages = history
             messages.append(Message(from: .user, content: [.text(prompt)]))
-            if let imageFormat: ImageFormat = imageFormat,
+            if let imageFormat: ImageBlock.Format = imageFormat,
                let imageBytes: String = imageBytes
             {
                 guard model.hasConverseModality(.vision) else {

@@ -16,18 +16,18 @@
 import Foundation
 
 public struct ImageBlock: Codable {
-    public let format: ImageFormat
+    public let format: Format
     public let source: String  // 64 encoded
 
-    public init(format: ImageFormat, source: String) {
+    public init(format: Format, source: String) {
         self.format = format
         self.source = source
     }
-}
 
-public enum ImageFormat: Codable {
+    public enum Format: Codable {
     case gif
     case jpeg
     case png
     case webp
+}
 }

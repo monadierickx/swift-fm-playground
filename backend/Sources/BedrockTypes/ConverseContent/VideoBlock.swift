@@ -16,28 +16,28 @@
 import Foundation
 
 public struct VideoBlock: Codable {
-    public let format: VideoFormat
-    public let source: VideoSource
+    public let format: Format
+    public let source: Source
 
-    public init(format: VideoFormat, source: VideoSource) {
+    public init(format: Format, source: Source) {
         self.format = format
         self.source = source
     }
-}
 
-public enum VideoSource: Codable {
-    case bytes(String)  // base64
-    case s3(S3Location)
-}
+    public enum Source: Codable {
+        case bytes(String)  // base64
+        case s3(S3Location)
+    }
 
-public enum VideoFormat: Codable {
-    case flv
-    case mkv
-    case mov
-    case mp4
-    case mpeg
-    case mpg
-    case threeGp
-    case webm
-    case wmv
+    public enum Format: Codable {
+        case flv
+        case mkv
+        case mov
+        case mp4
+        case mpeg
+        case mpg
+        case threeGp
+        case webm
+        case wmv
+    }
 }

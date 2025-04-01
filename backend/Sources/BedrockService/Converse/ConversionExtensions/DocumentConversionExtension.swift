@@ -34,7 +34,7 @@ extension DocumentBlock {
                 "Could not extract format from BedrockRuntimeClientTypes.DocumentBlock"
             )
         }
-        let format = try DocumentFormat(from: sdkFormat)
+        let format = try DocumentBlock.Format(from: sdkFormat)
         switch sdkDocumentSource {
         case .bytes(let data):
             self = DocumentBlock(name: name,format: format, source: data.base64EncodedString())
@@ -59,7 +59,7 @@ extension DocumentBlock {
     }
 }
 
-extension DocumentFormat {
+extension DocumentBlock.Format {
     init(from sdkDocumentFormat: BedrockRuntimeClientTypes.DocumentFormat) throws {
         switch sdkDocumentFormat {
         case .csv: self = .csv

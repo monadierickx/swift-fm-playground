@@ -17,24 +17,24 @@ import Foundation
 
 public struct DocumentBlock: Codable {
     public let name: String
-    public let format: DocumentFormat
+    public let format: Format
     public let source: String  // 64 encoded
 
-    public init(name: String, format: DocumentFormat, source: String) {
+    public init(name: String, format: Format, source: String) {
         self.name = name
         self.format = format
         self.source = source
     }
-}
 
-public enum DocumentFormat: Codable {
-    case csv
-    case doc
-    case docx
-    case html
-    case md
-    case pdf
-    case txt
-    case xls
-    case xlsx
+    public enum Format: Codable {
+        case csv
+        case doc
+        case docx
+        case html
+        case md
+        case pdf
+        case txt
+        case xls
+        case xlsx
+    }
 }

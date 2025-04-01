@@ -44,7 +44,7 @@ public enum ToolStatus: Codable {
 }
 
 public enum ToolResultContent: Codable {
-    // case json([String: Any])
+    // case json([String: Any]) // Just Data 
     case text(String)
     case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
     case document(DocumentBlock)

@@ -21,7 +21,7 @@ public struct ConverseRequest {
     let model: BedrockModel
     let messages: [Message]
     let inferenceConfig: InferenceConfig?
-    let toolConfig: ToolConfig?
+    // let toolConfig: ToolConfig?
 
     init(
         model: BedrockModel,
@@ -30,6 +30,7 @@ public struct ConverseRequest {
         temperature: Double?,
         topP: Double?,
         stopSequences: [String]?
+        // tools: [Tool]
     ) {
         self.messages = messages
         self.model = model
@@ -39,7 +40,7 @@ public struct ConverseRequest {
             topP: topP,
             stopSequences: stopSequences
         )
-        self.toolConfig = nil
+        // self.toolConfig = ToolConfig(tools: tools)
     }
 
     func getConverseInput() throws -> ConverseInput {
@@ -91,7 +92,7 @@ public struct ConverseRequest {
 
 public struct ToolConfig {
     // let toolChoice: ToolChoice?
-    let tools: [ToolSpecification]
+    let tools: [Tool]
 }
 
 // public enum ToolChoice {
@@ -102,39 +103,3 @@ public struct ToolConfig {
 //     /// The Model must request the specified tool. Only supported by Anthropic Claude 3 models.
 //     case tool(String)
 // }
-
-public struct ToolSpecification {
-    public let name: String
-    public let inputSchema: [String: Any]
-    public let description: String?
-
-    init(name: String, inputSchema: [String: Any], description: String? = nil) {
-        self.name = name
-        self.inputSchema = inputSchema
-        self.description = description
-    }
-
-    init(from sdkToolSpecification: BedrockRuntimeClientTypes.ToolSpecification) throws {
-        guard let name = sdkToolSpecification.name else {
-            throw BedrockServiceError.decodingError(
-                "Could not extract name from BedrockRuntimeClientTypes.ToolSpecification"
-            )
-        }
-        guard let sdkInputSchema = sdkToolSpecification.inputSchema else {
-            throw BedrockServiceError.decodingError(
-                "Could not extract inputSchema from BedrockRuntimeClientTypes.ToolSpecification"
-            )
-        }
-        guard case .json(let smithyDocument) = sdkInputSchema else {
-            throw BedrockServiceError.decodingError(
-                "Could not extract JSON from BedrockRuntimeClientTypes.ToolSpecification.inputSchema"
-            )
-        }
-        let inputSchema = try smithyDocument.asStringMap()
-        self = ToolSpecification(
-            name: name,
-            inputSchema: inputSchema,
-            description: sdkToolSpecification.description
-        )
-    }
-}

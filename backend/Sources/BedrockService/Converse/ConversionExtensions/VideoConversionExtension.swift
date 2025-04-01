@@ -30,8 +30,8 @@ extension VideoBlock {
             )
         }
         self = VideoBlock(
-            format: try VideoFormat(from: sdkFormat),
-            source: try VideoSource(from: sdkSource)
+            format: try VideoBlock.Format(from: sdkFormat),
+            source: try VideoBlock.Source(from: sdkSource)
         )
     }
 
@@ -43,7 +43,7 @@ extension VideoBlock {
     }
 }
 
-extension VideoFormat {
+extension VideoBlock.Format {
     init(from sdkVideoFormat: BedrockRuntimeClientTypes.VideoFormat) throws {
         switch sdkVideoFormat {
         case .flv: self = .flv
@@ -81,7 +81,7 @@ extension VideoFormat {
     }
 }
 
-extension VideoSource {
+extension VideoBlock.Source {
     init(from sdkVideoSource: BedrockRuntimeClientTypes.VideoSource) throws {
         switch sdkVideoSource {
         case .bytes(let data):

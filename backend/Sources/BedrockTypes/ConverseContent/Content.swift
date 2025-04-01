@@ -17,7 +17,7 @@ import Foundation
 
 public enum Content: Codable {
     case text(String)
-    case image(ImageBlock)  // String are the 64 encoded bytes
+    case image(ImageBlock)
     case toolUse(ToolUseBlock)
     case toolResult(ToolResultBlock)
     case document(DocumentBlock)
