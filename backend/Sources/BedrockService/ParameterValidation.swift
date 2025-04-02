@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 import BedrockTypes
+import Foundation
 
 extension BedrockService {
 
@@ -109,7 +109,7 @@ extension BedrockService {
     /// Validate parameters for a converse request
     public func validateConverseParams(
         modality: any ConverseModality,
-        prompt: String,
+        prompt: String?,
         history: [Message],
         maxTokens: Int?,
         temperature: Double?,
@@ -117,7 +117,9 @@ extension BedrockService {
         stopSequences: [String]?
     ) throws {
         let parameters = modality.getConverseParameters()
-        try validatePrompt(prompt, maxPromptTokens: parameters.prompt.maxSize)
+        if prompt != nil {
+            try validatePrompt(prompt!, maxPromptTokens: parameters.prompt.maxSize)
+        }
         if maxTokens != nil {
             try validateParameterValue(maxTokens!, parameter: parameters.maxTokens)
         }
@@ -177,7 +179,7 @@ extension BedrockService {
             metadata: [
                 "parameter": "\(parameter.name)", "value": "\(value)",
                 "value.min": "\(String(describing: parameter.minValue))",
-                "value.max": "\(String(describing: parameter.maxValue))"
+                "value.max": "\(String(describing: parameter.maxValue))",
             ]
         )
     }

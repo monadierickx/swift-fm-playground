@@ -459,7 +459,7 @@ public struct BedrockService: Sendable {
     /// Use Converse API
     public func converse(
         with model: BedrockModel,
-        prompt: String,
+        prompt: String?,
         imageFormat: ImageBlock.Format? = nil,
         imageBytes: String? = nil,
         history: [Message] = [],
@@ -468,14 +468,15 @@ public struct BedrockService: Sendable {
         topP: Double? = nil,
         stopSequences: [String]? = nil,
         systemPrompts: [String]? = nil,
-        tools: [Tool]? = nil
+        tools: [Tool]? = nil,
+        toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
         logger.trace(
             "Conversing",
             metadata: [
                 "model.id": .string(model.id),
                 "model.modality": .string(model.modality.getName()),
-                "prompt": .string(prompt),
+                "prompt": .string(prompt ?? "No prompt"),
             ]
         )
         do {
@@ -489,14 +490,39 @@ public struct BedrockService: Sendable {
                 temperature: temperature,
                 topP: topP,
                 stopSequences: stopSequences
-                // FIXME: add systemPrompts
-                // FIXME: add tools
+                    // FIXME: add systemPrompts
+                    // FIXME: add tools
             )
 
             var messages = history
-            messages.append(Message(from: .user, content: [.text(prompt)]))
-            if let imageFormat: ImageBlock.Format = imageFormat,
-                let imageBytes: String = imageBytes
+
+            if tools != nil || toolResult != nil {
+                guard model.hasConverseModality(.toolUse) else {
+                    throw BedrockServiceError.invalidModality(
+                        model,
+                        modality,
+                        "This model does not support converse tool."
+                    )
+                }
+            }
+
+            if toolResult != nil {
+                guard let _: [Tool] = tools else {
+                    throw BedrockServiceError.invalidPrompt("Tool result is defined but tools are not.")
+                }
+                guard case .toolUse(_) = messages.last?.content.last else {
+                    throw BedrockServiceError.invalidPrompt("Tool result is defined but last message is not tool use.")
+                }
+                messages.append(Message(from: .user, content: [.toolResult(toolResult!)]))
+            } else {
+                guard let prompt = prompt else {
+                    throw BedrockServiceError.invalidPrompt("Prompt is not defined.")
+                }
+                messages.append(Message(from: .user, content: [.text(prompt)]))
+            }
+
+            if let imageFormat = imageFormat,
+                let imageBytes = imageBytes
             {
                 guard model.hasConverseModality(.vision) else {
                     throw BedrockServiceError.invalidModality(
@@ -508,16 +534,6 @@ public struct BedrockService: Sendable {
                 messages.append(
                     Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))])
                 )
-            }
-
-            if tools != nil {
-                guard model.hasConverseModality(.toolUse) else {
-                    throw BedrockServiceError.invalidModality(
-                        model,
-                        modality,
-                        "This model does not support converse tool."
-                    )
-                }
             }
 
             let converseRequest = ConverseRequest(

@@ -30,6 +30,7 @@ struct ChatInput: Codable {
     let stopSequences: [String]?
     let systemPrompts: [String]?
     let tools: [Tool]?
+    let toolResult: ToolResultBlock?
 }
 
 struct ChatOutput: ResponseCodable {

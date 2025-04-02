@@ -184,17 +184,10 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 topP: input.topP,
                 stopSequences: input.stopSequences,
                 systemPrompts: input.systemPrompts,
-                tools: input.tools
+                tools: input.tools,
+                toolResult: input.toolResult
             )
-            print("checkpoint HB 1")
-            let output = ChatOutput(reply: reply, history: history)
-            print("checkpoint HB 2")
-            // logger.info("Chatoutput received", metadata: ["output": "\(output)"])
-            let encoder = JSONEncoder()
-            let encoded = try encoder.encode(output)  // will throw if there's a serialization issue
-            print("checkpoint HB 3")
-            logger.trace("Serialization check", metadata: ["encoded": "\(encoded)"])
-            return output
+            return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(
                 "An error occured while generating chat",
