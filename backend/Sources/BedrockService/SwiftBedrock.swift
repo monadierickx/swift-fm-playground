@@ -517,7 +517,8 @@ public struct BedrockService: Sendable {
                 temperature: temperature,
                 topP: topP,
                 stopSequences: stopSequences,
-                systemPrompts: systemPrompts
+                systemPrompts: systemPrompts,
+                tools: tools
             )
             let input = try converseRequest.getConverseInput()
             logger.trace(

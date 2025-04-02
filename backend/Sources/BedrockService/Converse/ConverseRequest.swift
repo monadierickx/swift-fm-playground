@@ -21,7 +21,7 @@ public struct ConverseRequest {
     let model: BedrockModel
     let messages: [Message]
     let inferenceConfig: InferenceConfig?
-    // let toolConfig: ToolConfig?
+    let toolConfig: ToolConfig?
     let systemPrompts: [String]?
 
     init(
@@ -31,8 +31,8 @@ public struct ConverseRequest {
         temperature: Double?,
         topP: Double?,
         stopSequences: [String]?,
-        systemPrompts: [String]?
-            // tools: [Tool]
+        systemPrompts: [String]?,
+        tools: [Tool]?
     ) {
         self.messages = messages
         self.model = model
@@ -43,21 +43,20 @@ public struct ConverseRequest {
             stopSequences: stopSequences
         )
         self.systemPrompts = systemPrompts
-        // self.toolConfig = ToolConfig(tools: tools)
+        if tools != nil {
+            self.toolConfig = ToolConfig(tools: tools!)
+        } else {
+            self.toolConfig = nil
+        }
     }
 
     func getConverseInput() throws -> ConverseInput {
-        let sdkInferenceConfig: BedrockRuntimeClientTypes.InferenceConfiguration?
-        if inferenceConfig != nil {
-            sdkInferenceConfig = inferenceConfig!.getSDKInferenceConfig()
-        } else {
-            sdkInferenceConfig = nil
-        }
-        return ConverseInput(
-            inferenceConfig: sdkInferenceConfig,
+        ConverseInput(
+            inferenceConfig: inferenceConfig?.getSDKInferenceConfig(),
             messages: try getSDKMessages(),
             modelId: model.id,
-            system: getSDKSystemPrompts()
+            system: getSDKSystemPrompts(),
+            toolConfig: try toolConfig?.getSDKToolConfig()
         )
     }
 
@@ -66,7 +65,7 @@ public struct ConverseRequest {
     }
 
     private func getSDKSystemPrompts() -> [BedrockRuntimeClientTypes.SystemContentBlock]? {
-        return systemPrompts?.map {
+        systemPrompts?.map {
             BedrockRuntimeClientTypes.SystemContentBlock.text($0)
         }
     }
@@ -98,11 +97,17 @@ public struct ConverseRequest {
             )
         }
     }
-}
 
-public struct ToolConfig {
-    // let toolChoice: ToolChoice?
-    let tools: [Tool]
+    public struct ToolConfig {
+        // let toolChoice: ToolChoice?
+        let tools: [Tool]
+
+        func getSDKToolConfig() throws -> BedrockRuntimeClientTypes.ToolConfiguration {
+            BedrockRuntimeClientTypes.ToolConfiguration(
+                tools: try tools.map { .toolspec(try $0.getSDKToolSpecification()) }
+            )
+        }
+    }
 }
 
 // public enum ToolChoice {
