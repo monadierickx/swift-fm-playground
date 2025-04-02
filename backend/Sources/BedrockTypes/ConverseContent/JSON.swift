@@ -45,7 +45,9 @@ public struct JSON: Codable {
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        if let intValue = value as? Int {
+        if let jsonValue = value as? JSON {
+            try jsonValue.encode(to: encoder)
+        } else if let intValue = value as? Int {
             try container.encode(intValue)
         } else if let doubleValue = value as? Double {
             try container.encode(doubleValue)
@@ -60,6 +62,7 @@ public struct JSON: Codable {
             let jsonDictionary = dictionaryValue.mapValues { JSON($0) }
             try container.encode(jsonDictionary)
         } else {
+            // try container.encode(String(describing: value ?? "nil"))
             throw EncodingError.invalidValue(
                 value ?? "nil",
                 EncodingError.Context(codingPath: encoder.codingPath, debugDescription: "Unsupported type")

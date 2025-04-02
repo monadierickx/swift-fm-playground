@@ -510,6 +510,16 @@ public struct BedrockService: Sendable {
                 )
             }
 
+            if tools != nil {
+                guard model.hasConverseModality(.toolUse) else {
+                    throw BedrockServiceError.invalidModality(
+                        model,
+                        modality,
+                        "This model does not support converse tool."
+                    )
+                }
+            }
+
             let converseRequest = ConverseRequest(
                 model: model,
                 messages: messages,
@@ -525,6 +535,7 @@ public struct BedrockService: Sendable {
                 "Created ConverseInput",
                 metadata: ["messages.count": "\(messages.count)", "model": "\(model.id)"]
             )
+
             let response = try await self.bedrockRuntimeClient.converse(input: input)
             logger.trace("Received response", metadata: ["response": "\(response)"])
 
@@ -546,7 +557,11 @@ public struct BedrockService: Sendable {
                 "Received message",
                 metadata: ["replyMessage": "\(converseResponse.message)", "messages.count": "\(messages.count)"]
             )
-            return (converseResponse.getReply(), messages)
+            let reply = converseResponse.getReply()
+            // logger.trace("Extracted reply", metadata: ["reply": "\(reply)"])
+            // logger.trace("Messages", metadata: ["messages": "\(messages)"])
+            return (reply, messages)
+            // return (reply, [])
         } catch {
             logger.trace("Error while conversing", metadata: ["error": "\(error)"])
             throw error

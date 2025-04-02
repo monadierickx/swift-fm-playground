@@ -13,10 +13,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Hummingbird
-import Logging
 import BedrockService
 import BedrockTypes
+import Hummingbird
+import Logging
+import Foundation
 
 /// Application arguments protocol. We use a protocol so we can call
 /// `buildApplication` inside Tests as well as in the App executable.
@@ -175,9 +176,9 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             let (reply, history) = try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
-                imageFormat: input.imageFormat ?? .jpeg, // default to simplify frontend
+                imageFormat: input.imageFormat ?? .jpeg,  // default to simplify frontend
                 imageBytes: input.imageBytes,
-                history: input.history,
+                history: input.history ?? [],
                 maxTokens: input.maxTokens,
                 temperature: input.temperature,
                 topP: input.topP,
@@ -185,7 +186,15 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 systemPrompts: input.systemPrompts,
                 tools: input.tools
             )
-            return ChatOutput(reply: reply, history: history)
+            print("checkpoint HB 1")
+            let output = ChatOutput(reply: reply, history: history)
+            print("checkpoint HB 2")
+            // logger.info("Chatoutput received", metadata: ["output": "\(output)"])
+            let encoder = JSONEncoder()
+            let encoded = try encoder.encode(output)  // will throw if there's a serialization issue
+            print("checkpoint HB 3")
+            logger.trace("Serialization check", metadata: ["encoded": "\(encoded)"])
+            return output
         } catch {
             logger.info(
                 "An error occured while generating chat",
@@ -194,6 +203,6 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }
-    
+
     return router
 }
