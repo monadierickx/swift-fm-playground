@@ -2,6 +2,7 @@
 
 Work in progress, feel free to open issue, but do not use in your projects. 
 
+<!-- 
 ## How to add a new model family?
 
 As an example we will add the Llama 3.1 70B Instruct model from the Meta family as an example.
@@ -123,4 +124,4 @@ extension BedrockModel {
 }
 ```
 
-Note that the model will not automatically be included in the BedrockModel initializer that creates an instance from a raw string value. Consider creating a custom initializer that includes your models. 
+Note that the model will not automatically be included in the BedrockModel initializer that creates an instance from a raw string value. Consider creating a custom initializer that includes your models.  -->

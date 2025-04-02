@@ -39,11 +39,12 @@ extension BedrockModel {
     public static let nova_lite: BedrockModel = BedrockModel(
         id: "amazon.nova-lite-v1:0",
         name: "Nova Lite",
-        modality: NovaConverse(
-            parameters: ConverseParameters(
+        modality: NovaText(
+            parameters: TextGenerationParameters(
                 temperature: Parameter(.temperature, minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 5_000, defaultValue: 5_000),
                 topP: Parameter(.topP, minValue: 0, maxValue: 1.0, defaultValue: 0.9),
+                topK: Parameter(.topK, minValue: 0, maxValue: nil, defaultValue: 50),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             ),
@@ -53,11 +54,12 @@ extension BedrockModel {
     public static let nova_pro: BedrockModel = BedrockModel(
         id: "amazon.nova-pro-v1:0",
         name: "Nova Pro",
-        modality: NovaConverse(
-            parameters: ConverseParameters(
+        modality: NovaText(
+            parameters: TextGenerationParameters(
                 temperature: Parameter(.temperature, minValue: 0.00001, maxValue: 1, defaultValue: 0.7),
                 maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: 5_000, defaultValue: 5_000),
                 topP: Parameter(.topP, minValue: 0, maxValue: 1.0, defaultValue: 0.9),
+                topK: Parameter(.topK, minValue: 0, maxValue: nil, defaultValue: 50),
                 stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
                 maxPromptSize: nil
             ),

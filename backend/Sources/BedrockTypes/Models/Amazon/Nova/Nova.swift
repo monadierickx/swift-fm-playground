@@ -15,17 +15,17 @@
 
 import Foundation
 
-struct NovaConverse: ConverseModality {
-    func getName() -> String { "Nova Lite and Nova Pro Converse Modality" }
+// struct NovaConverse: ConverseModality {
+//     func getName() -> String { "Nova Lite and Nova Pro Converse Modality" }
 
-    let converseParameters: ConverseParameters
-    let converseFeatures: [ConverseFeature]
+//     let converseParameters: ConverseParameters
+//     let converseFeatures: [ConverseFeature]
 
-    init(parameters: ConverseParameters, features: [ConverseFeature]) {
-        self.converseParameters = parameters
-        self.converseFeatures = features
-    }
-}
+//     init(parameters: ConverseParameters, features: [ConverseFeature]) {
+//         self.converseParameters = parameters
+//         self.converseFeatures = features
+//     }
+// }
 
 struct NovaText: TextModality, ConverseModality {
     func getName() -> String { "Nova Text Generation" }
