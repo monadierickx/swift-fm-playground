@@ -14,25 +14,15 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import Hummingbird
-import BedrockTypes
 
-extension Message: ResponseCodable {}
+public struct Tool: Codable {
+    public let name: String
+    public let inputSchema: JSON
+    public let description: String?
 
-struct ChatInput: Codable {
-    let prompt: String
-    let history: [Message]
-    let imageFormat: ImageBlock.Format?
-    let imageBytes: String?
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let stopSequences: [String]?
-    let systemPrompts: [String]?
-    let tools: [Tool]?
-}
-
-struct ChatOutput: ResponseCodable {
-    let reply: String
-    let history: [Message]
+    public init(name: String, inputSchema: JSON, description: String? = nil) {
+        self.name = name
+        self.inputSchema = inputSchema
+        self.description = description
+    }
 }

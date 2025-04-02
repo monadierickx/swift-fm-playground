@@ -13,26 +13,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-import Hummingbird
 import BedrockTypes
+import Foundation
+import Smithy
 
-extension Message: ResponseCodable {}
-
-struct ChatInput: Codable {
-    let prompt: String
-    let history: [Message]
-    let imageFormat: ImageBlock.Format?
-    let imageBytes: String?
-    let maxTokens: Int?
-    let temperature: Double?
-    let topP: Double?
-    let stopSequences: [String]?
-    let systemPrompts: [String]?
-    let tools: [Tool]?
-}
-
-struct ChatOutput: ResponseCodable {
-    let reply: String
-    let history: [Message]
+extension JSON {
+    func toDocument() throws -> Document {
+        let encoder = JSONEncoder()
+        let encoded = try encoder.encode(self)
+        return try Document.make(from: encoded)
+    }
 }

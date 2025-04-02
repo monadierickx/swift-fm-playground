@@ -18,11 +18,12 @@ import Foundation
 public struct ToolUseBlock: Codable {
     public let id: String
     public let name: String
-    // let input: [String: Any]
+    public let input: JSON
 
-    public init(id: String, name: String) {
+    public init(id: String, name: String, input: JSON) {
         self.id = id
         self.name = name
+        self.input = input
     }
 }
 
@@ -45,6 +46,8 @@ public enum ToolStatus: Codable {
 
 public enum ToolResultContent: Codable {
     // case json([String: Any]) // Just Data 
+    // case json(Data)
+    case json(JSON)
     case text(String)
     case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
     case document(DocumentBlock)

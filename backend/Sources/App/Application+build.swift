@@ -182,7 +182,8 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 temperature: input.temperature,
                 topP: input.topP,
                 stopSequences: input.stopSequences,
-                systemPrompts: input.systemPrompts
+                systemPrompts: input.systemPrompts,
+                tools: input.tools
             )
             return ChatOutput(reply: reply, history: history)
         } catch {
