@@ -18,7 +18,6 @@ import Foundation
 public enum BedrockServiceError: Error {
     case invalidParameter(ParameterName, String)
     case invalidModality(BedrockModel, Modality, String)
-    // case invalidModel(BedrockModel, String)
     case invalidPrompt(String)
     case invalidStopSequences([String], String)
     case invalidURI(String)

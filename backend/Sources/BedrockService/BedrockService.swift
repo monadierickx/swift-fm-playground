@@ -87,7 +87,9 @@ public struct BedrockService: Sendable {
 
     // MARK: - Private Helpers
 
-    /// Creates Logger using either the loglevel saved as en environment variable `SWIFT_BEDROCK_LOG_LEVEL` or with default `.trace`
+    /// Creates Logger using either the loglevel saved as environment variable `SWIFT_BEDROCK_LOG_LEVEL` or with default `.trace`
+    /// - Parameter name: The name/label for the logger
+    /// - Returns: Configured Logger instance
     static private func createLogger(_ name: String) -> Logger {
         var logger: Logger = Logger(label: name)
         logger.logLevel =
@@ -98,6 +100,11 @@ public struct BedrockService: Sendable {
     }
 
     /// Creates a BedrockClient
+    /// - Parameters:
+    ///   - region: The AWS region to configure the client for
+    ///   - useSSO: Whether to use SSO authentication
+    /// - Returns: Configured BedrockClientProtocol instance
+    /// - Throws: Error if client creation fails
     static private func createBedrockClient(
         region: Region,
         useSSO: Bool = false
@@ -114,6 +121,11 @@ public struct BedrockService: Sendable {
     }
 
     /// Creates a BedrockRuntimeClient
+    /// - Parameters:
+    ///   - region: The AWS region to configure the client for
+    ///   - useSSO: Whether to use SSO authentication
+    /// - Returns: Configured BedrockRuntimeClientProtocol instance
+    /// - Throws: Error if client creation fails
     static private func createBedrockRuntimeClient(
         region: Region,
         useSSO: Bool = false
@@ -135,7 +147,7 @@ public struct BedrockService: Sendable {
 
     /// Lists all available foundation models from Amazon Bedrock
     /// - Throws: BedrockServiceError.invalidResponse
-    /// - Returns: An array of ModelInfo objects containing details about each available model.
+    /// - Returns: An array of ModelSummary objects containing details about each available model
     public func listModels() async throws -> [ModelSummary] {
         logger.trace("Fetching foundation models")
         do {
@@ -166,16 +178,21 @@ public struct BedrockService: Sendable {
         }
     }
 
-    /// Generates a text completion using a specified model.
+    /// Generates a text completion using a specified model
     /// - Parameters:
-    ///   - text: the text to be completed
-    ///   - model: the BedrockModel that will be used to generate the completion
-    ///   - maxTokens: the maximum amount of tokens in the completion (must be at least 1) optional, default 300
-    ///   - temperature: the temperature used to generate the completion (must be a value between 0 and 1) optional, default 0.6
-    /// - Throws: BedrockServiceError.invalidMaxTokens if maxTokens is less than 1
-    ///           BedrockServiceError.invalidTemperature if temperature is not between 0 and 1
-    ///           BedrockServiceError.invalidPrompt if the prompt is empty
-    ///           BedrockServiceError.invalidResponse if the response body is missing
+    ///   - prompt: The text to be completed
+    ///   - model: The BedrockModel that will be used to generate the completion
+    ///   - maxTokens: The maximum amount of tokens in the completion (optional, default 300)
+    ///   - temperature: The temperature used to generate the completion (optional, default 0.6)
+    ///   - topP: Optional top-p parameter for nucleus sampling
+    ///   - topK: Optional top-k parameter for filtering
+    ///   - stopSequences: Optional array of sequences where generation should stop
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt for a prompt that is empty or too long
+    ///           BedrockServiceError.invalidStopSequences if too many stop sequences were provided
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
     /// - Returns: a TextCompletion object containing the generated text from the model
     public func completeText(
         _ prompt: String,
@@ -276,15 +293,22 @@ public struct BedrockService: Sendable {
         }
     }
 
-    /// Generates 1 to 5 image(s) from a text prompt using a specific model.
+    /// Generates 1 to 5 image(s) from a text prompt using a specific model
     /// - Parameters:
-    ///   - prompt: the prompt describing the image that should be generated
-    ///   - model: the BedrockModel that will be used to generate the image
-    ///   - nrOfImages: the number of images that will be generated (must be a number between 1 and 5) optional, default 3
-    /// - Throws: BedrockServiceError.invalidNrOfImages if nrOfImages is not between 1 and 5
-    ///           BedrockServiceError.invalidPrompt if the prompt is empty
-    ///           BedrockServiceError.invalidResponse if the response body is missing
-    /// - Returns: a ImageGenerationOutput object containing an array of generated images
+    ///   - prompt: The text prompt describing the image that should be generated
+    ///   - model: The BedrockModel that will be used to generate the image
+    ///   - negativePrompt: Optional text describing what to avoid in the generated image
+    ///   - nrOfImages: Optional number of images to generate (must be between 1 and 5, default 3)
+    ///   - cfgScale: Optional classifier free guidance scale to control prompt adherence
+    ///   - seed: Optional seed for reproducible image generation
+    ///   - quality: Optional parameter to control the quality of generated images
+    ///   - resolution: Optional parameter to specify the desired image resolution
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt if the prompt is empty or too long
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
+    /// - Returns: An ImageGenerationOutput object containing an array of generated images
     public func generateImage(
         _ prompt: String,
         with model: BedrockModel,
@@ -360,17 +384,24 @@ public struct BedrockService: Sendable {
         }
     }
 
-    /// Generates 1 to 5 imagevariation(s) from reference images and a text prompt using a specific model.
+    /// Generates 1 to 5 image variation(s) from reference images and a text prompt using a specific model
     /// - Parameters:
-    ///   - image: the reference images
-    ///   - prompt: the prompt describing the image that should be generated
-    ///   - model: the BedrockModel that will be used to generate the image
-    ///   - nrOfImages: the number of images that will be generated (must be a number between 1 and 5) optional, default 3
-    /// - Throws: BedrockServiceError.invalidNrOfImages if nrOfImages is not between 1 and 5
-    ///           BedrockServiceError.similarity if similarity is not between 0.2 - 1.0
-    ///           BedrockServiceError.invalidPrompt if the prompt is empty
-    ///           BedrockServiceError.invalidResponse if the response body is missing
-    /// - Returns: a ImageGenerationOutput object containing an array of generated images
+    ///   - images: Array of base64 encoded reference images to generate variations from
+    ///   - prompt: The text prompt describing desired modifications to the reference images
+    ///   - model: The BedrockModel that will be used to generate the variations
+    ///   - negativePrompt: Optional text describing what to avoid in the generated variations
+    ///   - similarity: Optional parameter controlling how closely variations should match reference (between 0.2 and 1.0)
+    ///   - nrOfImages: Optional number of variations to generate (must be between 1 and 5, default 3)
+    ///   - cfgScale: Optional classifier free guidance scale to control prompt adherence
+    ///   - seed: Optional seed for reproducible variation generation
+    ///   - quality: Optional parameter to control the quality of generated variations
+    ///   - resolution: Optional parameter to specify the desired image resolution
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt if the prompt is empty or too long
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
+    /// - Returns: An ImageGenerationOutput object containing an array of generated image variations
     public func generateImageVariation(
         images: [String],
         prompt: String,
@@ -456,7 +487,22 @@ public struct BedrockService: Sendable {
         }
     }
 
-    /// converse
+    /// Converse with a model using the Bedrock Converse API
+    /// - Parameters:
+    ///   - model: The BedrockModel to converse with
+    ///   - conversation: Array of previous messages in the conversation
+    ///   - maxTokens: Optional maximum number of tokens to generate
+    ///   - temperature: Optional temperature parameter for controlling randomness
+    ///   - topP: Optional top-p parameter for nucleus sampling
+    ///   - stopSequences: Optional array of sequences where generation should stop
+    ///   - systemPrompts: Optional array of system prompts to guide the conversation
+    ///   - tools: Optional array of tools the model can use
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt if the prompt is empty or too long
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
+    /// - Returns: A Message containing the model's response
     public func converse(
         with model: BedrockModel,
         conversation: [Message],
@@ -536,6 +582,25 @@ public struct BedrockService: Sendable {
     }
 
     /// Use Converse API without needing to make Messages
+    /// - Parameters:
+    ///   - model: The BedrockModel to converse with
+    ///   - prompt: Optional text prompt for the conversation
+    ///   - imageFormat: Optional format for image input
+    ///   - imageBytes: Optional base64 encoded image data
+    ///   - history: Optional array of previous messages
+    ///   - maxTokens: Optional maximum number of tokens to generate
+    ///   - temperature: Optional temperature parameter for controlling randomness
+    ///   - topP: Optional top-p parameter for nucleus sampling
+    ///   - stopSequences: Optional array of sequences where generation should stop
+    ///   - systemPrompts: Optional array of system prompts to guide the conversation
+    ///   - tools: Optional array of tools the model can use
+    ///   - toolResult: Optional result from a previous tool invocation
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt if the prompt is empty or too long
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
+    /// - Returns: Tuple containing the model's response text and updated message history
     public func converse(
         with model: BedrockModel,
         prompt: String?,

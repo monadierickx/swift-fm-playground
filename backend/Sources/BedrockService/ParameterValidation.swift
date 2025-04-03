@@ -18,15 +18,24 @@ import Foundation
 
 extension BedrockService {
 
-    /// Validate parameters for a text completion request
+    /// Validates text completion parameters against the model's capabilities and constraints
+    /// - Parameters:
+    ///   - modality: The text modality of the model
+    ///   - prompt: The input text prompt to validate
+    ///   - maxTokens: Optional maximum number of tokens to generate
+    ///   - temperature: Optional temperature parameter for controlling randomness
+    ///   - topP: Optional top-p parameter for nucleus sampling
+    ///   - topK: Optional top-k parameter for filtering
+    ///   - stopSequences: Optional array of sequences where generation should stop
+    /// - Throws: BedrockServiceError for invalid parameters
     public func validateTextCompletionParams(
         modality: any TextModality,
-        prompt: String?,
-        maxTokens: Int?,
-        temperature: Double?,
-        topP: Double?,
-        topK: Int?,
-        stopSequences: [String]?
+        prompt: String? = nil,
+        maxTokens: Int? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        topK: Int? = nil,
+        stopSequences: [String]? = nil
     ) throws {
         let parameters = modality.getParameters()
         if maxTokens != nil {
@@ -49,13 +58,20 @@ extension BedrockService {
         }
     }
 
-    /// Validate parameters for an image generation request
+    /// Validates image generation parameters against the model's capabilities and constraints
+    /// - Parameters:
+    ///   - modality: The image modality of the model
+    ///   - nrOfImages: Optional number of images to generate
+    ///   - cfgScale: Optional classifier free guidance scale
+    ///   - resolution: Optional image resolution settings
+    ///   - seed: Optional seed for reproducible generation
+    /// - Throws: BedrockServiceError for invalid parameters
     public func validateImageGenerationParams(
         modality: any ImageModality,
-        nrOfImages: Int?,
-        cfgScale: Double?,
-        resolution: ImageResolution?,
-        seed: Int?
+        nrOfImages: Int? = nil,
+        cfgScale: Double? = nil,
+        resolution: ImageResolution? = nil,
+        seed: Int? = nil
     ) throws {
         let parameters = modality.getParameters()
         if nrOfImages != nil {
@@ -72,11 +88,16 @@ extension BedrockService {
         }
     }
 
-    /// Validate specific parameters for a text to image request
+    /// Validates parameters for text-to-image generation requests
+    /// - Parameters:
+    ///   - modality: The text-to-image modality of the model to use
+    ///   - prompt: The input text prompt describing the desired image
+    ///   - negativePrompt: Optional text describing what to avoid in the generated image
+    /// - Throws: BedrockServiceError if the parameters are invalid or exceed model constraints
     public func validateTextToImageParams(
         modality: any TextToImageModality,
         prompt: String,
-        negativePrompt: String?
+        negativePrompt: String? = nil
     ) throws {
         let textToImageParameters = modality.getTextToImageParameters()
         try validatePrompt(prompt, maxPromptTokens: textToImageParameters.prompt.maxSize)
@@ -85,13 +106,20 @@ extension BedrockService {
         }
     }
 
-    /// Validate specific parameters for an image variation request
+    /// Validates image variation generation parameters
+    /// - Parameters:
+    ///   - modality: The image variation modality of the model
+    ///   - images: Array of base64 encoded images to use as reference
+    ///   - prompt: Text prompt describing desired variations
+    ///   - similarity: Optional parameter controlling variation similarity
+    ///   - negativePrompt: Optional text describing what to avoid
+    /// - Throws: BedrockServiceError for invalid parameters
     public func validateImageVariationParams(
         modality: any ImageVariationModality,
         images: [String],
-        prompt: String?,
-        similarity: Double?,
-        negativePrompt: String?
+        prompt: String? = nil,
+        similarity: Double? = nil,
+        negativePrompt: String? = nil
     ) throws {
         let imageVariationParameters = modality.getImageVariationParameters()
         try validateParameterValue(images.count, parameter: imageVariationParameters.images)
@@ -106,7 +134,14 @@ extension BedrockService {
         }
     }
 
-    /// Validate parameters for a converse request
+    /// Validates conversation parameters for the model
+    /// - Parameters:
+    ///   - modality: The conversation modality of the model
+    ///   - maxTokens: Optional maximum number of tokens to generate
+    ///   - temperature: Optional temperature parameter for controlling randomness
+    ///   - topP: Optional top-p parameter for nucleus sampling
+    ///   - stopSequences: Optional array of sequences where generation should stop
+    /// - Throws: BedrockServiceError for invalid parameters
     public func validateConverseParams(
         modality: any ConverseModality,
         prompt: String? = nil,
@@ -206,6 +241,13 @@ extension BedrockService {
                 )
             }
         }
+        logger.trace(
+            "Valid prompt",
+            metadata: [
+                "prompt": "\(prompt)",
+                "prompt.maxPromptTokens": "\(String(describing: maxPromptTokens))",
+            ]
+        )
     }
 
     /// Validate that not more stopsequences than allowed were given
@@ -226,5 +268,12 @@ extension BedrockService {
                 )
             }
         }
+        logger.trace(
+            "Valid stop sequences",
+            metadata: [
+                "stopSequences": "\(stopSequences)",
+                "stopSequences.maxNrOfStopSequences": "\(String(describing: maxNrOfStopSequences))",
+            ]
+        )
     }
 }
