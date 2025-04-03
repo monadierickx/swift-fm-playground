@@ -18,10 +18,10 @@ import Foundation
 
 public struct ToolResultBlock: Codable {
     public let id: String
-    public let content: [ToolResultContent]
-    public let status: ToolStatus?  // currently only supported by Anthropic Claude 3 models
+    public let content: [Content]
+    public let status: Status?  // currently only supported by Anthropic Claude 3 models
 
-    public init(id: String, content: [ToolResultContent], status: ToolStatus? = nil) {
+    public init(id: String, content: [Content], status: Status? = nil) {
         self.id = id
         self.content = content
         self.status = status
@@ -39,11 +39,11 @@ public struct ToolResultBlock: Codable {
             )
         }
         let sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus? = sdkToolResultBlock.status
-        var status: ToolStatus? = nil
+        var status: Status? = nil
         if let sdkToolStatus = sdkToolStatus {
-            status = try ToolStatus(from: sdkToolStatus)
+            status = try Status(from: sdkToolStatus)
         }
-        let toolContents = try sdkToolResultContent.map { try ToolResultContent(from: $0) }
+        let toolContents = try sdkToolResultContent.map { try Content(from: $0) }
         self = ToolResultBlock(id: id, content: toolContents, status: status)
     }
 
@@ -54,82 +54,78 @@ public struct ToolResultBlock: Codable {
             toolUseId: id
         )
     }
-}
 
-public enum ToolStatus: Codable {
-    case success
-    case error
+    public enum Status: Codable {
+        case success
+        case error
 
-    public init(from sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus) throws {
-        switch sdkToolStatus {
-        case .success: self = .success
-        case .error: self = .error
-        case .sdkUnknown(let unknownToolStatus):
-            throw BedrockServiceError.notImplemented(
-                "ToolResultStatus \(unknownToolStatus) is not implemented by BedrockRuntimeClientTypes"
-            )
+        init(from sdkToolStatus: BedrockRuntimeClientTypes.ToolResultStatus) throws {
+            switch sdkToolStatus {
+            case .success: self = .success
+            case .error: self = .error
+            case .sdkUnknown(let unknownToolStatus):
+                throw BedrockServiceError.notImplemented(
+                    "ToolResultStatus \(unknownToolStatus) is not implemented by BedrockRuntimeClientTypes"
+                )
+            }
+        }
+
+        func getSDKToolStatus() -> BedrockRuntimeClientTypes.ToolResultStatus {
+            switch self {
+            case .success: .success
+            case .error: .error
+            }
         }
     }
 
-    public func getSDKToolStatus() -> BedrockRuntimeClientTypes.ToolResultStatus {
-        switch self {
-        case .success: .success
-        case .error: .error
+    public enum Content {
+        case json(JSON)
+        case text(String)
+        case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
+        case document(DocumentBlock)
+        case video(VideoBlock)
+
+        init(from sdkToolResultContent: BedrockRuntimeClientTypes.ToolResultContentBlock) throws {
+            switch sdkToolResultContent {
+            case .document(let sdkDocumentBlock):
+                self = .document(try DocumentBlock(from: sdkDocumentBlock))
+            case .image(let sdkImageBlock):
+                self = .image(try ImageBlock(from: sdkImageBlock))
+            case .text(let text):
+                self = .text(text)
+            case .video(let sdkVideoBlock):
+                self = .video(try VideoBlock(from: sdkVideoBlock))
+            case .json(let document):
+                self = .json(try document.toJSON())
+            case .sdkUnknown(let unknownToolResultContent):
+                throw BedrockServiceError.notImplemented(
+                    "ToolResultContentBlock \(unknownToolResultContent) is not implemented by BedrockRuntimeClientTypes"
+                )
+            // default:
+            //     throw BedrockServiceError.notImplemented(
+            //         "ToolResultContentBlock \(sdkToolResultContent) is not implemented by BedrockTypes"
+            //     )
+            }
         }
-    }
-}
 
-public enum ToolResultContent {
-    case json(JSON)
-    case text(String)
-    case image(ImageBlock)  // currently only supported by Anthropic Claude 3 models
-    case document(DocumentBlock)
-    case video(VideoBlock)
-
-    public init(from sdkToolResultContent: BedrockRuntimeClientTypes.ToolResultContentBlock) throws {
-        switch sdkToolResultContent {
-        case .document(let sdkDocumentBlock):
-            self = .document(try DocumentBlock(from: sdkDocumentBlock))
-        case .image(let sdkImageBlock):
-            self = .image(try ImageBlock(from: sdkImageBlock))
-        case .text(let text):
-            self = .text(text)
-        case .video(let sdkVideoBlock):
-            self = .video(try VideoBlock(from: sdkVideoBlock))
-        case .json(let document):
-            self = .json(try document.toJSON())
-        // case .json(let document):
-        //     self = .json(document.data(using: .utf8))
-        case .sdkUnknown(let unknownToolResultContent):
-            throw BedrockServiceError.notImplemented(
-                "ToolResultContentBlock \(unknownToolResultContent) is not implemented by BedrockRuntimeClientTypes"
-            )
-        // default:
-        //     throw BedrockServiceError.notImplemented(
-        //         "ToolResultContentBlock \(sdkToolResultContent) is not implemented by BedrockTypes"
-        //     )
-        }
-    }
-
-    public func getSDKToolResultContentBlock() throws -> BedrockRuntimeClientTypes.ToolResultContentBlock {
-        switch self {
-        // case .json(let data):
-        //     .json(try Document.make(from: data))
-        case .json(let json):
-            .json(try json.toDocument())
-        case .document(let documentBlock):
-            .document(try documentBlock.getSDKDocumentBlock())
-        case .image(let imageBlock):
-            .image(try imageBlock.getSDKImageBlock())
-        case .text(let text):
-            .text(text)
-        case .video(let videoBlock):
-            .video(try videoBlock.getSDKVideoBlock())
+        func getSDKToolResultContentBlock() throws -> BedrockRuntimeClientTypes.ToolResultContentBlock {
+            switch self {
+            case .json(let json):
+                .json(try json.toDocument())
+            case .document(let documentBlock):
+                .document(try documentBlock.getSDKDocumentBlock())
+            case .image(let imageBlock):
+                .image(try imageBlock.getSDKImageBlock())
+            case .text(let text):
+                .text(text)
+            case .video(let videoBlock):
+                .video(try videoBlock.getSDKVideoBlock())
+            }
         }
     }
 }
 
-extension ToolResultContent: Codable {
+extension ToolResultBlock.Content: Codable {
     private enum CodingKeys: String, CodingKey {
         case json, text, image, document, video
     }
