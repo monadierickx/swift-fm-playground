@@ -44,7 +44,7 @@ public struct BedrockService: Sendable {
         bedrockRuntimeClient: BedrockRuntimeClientProtocol? = nil,
         useSSO: Bool = false
     ) async throws {
-        self.logger = logger ?? BedrockService.createLogger("swiftbedrock.service")
+        self.logger = logger ?? BedrockService.createLogger("bedrock.service")
         self.logger.trace(
             "Initializing SwiftBedrock",
             metadata: ["region": .string(region.rawValue)]

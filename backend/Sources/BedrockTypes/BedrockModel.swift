@@ -103,6 +103,10 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         }
     }
 
+    // MARK: Modality checks
+
+    // MARK - Text completion
+
     /// Checks if the model supports text generation
     /// - Returns: True if the model supports text generation
     public func hasTextModality() -> Bool {
@@ -122,34 +126,7 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         return textModality
     }
 
-    /// Checks if the model supports text generation and returns ConverseModality
-    /// - Returns: ConverseModality if the model supports text modality
-    public func getConverseModality() throws -> any ConverseModality {
-        guard let modality = modality as? any ConverseModality else {
-            throw BedrockServiceError.invalidModality(
-                self,
-                modality,
-                "Model \(id) does not support text generation"
-            )
-        }
-        return modality
-    }
-
-    // FIXME: this would be cleaner
-    // Error: Only concrete types such as structs, enums and classes can conform to protocols
-    public func getModality<M: Modality>() throws -> M {
-        guard let modality = modality as? M else {
-            throw BedrockServiceError.invalidModality(
-                self,
-                modality,
-                "Model \(id) does not support \(M.self)"
-            )
-        }
-        return modality
-    }
-    public func hasModality<M: Modality>(_ type: M.Type) -> Bool {
-        modality as? M != nil
-    }
+    // MARK - Image generation
 
     /// Checks if the model supports image generation
     /// - Returns: True if the model supports image generation
@@ -170,6 +147,12 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         return imageModality
     }
 
+    /// Checks if the model supports text to image generation
+    /// - Returns: True if the model supports text to image generation
+    public func hasTextToImageModality() -> Bool {
+        modality as? any TextToImageModality != nil
+    }
+
     /// Checks if the model supports text to image generation and returns TextToImageModality
     /// - Returns: TextToImageModality if the model supports image modality
     public func getTextToImageModality() throws -> any TextToImageModality {
@@ -181,6 +164,12 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
             )
         }
         return textToImageModality
+    }
+
+    /// Checks if the model supports image variation
+    /// - Returns: True if the model supports image variation
+    public func hasImageVariationModality() -> Bool {
+        modality as? any ImageVariationModality != nil
     }
 
     /// Checks if the model supports image variation and returns ImageVariationModality
@@ -196,23 +185,13 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         return modality
     }
 
-    /// Checks if the model supports text to image generation
-    /// - Returns: True if the model supports text to image generation
-    public func hasTextToImageModality() -> Bool {
-        modality as? any TextToImageModality != nil
-    }
-
-    /// Checks if the model supports image variation
-    /// - Returns: True if the model supports image variation
-    public func hasImageVariationModality() -> Bool {
-        modality as? any ImageVariationModality != nil
-    }
-
     /// Checks if the model supports conditioned text to image generation
     /// - Returns: True if the model supports conditioned text to image generation
     public func hasConditionedTextToImageModality() -> Bool {
         modality as? any ConditionedTextToImageModality != nil
     }
+
+    // MARK - Converse
 
     /// Checks if the model supports converse
     /// - Returns: True if the model supports converse
@@ -220,14 +199,29 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         modality as? any ConverseModality != nil
     }
 
-    // /// Checks if the model supports converse vision
-    // /// - Returns: True if the model supports converse vision
+    /// Checks if the model supports a specific converse feature
+    /// - Parameters:
+    ///         - feature: the ConverseFeature that will be checked
+    /// - Returns: True if the model supports the converse feature
     public func hasConverseModality(_ feature: ConverseFeature = .textGeneration) -> Bool {
         if let converseModality = modality as? any ConverseModality {
             let features = converseModality.getConverseFeatures()
             return features.contains(feature)
         }
         return false
+    }
+
+    /// Checks if the model supports text generation and returns ConverseModality
+    /// - Returns: ConverseModality if the model supports text modality
+    public func getConverseModality() throws -> any ConverseModality {
+        guard let modality = modality as? any ConverseModality else {
+            throw BedrockServiceError.invalidModality(
+                self,
+                modality,
+                "Model \(id) does not support text generation"
+            )
+        }
+        return modality
     }
 }
 

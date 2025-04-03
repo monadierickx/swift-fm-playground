@@ -1,129 +1,156 @@
 # SwiftBedrockService
 
-Work in progress, feel free to open issue, but do not use in your projects. 
-1. How to use the library?
-2. Example for every functionality
-3. How to add a model(family) 
-<!-- 
-## How to add a new model family?
+This library is a work in progress, feel free to open an issue, but do not use it in your projects just yet. 
 
-As an example we will add the Llama 3.1 70B Instruct model from the Meta family as an example.
+## How to get started with BedrockService
 
-"meta.llama3-70b-instruct-v1:0"
+1. Import the BedrockService and BedrockTypes
 
-### 1. Add create BedrockModel instance
+```swift 
+import BedrockService
+import BedrockTypes
+```
+
+2. Initialize the BedrockService
+
+Choose what Region to use, whether to use AWS SSO authentication instead of standard credentials and pass a logger. If no region is passed it will default to `.useast1`, if no logger is provided a default logger with the name `bedrock.service` is created. The log level will be set to the environment variable `SWIFT_BEDROCK_LOG_LEVEL` or default to `.trace`. If `useSSO` is not defined it will default to `false` and use the standard credentials for authentication.
+
+```swift 
+let bedrock = try await BedrockService(
+    region: .uswest1,
+    logger: logger,
+    useSSO: true
+) 
+```
+
+3. List the available models
+
+Use the `listModels()` function to test your set-up. This function will return an array of `ModelSummary` objects, each one representing a model supported by Amazon Bedrock. The ModelSummaries that contain a `BedrockModel` object are the models supported by BedrockService. 
 
 ```swift
-extension BedrockModel {
-    public static let llama3_70b_instruct: BedrockModel = BedrockModel(
-        id: "meta.llama3-70b-instruct-v1:0",
-        modality: LlamaText()
-    )
-}
+let models = try await bedrock.listModels()
 ```
 
-### 2. Create family-specific request and response struct
+## How to generate text using the InvokeModel API
 
-Make sure to create a struct that reflects exactly how the body of the request for an invokeModel call to this family should look. Make sure to add the public initializer with parameters `prompt`, `maxTokens` and `temperature` to comply to the `BedrockBodyCodable` protocol. 
+Choose a BedrockModel that supports text generation, you can verify this using the `hasTextModality` function. when calling the `completeText` function you can provide some inference parameters: 
 
-```json
-{
-    "prompt": "\(prompt)",
-    "temperature": 1, 
-    "top_p": 0.9,
-    "max_tokens": 200,
-    "stop": ["END"]
-}
-```
+- `maxTokens`: The maximum amount of tokens that the model is allowed to return
+- `temperature`: Controls the randomness of the model's output
+- `topP`: Nucleus sampling, this parameter controls the cumulative probability threshold for token selection
+- `topK`: Limits the number of tokens the model considers for each step of text generation to the K most likely ones
+- `stopSequences`: An array of strings that will cause the model to stop generating further text when encountered
+
+The function returns a `TextCompletion` object containg the generated text.
 
 ```swift
-public struct LlamaRequestBody: BedrockBodyCodable {
-    let prompt: String
-    let max_gen_len: Int
-    let temperature: Double
-    let top_p: Double
+let model = .anthropicClaude3Sonnet
 
-    public init(prompt: String, maxTokens: Int = 512, temperature: Double = 0.5) {
-        self.prompt =
-            "<|begin_of_text|><|start_header_id|>user<|end_header_id|>\(prompt)<|eot_id|><|start_header_id|>assistant<|end_header_id|>"
-        self.max_gen_len = maxTokens
-        self.temperature = temperature
-        self.top_p = 0.9
-    }
+guard model.hasTextModality() else {
+    print("\(model.name) does not support text completion")
 }
+
+let textCompletion = try await bedrock.completeText(
+    "Write a story about a space adventure",
+    with: model,
+    maxTokens: 1000,
+    temperature: 0.7,
+    topP: 0.9,
+    topK: 250,
+    stopSequences: ["THE END"]
+)
 ```
 
-Do the same for the response and ensure to add the `getTextCompletion` method to extract the completion from the response body and to comply to the `ContainsTextCompletion` protocol.
+Note that the minimum, maximum and default values for each parameter are model specific and defined when the BedrockModel is created. Some parameters might not be supported by certain models.
 
-```json
-{
-    "generation": "\n\n<response>",
-    "prompt_token_count": int,
-    "generation_token_count": int,
-    "stop_reason" : string
-}
-```
+## How to generate an image using the InvokeModel API
+
+Choose a BedrockModel that supports image generation - you can verify this using the `hasImageModality` and the `hasTextToImageModality` function. The `generateImage` function allows you to create images from text descriptions with various optional parameters:
+
+- `prompt`: Text description of the desired image
+- `negativePrompt`: Text describing what to avoid in the generated image
+- `nrOfImages`: Number of images to generate
+- `cfgScale`: Classifier free guidance scale to control how closely the image follows the prompt
+- `seed`: Seed for reproducible image generation
+- `quality`: Parameter to control the quality of generated images
+- `resolution`: Desired image resolution for the generated images
+
+The function returns an ImageGenerationOutput object containing an array of generated images in base64 format.
 
 ```swift
-struct LlamaResponseBody: ContainsTextCompletion {
-    let generation: String
-    let prompt_token_count: Int
-    let generation_token_count: Int
-    let stop_reason: String
+let model = .nova_canvas
 
-    public func getTextCompletion() throws -> TextCompletion {
-        TextCompletion(generation)
-    }
+guard model.hasImageModality(),
+      model.hasTextToImageModality() else {
+    print("\(model.name) does not support image generation")
 }
+
+let imageGeneration = try await bedrock.generateImage(
+    "A serene landscape with mountains at sunset",
+    with: model,
+    negativePrompt: "dark, stormy, people",
+    nrOfImages: 3,
+    cfgScale: 7.0,
+    seed: 42,
+    quality: .standard,
+    resolution: ImageResolution(width: 100, height: 100)
+)
 ```
 
-### 3. Add the Modality (TextModality or ImageModality)
+Note that the minimum, maximum and default values for each parameter are model specific and defined when the BedrockModel is created. Some parameters might not be supported by certain models.
 
-For a text generation create a struct conforming to TextModality. Use the request body and response body you created in  [the previous step](#2-create-family-specific-request-and-response-struct). 
+## How to generate image variations using the InvokeModel API
+Choose a BedrockModel that supports image variations - you can verify this using the `hasImageVariationModality` and the `hasImageVariationModality` function. The `generateImageVariation` function allows you to create variations of an existing image with these parameters:
+
+- `images`: The base64-encoded source images used to create variations from
+- `negativePrompt`: Text describing what to avoid in the generated image
+- `similarity`: Controls how similar the variations will be to the source images
+- `nrOfImages`: Number of variations to generate
+- `cfgScale`: Classifier free guidance scale to control how closely variations follow the original image
+- `seed`: Seed for reproducible variation generation
+- `quality`: Parameter to control the quality of generated variations
+- `resolution`: Desired resolution for the output variations
+
+This function returns an `ImageGenerationOutput` object containing an array of generated image variations in base64 format. Each variation will maintain key characteristics of the source images while introducing creative differences.
 
 ```swift
-struct LlamaText: TextModality {
-    func getName() -> String { "Llama Text Generation" }
+let model = .nova_canvas
 
-    func getTextRequestBody(prompt: String, maxTokens: Int, temperature: Double) throws -> BedrockBodyCodable {
-        LlamaRequestBody(prompt: prompt, maxTokens: maxTokens, temperature: temperature)
-    }
-
-    func getTextResponseBody(from data: Data) throws -> ContainsTextCompletion {
-        let decoder = JSONDecoder()
-        return try decoder.decode(LlamaResponseBody.self, from: data)
-    }
+guard model.hasImageVariationModality(),
+      model.hasImageVariationModality() else {
+    print("\(model.name) does not support image variations")
 }
+
+let imageVariations = try await bedrock.generateImageVariation(
+    images: [base64EncodedImage],
+    prompt: "A dog drinking out of this teacup",
+    with: model,
+    negativePrompt: "Cats, worms, rain",
+    similarity: 0.8,
+    nrOfVariations: 4,
+    cfgScale: 7.0,
+    seed: 42,
+    quality: .standard,
+    resolution: ImageResolution(width: 100, height: 100)
+)
 ```
 
-### 4. Optionally you can create a BedrockModel initializer for your newly implemented models
-```swift
-extension BedrockModel {
-    init?(_ id: String) {
-        switch id {
-        case "meta.llama3-70b-instruct-v1:0": self = .llama3_70b_instruct
-        // ... 
-        default:
-            return nil
-        }
-    }
-}
-```
+Note that the minimum, maximum and default values for each parameter are model specific and defined when the BedrockModel is created. Some parameters might not be supported by certain models.
+
+## How to chat using the Converse API
+
+### Text prompt
+
+### Vision
+
+### Tools
+
+## How to add a BedrockModel
+
+### Text
+
+### Image
+
+### Converse
 
 
-## How to add a new model?
-
-If you want to add a model that has a request and response structure that is already implemented you can skip a few steps. Simply create a typealias for the Modality that matches the structure and use it to create a BedrockModel instance. 
-
-```swift
-typealias ClaudeNewModel = AnthropicText
-
-extension BedrockModel {
-    public static let instant: BedrockModel = BedrockModel(
-        id: "anthropic.claude-new-model",
-        modality: ClaudeNewModel()
-    )
-}
-```
-
-Note that the model will not automatically be included in the BedrockModel initializer that creates an instance from a raw string value. Consider creating a custom initializer that includes your models.  -->
