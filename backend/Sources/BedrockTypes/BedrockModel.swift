@@ -99,8 +99,8 @@ public struct BedrockModel: Hashable, Sendable, Equatable, RawRepresentable {
         case BedrockModel.mistral_7B_instruct.id: self = BedrockModel.mistral_7B_instruct
         case BedrockModel.mistral_8x7B_instruct.id: self = BedrockModel.mistral_8x7B_instruct
         //cohere
-        // case BedrockModel.cohere_command_R_plus.id: self = BedrockModel.cohere_command_R_plus
-        // case BedrockModel.cohere_command_R.id: self = BedrockModel.cohere_command_R
+        case BedrockModel.cohere_command_R_plus.id: self = BedrockModel.cohere_command_R_plus
+        case BedrockModel.cohere_command_R.id: self = BedrockModel.cohere_command_R
         default:
             return nil
         }

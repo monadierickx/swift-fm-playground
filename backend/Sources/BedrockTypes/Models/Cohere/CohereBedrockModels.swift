@@ -13,7 +13,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import BedrockTypes
+// import BedrockTypes
 import Foundation
 
 // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-cohere-command-r-plus.html
