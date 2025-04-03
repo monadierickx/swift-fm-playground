@@ -14,15 +14,12 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+import Smithy
 
-public struct Tool: Codable {
-    public let name: String
-    public let inputSchema: JSON
-    public let description: String?
-
-    public init(name: String, inputSchema: JSON, description: String? = nil) {
-        self.name = name
-        self.inputSchema = inputSchema
-        self.description = description
+extension JSON {
+    public func toDocument() throws -> Document {
+        let encoder = JSONEncoder()
+        let encoded = try encoder.encode(self)
+        return try Document.make(from: encoded)
     }
 }

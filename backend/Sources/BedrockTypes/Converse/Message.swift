@@ -14,12 +14,31 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import BedrockTypes
 import Foundation
 
-extension Message {
+public struct Message: Codable {
+    public let role: Role
+    public let content: [Content]
 
-    init(from sdkMessage: BedrockRuntimeClientTypes.Message) throws {
+    // public static func createTextMessage(from role: Role, text: String) -> Self {
+    //     Message(from: role, content: [.text(text)])
+    // }
+
+    package init(from role: Role, content: [Content]) {
+        self.role = role
+        self.content = content
+    }
+
+    // convenience
+    public init(prompt: String) {
+        self.init(from: .user, content: [.text(prompt)])
+    }
+
+    // public init(toolResult: String) {
+    //     self.init(from: .user, content: [.text(prompt)])
+    // }
+
+    public init(from sdkMessage: BedrockRuntimeClientTypes.Message) throws {
         guard let sdkRole = sdkMessage.role else {
             throw BedrockServiceError.decodingError("Could not extract role from BedrockRuntimeClientTypes.Message")
         }
@@ -30,7 +49,7 @@ extension Message {
         self = Message(from: try Role(from: sdkRole), content: content)
     }
 
-    func getSDKMessage() throws -> BedrockRuntimeClientTypes.Message {
+    public func getSDKMessage() throws -> BedrockRuntimeClientTypes.Message {
         let contentBlocks: [BedrockRuntimeClientTypes.ContentBlock] = try content.map {
             content -> BedrockRuntimeClientTypes.ContentBlock in
             return try content.getSDKContentBlock()

@@ -1,7 +1,9 @@
 # SwiftBedrockService
 
 Work in progress, feel free to open issue, but do not use in your projects. 
-
+1. How to use the library?
+2. Example for every functionality
+3. How to add a model(family) 
 <!-- 
 ## How to add a new model family?
 

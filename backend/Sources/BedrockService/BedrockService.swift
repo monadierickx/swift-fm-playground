@@ -521,8 +521,8 @@ public struct BedrockService: Sendable {
                 messages.append(Message(from: .user, content: [.text(prompt)]))
             }
 
-            if let imageFormat = imageFormat,
-                let imageBytes = imageBytes
+            if let imageFormat,
+                let imageBytes
             {
                 guard model.hasConverseModality(.vision) else {
                     throw BedrockServiceError.invalidModality(
@@ -535,7 +535,7 @@ public struct BedrockService: Sendable {
                     Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))])
                 )
             }
-
+            // MOVE from here
             let converseRequest = ConverseRequest(
                 model: model,
                 messages: messages,

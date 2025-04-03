@@ -13,12 +13,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import BedrockTypes
 import Foundation
 import Smithy
 
+// FIXME: avoid extensions on structs you do not control
 extension SmithyDocument {
-    func toJSON() throws -> JSON {
+    public func toJSON() throws -> JSON {
         switch self.type {
         case .string:
             return JSON(try self.asString())

@@ -14,12 +14,18 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import BedrockTypes
 import Foundation
 
-extension Content {
+public enum Content: Codable {
+    case text(String)
+    case image(ImageBlock)
+    case toolUse(ToolUseBlock)
+    case toolResult(ToolResultBlock)
+    case document(DocumentBlock)
+    case video(VideoBlock)
+    // case reasoningcontent(ReasoningBlock)
 
-    init(from sdkContentBlock: BedrockRuntimeClientTypes.ContentBlock) throws {
+    public init(from sdkContentBlock: BedrockRuntimeClientTypes.ContentBlock) throws {
         switch sdkContentBlock {
         case .text(let text):
             self = .text(text)
@@ -44,7 +50,7 @@ extension Content {
         }
     }
 
-    func getSDKContentBlock() throws -> BedrockRuntimeClientTypes.ContentBlock {
+    public func getSDKContentBlock() throws -> BedrockRuntimeClientTypes.ContentBlock {
         switch self {
         case .text(let text):
             return BedrockRuntimeClientTypes.ContentBlock.text(text)

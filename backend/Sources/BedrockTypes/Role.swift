@@ -13,9 +13,28 @@
 //
 //===----------------------------------------------------------------------===//
 
+@preconcurrency import AWSBedrockRuntime
 import Foundation
 
 public enum Role: String, Codable {
     case user
     case assistant
+
+    public init(from sdkConversationRole: BedrockRuntimeClientTypes.ConversationRole) throws {
+        switch sdkConversationRole {
+        case .user: self = .user
+        case .assistant: self = .assistant
+        case .sdkUnknown(let unknownRole):
+            throw BedrockServiceError.notImplemented(
+                "Role \(unknownRole) is not implemented by BedrockRuntimeClientTypes"
+            )
+        }
+    }
+
+    public func getSDKConversationRole() -> BedrockRuntimeClientTypes.ConversationRole {
+        switch self {
+        case .user: return .user
+        case .assistant: return .assistant
+        }
+    }
 }

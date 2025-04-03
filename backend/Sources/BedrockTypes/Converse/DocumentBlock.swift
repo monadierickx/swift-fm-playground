@@ -14,11 +14,20 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import BedrockTypes
 import Foundation
 
-extension DocumentBlock {
-    init(from sdkDocumentBlock: BedrockRuntimeClientTypes.DocumentBlock) throws {
+public struct DocumentBlock: Codable {
+    public let name: String
+    public let format: Format
+    public let source: String  // 64 encoded
+
+    public init(name: String, format: Format, source: String) {
+        self.name = name
+        self.format = format
+        self.source = source
+    }
+
+    public init(from sdkDocumentBlock: BedrockRuntimeClientTypes.DocumentBlock) throws {
         guard let sdkDocumentSource = sdkDocumentBlock.source else {
             throw BedrockServiceError.decodingError(
                 "Could not extract source from BedrockRuntimeClientTypes.DocumentBlock"
@@ -37,7 +46,7 @@ extension DocumentBlock {
         let format = try DocumentBlock.Format(from: sdkFormat)
         switch sdkDocumentSource {
         case .bytes(let data):
-            self = DocumentBlock(name: name,format: format, source: data.base64EncodedString())
+            self = DocumentBlock(name: name, format: format, source: data.base64EncodedString())
         case .sdkUnknown(let unknownImageSource):
             throw BedrockServiceError.notImplemented(
                 "ImageSource \(unknownImageSource) is not implemented by BedrockRuntimeClientTypes"
@@ -45,7 +54,7 @@ extension DocumentBlock {
         }
     }
 
-    func getSDKDocumentBlock() throws -> BedrockRuntimeClientTypes.DocumentBlock {
+    public func getSDKDocumentBlock() throws -> BedrockRuntimeClientTypes.DocumentBlock {
         guard let data = Data(base64Encoded: source) else {
             throw BedrockServiceError.decodingError(
                 "Could not decode document source from base64 string. String: \(source)"
@@ -57,38 +66,48 @@ extension DocumentBlock {
             source: BedrockRuntimeClientTypes.DocumentSource.bytes(data)
         )
     }
-}
 
-extension DocumentBlock.Format {
-    init(from sdkDocumentFormat: BedrockRuntimeClientTypes.DocumentFormat) throws {
-        switch sdkDocumentFormat {
-        case .csv: self = .csv
-        case .doc: self = .doc
-        case .docx: self = .docx
-        case .html: self = .html
-        case .md: self = .md
-        case .pdf: self = .pdf
-        case .txt: self = .txt
-        case .xls: self = .xls
-        case .xlsx: self = .xlsx
-        case .sdkUnknown(let unknownDocumentFormat):
-            throw BedrockServiceError.notImplemented(
-                "DocumentFormat \(unknownDocumentFormat) is not implemented by BedrockRuntimeClientTypes"
-            )
+    public enum Format: Codable {
+        case csv
+        case doc
+        case docx
+        case html
+        case md
+        case pdf
+        case txt
+        case xls
+        case xlsx
+
+        public init(from sdkDocumentFormat: BedrockRuntimeClientTypes.DocumentFormat) throws {
+            switch sdkDocumentFormat {
+            case .csv: self = .csv
+            case .doc: self = .doc
+            case .docx: self = .docx
+            case .html: self = .html
+            case .md: self = .md
+            case .pdf: self = .pdf
+            case .txt: self = .txt
+            case .xls: self = .xls
+            case .xlsx: self = .xlsx
+            case .sdkUnknown(let unknownDocumentFormat):
+                throw BedrockServiceError.notImplemented(
+                    "DocumentFormat \(unknownDocumentFormat) is not implemented by BedrockRuntimeClientTypes"
+                )
+            }
         }
-    }
 
-    func getSDKDocumentFormat() -> BedrockRuntimeClientTypes.DocumentFormat {
-        switch self {
-        case .csv: return .csv
-        case .doc: return .doc
-        case .docx: return .docx
-        case .html: return .html
-        case .md: return .md
-        case .pdf: return .pdf
-        case .txt: return .txt
-        case .xls: return .xls
-        case .xlsx: return .xlsx
+        public func getSDKDocumentFormat() -> BedrockRuntimeClientTypes.DocumentFormat {
+            switch self {
+            case .csv: return .csv
+            case .doc: return .doc
+            case .docx: return .docx
+            case .html: return .html
+            case .md: return .md
+            case .pdf: return .pdf
+            case .txt: return .txt
+            case .xls: return .xls
+            case .xlsx: return .xlsx
+            }
         }
     }
 }

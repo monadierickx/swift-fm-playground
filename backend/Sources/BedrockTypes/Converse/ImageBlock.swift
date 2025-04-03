@@ -14,11 +14,18 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import BedrockTypes
 import Foundation
 
-extension ImageBlock {
-    init(from sdkImageBlock: BedrockRuntimeClientTypes.ImageBlock) throws {
+public struct ImageBlock: Codable {
+    public let format: Format
+    public let source: String  // 64 encoded
+
+    public init(format: Format, source: String) {
+        self.format = format
+        self.source = source
+    }
+
+    public init(from sdkImageBlock: BedrockRuntimeClientTypes.ImageBlock) throws {
         guard let sdkFormat = sdkImageBlock.format else {
             throw BedrockServiceError.decodingError(
                 "Could not extract format from BedrockRuntimeClientTypes.ImageBlock"
@@ -40,7 +47,7 @@ extension ImageBlock {
         }
     }
 
-    func getSDKImageBlock() throws -> BedrockRuntimeClientTypes.ImageBlock {
+    public func getSDKImageBlock() throws -> BedrockRuntimeClientTypes.ImageBlock {
         guard let data = Data(base64Encoded: source) else {
             throw BedrockServiceError.decodingError(
                 "Could not decode image source from base64 string. String: \(source)"
@@ -51,29 +58,33 @@ extension ImageBlock {
             source: BedrockRuntimeClientTypes.ImageSource.bytes(data)
         )
     }
-}
 
-extension ImageBlock.Format {
+    public enum Format: Codable {
+        case gif
+        case jpeg
+        case png
+        case webp
 
-    init(from sdkImageFormat: BedrockRuntimeClientTypes.ImageFormat) throws {
-        switch sdkImageFormat {
-        case .gif: self = .gif
-        case .jpeg: self = .jpeg
-        case .png: self = .png
-        case .webp: self = .webp
-        case .sdkUnknown(let unknownImageFormat):
-            throw BedrockServiceError.notImplemented(
-                "ImageFormat \(unknownImageFormat) is not implemented by BedrockRuntimeClientTypes"
-            )
+        public init(from sdkImageFormat: BedrockRuntimeClientTypes.ImageFormat) throws {
+            switch sdkImageFormat {
+            case .gif: self = .gif
+            case .jpeg: self = .jpeg
+            case .png: self = .png
+            case .webp: self = .webp
+            case .sdkUnknown(let unknownImageFormat):
+                throw BedrockServiceError.notImplemented(
+                    "ImageFormat \(unknownImageFormat) is not implemented by BedrockRuntimeClientTypes"
+                )
+            }
         }
-    }
 
-    func getSDKImageFormat() -> BedrockRuntimeClientTypes.ImageFormat {
-        switch self {
-        case .gif: return .gif
-        case .jpeg: return .jpeg
-        case .png: return .png
-        case .webp: return .webp
+        public func getSDKImageFormat() -> BedrockRuntimeClientTypes.ImageFormat {
+            switch self {
+            case .gif: return .gif
+            case .jpeg: return .jpeg
+            case .png: return .png
+            case .webp: return .webp
+            }
         }
     }
 }
