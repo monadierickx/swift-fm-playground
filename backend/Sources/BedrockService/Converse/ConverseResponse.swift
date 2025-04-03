@@ -20,6 +20,10 @@ import BedrockTypes
 public struct ConverseResponse {
     let message: Message
 
+    public init(_ message: Message) {
+        self.message = message
+    }
+
     public init(_ output: BedrockRuntimeClientTypes.ConverseOutput) throws {
         guard case .message(let sdkMessage) = output else {
             throw BedrockServiceError.invalidSDKResponse("Could not extract message from ConverseOutput")

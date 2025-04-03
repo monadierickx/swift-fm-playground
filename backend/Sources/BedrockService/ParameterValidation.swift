@@ -109,12 +109,11 @@ extension BedrockService {
     /// Validate parameters for a converse request
     public func validateConverseParams(
         modality: any ConverseModality,
-        prompt: String?,
-        history: [Message],
-        maxTokens: Int?,
-        temperature: Double?,
-        topP: Double?,
-        stopSequences: [String]?
+        prompt: String? = nil,
+        maxTokens: Int? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        stopSequences: [String]? = nil
     ) throws {
         let parameters = modality.getConverseParameters()
         if prompt != nil {

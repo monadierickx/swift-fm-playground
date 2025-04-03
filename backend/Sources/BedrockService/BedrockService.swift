@@ -456,7 +456,86 @@ public struct BedrockService: Sendable {
         }
     }
 
-    /// Use Converse API
+    /// converse
+    public func converse(
+        with model: BedrockModel,
+        conversation: [Message],
+        maxTokens: Int? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        stopSequences: [String]? = nil,
+        systemPrompts: [String]? = nil,
+        tools: [Tool]? = nil
+    ) async throws -> Message {
+        do {
+            let modality: ConverseModality = try model.getConverseModality()
+            try validateConverseParams(
+                modality: modality,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                topP: topP,
+                stopSequences: stopSequences
+            )
+
+            logger.trace(
+                "Creating ConverseRequest",
+                metadata: [
+                    "model.name": "\(model.name)",
+                    "model.id": "\(model.id)",
+                    "conversation.count": "\(conversation.count)",
+                    "maxToken": "\(String(describing: maxTokens))",
+                    "temperature": "\(String(describing: temperature))",
+                    "topP": "\(String(describing: topP))",
+                    "stopSequences": "\(String(describing: stopSequences))",
+                    "systemPrompts": "\(String(describing: systemPrompts))",
+                    "tools": "\(String(describing: tools))",
+                ]
+            )
+            let converseRequest = ConverseRequest(
+                model: model,
+                messages: conversation,
+                maxTokens: maxTokens,
+                temperature: temperature,
+                topP: topP,
+                stopSequences: stopSequences,
+                systemPrompts: systemPrompts,
+                tools: tools
+            )
+
+            logger.trace("Creating ConverseInput")
+            let input = try converseRequest.getConverseInput()
+            logger.trace(
+                "Created ConverseInput",
+                metadata: [
+                    "input.messages.count": "\(String(describing:input.messages!.count))",
+                    "input.modelId": "\(String(describing:input.modelId!))",
+                ]
+            )
+
+            let response = try await self.bedrockRuntimeClient.converse(input: input)
+            logger.trace("Received response", metadata: ["response": "\(response)"])
+
+            guard let converseOutput = response.output else {
+                logger.trace(
+                    "Invalid response",
+                    metadata: [
+                        "response": .string(String(describing: response)),
+                        "hasOutput": .stringConvertible(response.output != nil),
+                    ]
+                )
+                throw BedrockServiceError.invalidSDKResponse(
+                    "Something went wrong while extracting ConverseOutput from response."
+                )
+            }
+            let converseResponse = try ConverseResponse(converseOutput)
+            return converseResponse.message
+        } catch {
+            logger.trace("Error while conversing", metadata: ["error": "\(error)"])
+            throw error
+        }
+    }
+
+    /// Use Converse API without needing to make Messages
     public func converse(
         with model: BedrockModel,
         prompt: String?,
@@ -480,21 +559,8 @@ public struct BedrockService: Sendable {
             ]
         )
         do {
-            let modality: ConverseModality = try model.getConverseModality()
-            try validateConverseParams(
-                modality: modality,
-                prompt: prompt,
-                // FIXME: add image
-                history: history,
-                maxTokens: maxTokens,
-                temperature: temperature,
-                topP: topP,
-                stopSequences: stopSequences
-                    // FIXME: add systemPrompts
-                    // FIXME: add tools
-            )
-
             var messages = history
+            let modality: ConverseModality = try model.getConverseModality()
 
             if tools != nil || toolResult != nil {
                 guard model.hasConverseModality(.toolUse) else {
@@ -534,11 +600,9 @@ public struct BedrockService: Sendable {
                     messages.append(Message(prompt))
                 }
             }
-
-            // MOVE from here
-            let converseRequest = ConverseRequest(
-                model: model,
-                messages: messages,
+            let message = try await converse(
+                with: model,
+                conversation: messages,
                 maxTokens: maxTokens,
                 temperature: temperature,
                 topP: topP,
@@ -546,38 +610,13 @@ public struct BedrockService: Sendable {
                 systemPrompts: systemPrompts,
                 tools: tools
             )
-            let input = try converseRequest.getConverseInput()
-            logger.trace(
-                "Created ConverseInput",
-                metadata: ["messages.count": "\(messages.count)", "model": "\(model.id)"]
-            )
-
-            let response = try await self.bedrockRuntimeClient.converse(input: input)
-            logger.trace("Received response", metadata: ["response": "\(response)"])
-
-            guard let converseOutput = response.output else {
-                logger.trace(
-                    "Invalid response",
-                    metadata: [
-                        "response": .string(String(describing: response)),
-                        "hasOutput": .stringConvertible(response.output != nil),
-                    ]
-                )
-                throw BedrockServiceError.invalidSDKResponse(
-                    "Something went wrong while extracting ConverseOutput from response."
-                )
-            }
-            let converseResponse = try ConverseResponse(converseOutput)
-            messages.append(converseResponse.message)
+            messages.append(message)
             logger.trace(
                 "Received message",
-                metadata: ["replyMessage": "\(converseResponse.message)", "messages.count": "\(messages.count)"]
+                metadata: ["replyMessage": "\(message)", "messages.count": "\(messages.count)"]
             )
-            let reply = converseResponse.getReply()
-            // logger.trace("Extracted reply", metadata: ["reply": "\(reply)"])
-            // logger.trace("Messages", metadata: ["messages": "\(messages)"])
-            return (reply, messages)
-            // return (reply, [])
+            let converseResponse = ConverseResponse(message)
+            return (converseResponse.getReply(), messages)
         } catch {
             logger.trace("Error while conversing", metadata: ["error": "\(error)"])
             throw error
