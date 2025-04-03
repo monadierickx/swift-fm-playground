@@ -603,7 +603,7 @@ public struct BedrockService: Sendable {
     /// - Returns: Tuple containing the model's response text and updated message history
     public func converse(
         with model: BedrockModel,
-        prompt: String?,
+        prompt: String? = nil,
         imageFormat: ImageBlock.Format? = nil,
         imageBytes: String? = nil,
         history: [Message] = [],

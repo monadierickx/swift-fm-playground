@@ -15,14 +15,17 @@
 
 import Foundation
 
-struct MistralConverse: ConverseModality {
-    func getName() -> String { "Mistral Converse Modality" }
+public struct StandardConverse: ConverseModality {
+    public func getName() -> String { "Standard Converse Modality" }
 
-    let converseParameters: ConverseParameters
-    let converseFeatures: [ConverseFeature]
+    public let converseParameters: ConverseParameters
+    public let converseFeatures: [ConverseFeature]
 
-    init(parameters: ConverseParameters, features: [ConverseFeature]) {
+    public init(parameters: ConverseParameters, features: [ConverseFeature]) {
         self.converseParameters = parameters
         self.converseFeatures = features
     }
+
+    public func getConverseParameters() -> ConverseParameters { converseParameters }
+    public func getConverseFeatures() -> [ConverseFeature] { converseFeatures }
 }

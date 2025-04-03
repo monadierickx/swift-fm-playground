@@ -141,16 +141,193 @@ Note that the minimum, maximum and default values for each parameter are model s
 
 ### Text prompt
 
+```swift
+let model = .nova_lite
+
+guard model.hasConverseModality() else {
+    print("\(model.name) does not support converse")
+}
+
+var (reply, history) = try await bedrock.converse(
+    with: model,
+    prompt: "Tell me about rainbows",
+    history: [],
+    maxTokens: 512,
+)
+
+print("Assistant: \(reply)")
+
+(reply, history) = try await bedrock.converse(
+    with: model,
+    prompt: "Do you think birds can see them too?",
+    history: history,
+    maxTokens: 512,
+)
+
+print("Assistant: \(reply)")
+```
+
+
 ### Vision
 
+```swift
+let model = .nova_lite
+
+guard model.hasConverseModality(.vision) else {
+    print("\(model.name) does not support converse")
+}
+
+let (reply, history) = try await bedrock.converse(
+    with model: model,
+    prompt: "Can you tell me about this plant?",
+    imageFormat: .jpeg,
+    imageBytes: base64EncodedImage,
+    temperature: 0.8,
+)
+
+print("Assistant: \(reply)")
+```
+
 ### Tools
+
+```swift
+let model = .nova_lite
+
+// verify that the model supports tool usage
+guard model.hasConverseModality(.toolUse) else {
+    print("\(model.name) does not support converse tools")
+}
+
+// define the inputschema for your tool
+let inputSchema = JSON([
+    "type": "object",
+    "properties": [
+        "sign": [
+            "type": "string",
+            "description": "The call sign for the radio station for which you want the most popular song. Example calls signs are WZPZ and WKRP."
+        ]
+    ],
+    "required": [
+        "sign"
+    ]
+])
+
+// create a Tool object
+let tool = Tool(name: "top_song", inputSchema: inputSchema, description: "Get the most popular song played on a radio station.")
+
+// pass a prompt and the tool to converse
+var (reply, history) = try await bedrock.converse(
+    with model: model,
+    prompt: "What is the most popular song on WZPZ?",
+    tools: [tool]
+)
+
+print("Assistant: \(reply)")  
+// The reply will be similar to this: "I need to use the \"top_song\" tool to find the most popular song on the radio station WZPZ. I will input the call sign \"WZPZ\" into the tool to get the required information."
+// The last message in the history will contain the tool use request
+
+if case .toolUse(let toolUse) = history.last?.content.last {
+    let id = toolUse.id
+    let name = toolUse.name
+    let input = toolUse.input
+
+    // Logic to use the tool here
+    
+    let toolResult = ToolResultBlock(id: id, content: [.text("The Best Song Ever")], status: .success)
+
+    // Send the toolResult back to the model
+    (reply, history) = try await bedrock.converse(
+    with: model,
+    history: history,
+    tools: [tool],
+    toolResult: toolResult
+)
+}
+
+print("Assistant: \(reply)")
+// The final reply will be similar to: "The most popular song currently played on WZPZ is \"The Best Song Ever\". If you need more information or have another request, feel free to ask!"
+```
+
+### Make your own `Message`
+
+Alternatively use the `converse` function that does not take a `prompt`, `toolResult` or `image` and construct the `Message` yourself. 
+
+```swift
+// Message with prompt
+let (reply, history) = try await bedrock.converse(
+    with model: model,
+    conversation: [Message("What day of the week is it?")],
+    maxTokens: 512,
+    temperature: 1,
+    stopSequences: ["THE END"],
+    systemPrompts: ["Today is Wednesday, make sure to mention that."]
+)
+
+// Message with an image and prompt
+let (reply, history) = try await bedrock.converse(
+    with model: model,
+    conversation: [Message(prompt: "What is in the this teacup?", imageFormat: .jpeg, imageBytes: base64EncodedImage)],
+)
+
+// Message with toolResult
+let (reply, history) = try await bedrock.converse(
+    with model: model,
+    conversation: [Message(toolResult)],
+    tools: [toolA, toolB]
+)
+```
 
 ## How to add a BedrockModel
 
 ### Text
 
+-- Under Construction --
+
 ### Image
+
+-- Under Construction --
 
 ### Converse
 
+To add a new model that only needs the ConverseModality, simply use the `StandardConverse` and add the correct [inferece parameters](https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters.html) and [supported converse features](https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html).
 
+```swift
+extension BedrockModel {
+    public static let new_bedrock_model = BedrockModel(
+        id: "family.model-id-v1:0",
+        name: "New Model Name",
+        modality: StandardConverse(
+            parameters: ConverseParameters(
+                temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 0.3),
+                maxTokens: Parameter(.maxTokens, minValue: 1, maxValue: nil, defaultValue: nil),
+                topP: Parameter(.topP, minValue: 0.01, maxValue: 0.99, defaultValue: 0.75),
+                stopSequences: StopSequenceParams(maxSequences: nil, defaultValue: []),
+                maxPromptSize: nil
+            ),
+            features: [.textGeneration, .systemPrompts, .document, .toolUse]
+        )
+    )
+}
+```
+
+If the model also implements other modalities you might need to create you own `Modality` and make sure it conforms to `ConverseModality` by implementing the `getConverseParameters` and `getConverseFeatures` functions. Note that the `ConverseParameters` can be extracted from `TextGenerationParameters` by using the public initializer.
+
+```swift
+struct ModelFamilyModality: TextModality, ConverseModality {
+    func getName() -> String { "Model Family Text and Converse Modality" }
+
+    let parameters: TextGenerationParameters
+    let converseFeatures: [ConverseFeature]
+    let converseParameters: ConverseParameters
+
+    init(parameters: TextGenerationParameters, features: [ConverseFeature] = [.textGeneration]) {
+        self.parameters = parameters
+        self.converseFeatures = features
+
+        // public initializer to extract `ConverseParameters` from `TextGenerationParameters`
+        self.converseParameters = ConverseParameters(textGenerationParameters: parameters) 
+    }
+
+    // ...
+}
+```

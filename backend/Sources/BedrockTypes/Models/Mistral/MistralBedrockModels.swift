@@ -19,6 +19,8 @@ import Foundation
 // https://docs.aws.amazon.com/bedrock/latest/userguide/model-parameters-mistral-text-completion.html
 // https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html
 
+typealias MistralConverse = StandardConverse
+
 extension BedrockModel {
     public static let mistral_large_2402 = BedrockModel(
         id: "mistral.mistral-large-2402-v1:0",
