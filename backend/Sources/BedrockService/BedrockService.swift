@@ -506,35 +506,35 @@ public struct BedrockService: Sendable {
                 }
             }
 
-            if toolResult != nil {
+            if let toolResult {
                 guard let _: [Tool] = tools else {
                     throw BedrockServiceError.invalidPrompt("Tool result is defined but tools are not.")
                 }
                 guard case .toolUse(_) = messages.last?.content.last else {
                     throw BedrockServiceError.invalidPrompt("Tool result is defined but last message is not tool use.")
                 }
-                messages.append(Message(from: .user, content: [.toolResult(toolResult!)]))
+                messages.append(Message(toolResult))
             } else {
                 guard let prompt = prompt else {
                     throw BedrockServiceError.invalidPrompt("Prompt is not defined.")
                 }
-                messages.append(Message(from: .user, content: [.text(prompt)]))
+
+                if let imageFormat, let imageBytes {
+                    guard model.hasConverseModality(.vision) else {
+                        throw BedrockServiceError.invalidModality(
+                            model,
+                            modality,
+                            "This model does not support converse vision."
+                        )
+                    }
+                    messages.append(
+                        Message(prompt: prompt, imageFormat: imageFormat, imageBytes: imageBytes)
+                    )
+                } else {
+                    messages.append(Message(prompt))
+                }
             }
 
-            if let imageFormat,
-                let imageBytes
-            {
-                guard model.hasConverseModality(.vision) else {
-                    throw BedrockServiceError.invalidModality(
-                        model,
-                        modality,
-                        "This model does not support converse vision."
-                    )
-                }
-                messages.append(
-                    Message(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))])
-                )
-            }
             // MOVE from here
             let converseRequest = ConverseRequest(
                 model: model,

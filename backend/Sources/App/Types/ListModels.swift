@@ -15,6 +15,6 @@
 
 import Foundation
 import Hummingbird
-import BedrockService
+import BedrockTypes
 
 extension ModelSummary: ResponseEncodable {}

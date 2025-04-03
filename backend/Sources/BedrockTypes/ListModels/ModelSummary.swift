@@ -14,10 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrock
-import BedrockTypes
 import Foundation
 
-// comment to explain difference
 public struct ModelSummary: Encodable {
     let modelName: String
     let providerName: String

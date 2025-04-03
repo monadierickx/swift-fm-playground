@@ -20,23 +20,40 @@ public struct Message: Codable {
     public let role: Role
     public let content: [Content]
 
-    // public static func createTextMessage(from role: Role, text: String) -> Self {
-    //     Message(from: role, content: [.text(text)])
-    // }
-
     package init(from role: Role, content: [Content]) {
         self.role = role
         self.content = content
     }
 
-    // convenience
-    public init(prompt: String) {
+    /// convenience initializer for message with only a user prompt
+    public init(_ prompt: String) {
         self.init(from: .user, content: [.text(prompt)])
     }
 
-    // public init(toolResult: String) {
-    //     self.init(from: .user, content: [.text(prompt)])
-    // }
+    /// convenience initializer for message with only a ToolResultBlock
+    public init(_ toolResult: ToolResultBlock) {
+        self.init(from: .user, content: [.toolResult(toolResult)])
+    }
+
+    /// convenience initializer for message with only an ImageBlock
+    public init(_ imageBlock: ImageBlock) {
+        self.init(from: .user, content: [.image(imageBlock)])
+    }
+
+    /// convenience initializer for message with an ImageBlock.Format and imageBytes
+    public init(imageFormat: ImageBlock.Format, imageBytes: String) {
+        self.init(from: .user, content: [.image(ImageBlock(format: imageFormat, source: imageBytes))])
+    }
+
+    /// convenience initializer for message with an ImageBlock and a user prompt
+    public init(prompt: String, imageBlock: ImageBlock) {
+        self.init(from: .user, content: [.text(prompt), .image(imageBlock)])
+    }
+
+    /// convenience initializer for message with a user prompt, an ImageBlock.Format and imageBytes
+    public init(prompt: String, imageFormat: ImageBlock.Format, imageBytes: String) {
+        self.init(from: .user, content: [.text(prompt), .image(ImageBlock(format: imageFormat, source: imageBytes))])
+    }
 
     public init(from sdkMessage: BedrockRuntimeClientTypes.Message) throws {
         guard let sdkRole = sdkMessage.role else {
