@@ -4,10 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "HummingbirdBackend",  // FIXME: better name
+    name: "SwiftBedrock",
     platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17)],
     products: [
-        .executable(name: "App", targets: ["App"])  // FIXME: better name
+        .executable(name: "PlaygroundAPI", targets: ["PlaygroundAPI"]),
+        .library(name: "BedrockService", targets: ["BedrockService"]),
+        .library(name: "BedrockTypes", targets: ["BedrockTypes"])
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
@@ -19,13 +21,13 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "App",
+            name: "PlaygroundAPI",
             dependencies: [
                 .target(name: "BedrockService"),
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
                 .product(name: "Hummingbird", package: "hummingbird"),
             ],
-            path: "Sources/App"
+            path: "Sources/PlaygroundAPI"
         ),
         .target(
             name: "BedrockService",
@@ -54,14 +56,6 @@ let package = Package(
                 .product(name: "Testing", package: "swift-testing"),
             ],
             path: "Tests/BedrockServiceTests"
-        ),
-        // .testTarget(name: "AppTests",
-        //     dependencies: [
-        //         .byName(name: "App"),
-        //         .target(name: "SwiftBedrockService"),
-        //         .product(name: "HummingbirdTesting", package: "hummingbird")
-        //     ],
-        //     path: "Tests/AppTests"
-        // )
+        )
     ]
 )
