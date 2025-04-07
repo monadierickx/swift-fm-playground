@@ -329,7 +329,7 @@ if case .toolUse(let toolUse) = history.last?.content.last {
 
     // Logic to use the tool here
     
-    let toolResult = ToolResultBlock(id: id, content: [.text("The Best Song Ever")], status: .success)
+    let toolResult = ToolResultBlock("The Best Song Ever", id: id)
 
     // Send the toolResult back to the model
     (reply, history) = try await bedrock.converse(

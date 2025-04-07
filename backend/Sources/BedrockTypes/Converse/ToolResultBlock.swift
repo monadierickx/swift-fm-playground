@@ -27,6 +27,36 @@ public struct ToolResultBlock: Codable {
         self.status = status
     }
 
+    /// convenience initializer for ToolResultBlock with only an id and a String
+    public init(_ prompt: String, id: String) {
+        self.init(id: id, content: [.text(prompt)], status: .success)
+    }
+
+    /// convenience initializer for ToolResultBlock with only an id and a JSON
+    public init(_ json: JSON, id: String) {
+        self.init(id: id, content: [.json(json)], status: .success)
+    }
+
+    /// convenience initializer for ToolResultBlock with only an id and a ImageBlock
+    public init(_ image: ImageBlock, id: String) {
+        self.init(id: id, content: [.image(image)], status: .success)
+    }
+
+    /// convenience initializer for ToolResultBlock with only an id and a DocumentBlock
+    public init(_ document: DocumentBlock, id: String) {
+        self.init(id: id, content: [.document(document)], status: .success)
+    }
+
+    /// convenience initializer for ToolResultBlock with only an id and a VideoBlock
+    public init(_ video: VideoBlock, id: String) {
+        self.init(id: id, content: [.video(video)], status: .success)
+    }
+
+    /// convenience initializer for ToolResultBlock with failed request
+    public static func failed(_ id: String) -> Self {
+        self.init(id: id, content: [], status: .error)
+    }
+
     public init(from sdkToolResultBlock: BedrockRuntimeClientTypes.ToolResultBlock) throws {
         guard let sdkToolResultContent = sdkToolResultBlock.content else {
             throw BedrockServiceError.decodingError(
