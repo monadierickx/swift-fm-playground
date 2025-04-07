@@ -46,12 +46,12 @@ public struct Message: Codable {
     }
 
     /// convenience initializer for message with an ImageBlock and a user prompt
-    public init(prompt: String, imageBlock: ImageBlock) {
+    public init(_ prompt: String, imageBlock: ImageBlock) {
         self.init(from: .user, content: [.text(prompt), .image(imageBlock)])
     }
 
     /// convenience initializer for message with a user prompt, an ImageBlock.Format and imageBytes
-    public init(prompt: String, imageFormat: ImageBlock.Format, imageBytes: String) {
+    public init(_ prompt: String, imageFormat: ImageBlock.Format, imageBytes: String) {
         self.init(from: .user, content: [.text(prompt), .image(ImageBlock(format: imageFormat, source: imageBytes))])
     }
 

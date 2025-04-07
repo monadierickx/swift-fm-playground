@@ -1,17 +1,60 @@
-# SwiftBedrockService
+# BedrockService
 
 This library is a work in progress, feel free to open an issue, but do not use it in your projects just yet. 
 
-## How to get started with BedrockService
+## Getting started with BedrockService
 
-1. Import the BedrockService and BedrockTypes
+1. Set-up your `Package.swift`
+
+First add dependencies: 
+```bash
+swift package add-dependency https://github.com/build-on-aws/swift-fm-playground.git --branch main
+swift swift package add-target-dependency BedrockService ProjectName        ## FIXME: does not work because `Package.swift` is in `backend` and not in the root of the repo
+```
+
+Next up add `platforms` configuration after `name`
+
+```swift
+platforms: [
+    .macOS(.v14),
+    .iOS(.v17),
+    .tvOS(.v17)
+],
+```
+
+Your `Package.swift` should now look something like this: 
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "ProjectName",
+    platforms: [
+        .macOS(.v14),
+        .iOS(.v17),
+        .tvOS(.v17),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/build-on-aws/swift-fm-playground.git", branch: "main")
+    ],
+    targets: [
+        .executableTarget(
+            name: "testje",
+            dependencies: [
+                .target(name: "BedrockService")
+            ]
+        )
+    ]
+)
+```
+
+2. Import the BedrockService and BedrockTypes
 
 ```swift 
 import BedrockService
 import BedrockTypes
 ```
 
-2. Initialize the BedrockService
+3. Initialize the BedrockService
 
 Choose what Region to use, whether to use AWS SSO authentication instead of standard credentials and pass a logger. If no region is passed it will default to `.useast1`, if no logger is provided a default logger with the name `bedrock.service` is created. The log level will be set to the environment variable `SWIFT_BEDROCK_LOG_LEVEL` or default to `.trace`. If `useSSO` is not defined it will default to `false` and use the standard credentials for authentication.
 
@@ -23,7 +66,7 @@ let bedrock = try await BedrockService(
 ) 
 ```
 
-3. List the available models
+4. List the available models
 
 Use the `listModels()` function to test your set-up. This function will return an array of `ModelSummary` objects, each one representing a model supported by Amazon Bedrock. The ModelSummaries that contain a `BedrockModel` object are the models supported by BedrockService. 
 
@@ -50,6 +93,15 @@ guard model.hasTextModality() else {
     print("\(model.name) does not support text completion")
 }
 
+let textCompletion = try await bedrock.completeText(
+    "Write a story about a space adventure",
+    with: model
+)
+```
+
+Optionally add inference parameters.
+
+```swift
 let textCompletion = try await bedrock.completeText(
     "Write a story about a space adventure",
     with: model,
@@ -85,6 +137,15 @@ guard model.hasImageModality(),
     print("\(model.name) does not support image generation")
 }
 
+let imageGeneration = try await bedrock.generateImage(
+    "A serene landscape with mountains at sunset",
+    with: model,
+)
+```
+
+Optionally add inference parameters.
+
+```swift
 let imageGeneration = try await bedrock.generateImage(
     "A serene landscape with mountains at sunset",
     with: model,
@@ -124,6 +185,16 @@ guard model.hasImageVariationModality(),
 let imageVariations = try await bedrock.generateImageVariation(
     images: [base64EncodedImage],
     prompt: "A dog drinking out of this teacup",
+    with: model
+)
+```
+
+Optionally add inference parameters.
+
+```swift
+let imageVariations = try await bedrock.generateImageVariation(
+    images: [base64EncodedImage],
+    prompt: "A dog drinking out of this teacup",
     with: model,
     negativePrompt: "Cats, worms, rain",
     similarity: 0.8,
@@ -150,9 +221,7 @@ guard model.hasConverseModality() else {
 
 var (reply, history) = try await bedrock.converse(
     with: model,
-    prompt: "Tell me about rainbows",
-    history: [],
-    maxTokens: 512,
+    prompt: "Tell me about rainbows"
 )
 
 print("Assistant: \(reply)")
@@ -160,11 +229,25 @@ print("Assistant: \(reply)")
 (reply, history) = try await bedrock.converse(
     with: model,
     prompt: "Do you think birds can see them too?",
-    history: history,
-    maxTokens: 512,
+    history: history
 )
 
 print("Assistant: \(reply)")
+```
+
+Optionally add inference parameters. 
+
+```swift
+var (reply, history) = try await bedrock.converse(
+    with: model,
+    prompt: "Tell me about rainbows",
+    history: history,
+    maxTokens: 1024,
+    temperature: 0.2,
+    topP: 0.8,
+    stopSequences: ["END", "STOP", "<assistant>"],
+    systemPrompts: ["Do not pretend to be human", "Never talk about goats", "You like puppies"]
+    )
 ```
 
 
@@ -181,11 +264,24 @@ let (reply, history) = try await bedrock.converse(
     with model: model,
     prompt: "Can you tell me about this plant?",
     imageFormat: .jpeg,
-    imageBytes: base64EncodedImage,
-    temperature: 0.8,
+    imageBytes: base64EncodedImage
 )
 
 print("Assistant: \(reply)")
+```
+
+
+Optionally add inference parameters. 
+
+```swift
+var (reply, history) = try await bedrock.converse(
+    with model: model,
+    prompt: "Can you tell me about this plant?",
+    imageFormat: .jpeg,
+    imageBytes: base64EncodedImage,
+    history: history,
+    temperature: 1
+    )
 ```
 
 ### Tools
@@ -241,7 +337,7 @@ if case .toolUse(let toolUse) = history.last?.content.last {
     history: history,
     tools: [tool],
     toolResult: toolResult
-)
+    )
 }
 
 print("Assistant: \(reply)")
@@ -255,23 +351,30 @@ Alternatively use the `converse` function that does not take a `prompt`, `toolRe
 ```swift
 // Message with prompt
 let (reply, history) = try await bedrock.converse(
-    with model: model,
+    with: model,
+    conversation: [Message("What day of the week is it?")]
+)
+
+// Optionally add inference parameters
+let (reply, history) = try await bedrock.converse(
+    with: model,
     conversation: [Message("What day of the week is it?")],
     maxTokens: 512,
     temperature: 1,
+    topP: 0.8,
     stopSequences: ["THE END"],
     systemPrompts: ["Today is Wednesday, make sure to mention that."]
 )
 
 // Message with an image and prompt
 let (reply, history) = try await bedrock.converse(
-    with model: model,
-    conversation: [Message(prompt: "What is in the this teacup?", imageFormat: .jpeg, imageBytes: base64EncodedImage)],
+    with: model,
+    conversation: [Message("What is in the this teacup?", imageFormat: .jpeg, imageBytes: base64EncodedImage)],
 )
 
 // Message with toolResult
 let (reply, history) = try await bedrock.converse(
-    with model: model,
+    with: model,
     conversation: [Message(toolResult)],
     tools: [toolA, toolB]
 )
