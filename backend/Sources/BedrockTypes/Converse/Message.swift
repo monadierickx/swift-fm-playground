@@ -69,7 +69,7 @@ public struct Message: Codable {
     public func getSDKMessage() throws -> BedrockRuntimeClientTypes.Message {
         let contentBlocks: [BedrockRuntimeClientTypes.ContentBlock] = try content.map {
             content -> BedrockRuntimeClientTypes.ContentBlock in
-            return try content.getSDKContentBlock()
+            try content.getSDKContentBlock()
         }
         return BedrockRuntimeClientTypes.Message(
             content: contentBlocks,
