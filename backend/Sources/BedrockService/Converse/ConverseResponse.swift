@@ -41,8 +41,9 @@ public struct ConverseResponse {
     }
 
     func getToolUse() -> ToolUseBlock? {
-        if case .toolUse(let toolUse) = history.last?.content.last {
+        if case .toolUse(let toolUse) = message.content.last {
             return toolUse
         }
+        return nil
     }
 }
