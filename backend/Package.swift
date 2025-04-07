@@ -9,7 +9,7 @@ let package = Package(
     products: [
         .executable(name: "PlaygroundAPI", targets: ["PlaygroundAPI"]),
         .library(name: "BedrockService", targets: ["BedrockService"]),
-        .library(name: "BedrockTypes", targets: ["BedrockTypes"])
+        .library(name: "BedrockTypes", targets: ["BedrockTypes"]),
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
@@ -56,6 +56,6 @@ let package = Package(
                 .product(name: "Testing", package: "swift-testing"),
             ],
             path: "Tests/BedrockServiceTests"
-        )
+        ),
     ]
 )
