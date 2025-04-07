@@ -16,9 +16,9 @@
 @preconcurrency import AWSBedrockRuntime
 import AWSClientRuntime
 import AWSSDKIdentity
-import Foundation
 import BedrockService
 import BedrockTypes
+import Foundation
 
 public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
     public init() {}
@@ -152,7 +152,7 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
         else {
             throw AWSBedrockRuntime.ValidationException(
                 message: "Hier is het)"
-                // message: "Malformed input request, please reformat your input and try again."
+                    // message: "Malformed input request, please reformat your input and try again."
             )
         }
         if let inputText = json["inputText"] as? String {

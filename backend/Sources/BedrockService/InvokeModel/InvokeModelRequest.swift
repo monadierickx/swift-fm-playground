@@ -14,8 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import Foundation
 import BedrockTypes
+import Foundation
 
 struct InvokeModelRequest {
     let model: BedrockModel

@@ -32,7 +32,8 @@ public struct Parameter<T: Sendable & Hashable & Equatable & Numeric>: Sendable,
         Self(name: name, minValue: nil, maxValue: nil, defaultValue: nil, isSupported: false)
     }
 
-    private init(name: ParameterName, minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil, isSupported: Bool) {
+    private init(name: ParameterName, minValue: T? = nil, maxValue: T? = nil, defaultValue: T? = nil, isSupported: Bool)
+    {
         self.minValue = minValue
         self.maxValue = maxValue
         self.defaultValue = defaultValue

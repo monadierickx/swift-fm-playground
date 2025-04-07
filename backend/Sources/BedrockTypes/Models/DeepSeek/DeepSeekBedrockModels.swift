@@ -19,7 +19,8 @@ typealias DeepSeekR1V1 = DeepSeekText
 
 extension BedrockModel {
     public static let deepseek_r1_v1: BedrockModel = BedrockModel(
-        id: "us.deepseek.r1-v1:0", name: "DeepSeek R1",
+        id: "us.deepseek.r1-v1:0",
+        name: "DeepSeek R1",
         modality: DeepSeekR1V1(
             parameters: TextGenerationParameters(
                 temperature: Parameter(.temperature, minValue: 0, maxValue: 1, defaultValue: 1),

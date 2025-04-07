@@ -13,8 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import BedrockTypes
 import Foundation
 import Hummingbird
-import BedrockTypes
 
 extension ModelSummary: ResponseEncodable {}

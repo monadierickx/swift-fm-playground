@@ -22,7 +22,10 @@ struct AnthropicText: TextModality, ConverseModality {
 
     func getName() -> String { "Anthropic Text Generation" }
 
-    init(parameters: TextGenerationParameters, features: [ConverseFeature] = [.textGeneration, .systemPrompts, .document]) {
+    init(
+        parameters: TextGenerationParameters,
+        features: [ConverseFeature] = [.textGeneration, .systemPrompts, .document]
+    ) {
         self.parameters = parameters
         self.converseFeatures = features
         self.converseParameters = ConverseParameters(textGenerationParameters: parameters)

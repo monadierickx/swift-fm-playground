@@ -20,4 +20,3 @@ import Foundation
 // https://docs.aws.amazon.com/bedrock/latest/userguide/conversation-inference-supported-models-features.html
 
 typealias JambaConverse = StandardConverse
-

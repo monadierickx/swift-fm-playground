@@ -16,8 +16,8 @@
 @preconcurrency import AWSBedrockRuntime
 import AWSClientRuntime
 import AWSSDKIdentity
-import Foundation
 import BedrockTypes
+import Foundation
 
 // Protocol allows writing mocks for unit tests
 public protocol BedrockRuntimeClientProtocol: Sendable {

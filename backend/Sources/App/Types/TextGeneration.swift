@@ -13,9 +13,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+import BedrockTypes
 import Foundation
 import Hummingbird
-import BedrockTypes
 
 extension TextCompletion: ResponseCodable {}
 

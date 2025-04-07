@@ -14,8 +14,8 @@
 //===----------------------------------------------------------------------===//
 
 @preconcurrency import AWSBedrockRuntime
-import Foundation
 import BedrockTypes
+import Foundation
 
 public struct InvokeModelResponse {
     let model: BedrockModel
@@ -82,7 +82,7 @@ public struct InvokeModelResponse {
         do {
             guard let textCompletionBody = textCompletionBody else {
                 throw BedrockServiceError.decodingError("No text completion body found in the response")
-            } 
+            }
             return try textCompletionBody.getTextCompletion()
         } catch {
             throw BedrockServiceError.decodingError(

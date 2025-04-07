@@ -15,9 +15,9 @@
 
 import BedrockService
 import BedrockTypes
+import Foundation
 import Hummingbird
 import Logging
-import Foundation
 
 /// Application arguments protocol. We use a protocol so we can call
 /// `buildApplication` inside Tests as well as in the App executable.

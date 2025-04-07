@@ -34,10 +34,16 @@ struct NovaImageResolutionValidator: ImageResolutionValidator {
             )
         }
         guard width % 16 == 0 else {
-            throw BedrockServiceError.invalidParameter(.resolution, "Width must be evenly divisible by 16. Width: \(width)")
+            throw BedrockServiceError.invalidParameter(
+                .resolution,
+                "Width must be evenly divisible by 16. Width: \(width)"
+            )
         }
         guard height % 16 == 0 else {
-            throw BedrockServiceError.invalidParameter(.resolution, "Height must be evenly divisible by 16. Height: \(height)")
+            throw BedrockServiceError.invalidParameter(
+                .resolution,
+                "Height must be evenly divisible by 16. Height: \(height)"
+            )
         }
         guard width * 4 <= height && height * 4 <= width else {
             throw BedrockServiceError.invalidParameter(

@@ -19,7 +19,7 @@ import Testing
 @testable import BedrockTypes
 
 //struct Constants {
-//    
+//
 //}
 
 @Suite("SwiftBedrockService Tests")
@@ -59,13 +59,13 @@ struct BedrockServiceTests {
     ]
     static let invalidPrompts = [
         "", " ", " \n  ", "\t",
-//        String(repeating: "tests", count: 5_000_001),
+        //        String(repeating: "tests", count: 5_000_001),
     ]
     static let textCompletionModels = [
         BedrockModel.nova_micro,
-//        BedrockModel.titan_text_g1_lite,
-//        BedrockModel.titan_text_g1_express,
-//        BedrockModel.titan_text_g1_premier,
+        //        BedrockModel.titan_text_g1_lite,
+        //        BedrockModel.titan_text_g1_express,
+        //        BedrockModel.titan_text_g1_premier,
         BedrockModel.claudev1,
         BedrockModel.claudev2,
         BedrockModel.claudev2_1,

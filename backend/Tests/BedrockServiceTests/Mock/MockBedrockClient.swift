@@ -16,9 +16,9 @@
 @preconcurrency import AWSBedrock
 import AWSClientRuntime
 import AWSSDKIdentity
-import Foundation
 import BedrockService
 import BedrockTypes
+import Foundation
 
 public struct MockBedrockClient: BedrockClientProtocol {
     public init() {}

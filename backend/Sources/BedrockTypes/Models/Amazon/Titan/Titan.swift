@@ -17,7 +17,7 @@ import Foundation
 
 struct TitanText: TextModality, ConverseModality {
     func getName() -> String { "Titan Text Generation" }
-    
+
     let parameters: TextGenerationParameters
     let converseParameters: ConverseParameters
     let converseFeatures: [ConverseFeature]
