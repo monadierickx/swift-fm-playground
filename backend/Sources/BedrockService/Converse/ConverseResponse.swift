@@ -39,4 +39,10 @@ public struct ConverseResponse {
             return "Not found"  // FIXME
         }
     }
+
+    func getToolUse() -> ToolUseBlock? {
+        if case .toolUse(let toolUse) = history.last?.content.last {
+            return toolUse
+        }
+    }
 }
