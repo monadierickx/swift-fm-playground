@@ -2,7 +2,7 @@ name: Build And Test on EC2
 
 on:
   push:
-    branches: ["main", "week12"]
+    branches: ["main", "week15"]
   pull_request:
     branches: ["main"]
 
