@@ -471,7 +471,7 @@ extension BedrockService {
             toolResult: toolResult
         )
     }
-    
+
     /// Use Converse API without needing to make Messages
     /// - Parameters:
     ///   - model: The BedrockModel to converse with
@@ -521,7 +521,7 @@ extension BedrockService {
             toolResult: toolResult
         )
     }
-    
+
     /// Use Converse API without needing to make Messages
     /// - Parameters:
     ///   - model: The BedrockModel to converse with
@@ -571,5 +571,5 @@ extension BedrockService {
             toolResult: toolResult
         )
     }
-    
+
 }
