@@ -256,7 +256,7 @@ extension BedrockService {
         tool: Tool? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -306,7 +306,7 @@ extension BedrockService {
         tool: Tool? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -356,7 +356,7 @@ extension BedrockService {
         tool: Tool? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -406,7 +406,7 @@ extension BedrockService {
         tool: Tool? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -456,7 +456,7 @@ extension BedrockService {
         tools: [Tool]? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -506,7 +506,7 @@ extension BedrockService {
         tools: [Tool]? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
@@ -556,7 +556,7 @@ extension BedrockService {
         tools: [Tool]? = nil,
         toolResult: ToolResultBlock? = nil
     ) async throws -> (String, [Message]) {
-        converse(
+        try await converse(
             with: model,
             prompt: prompt,
             imageFormat: imageFormat,
