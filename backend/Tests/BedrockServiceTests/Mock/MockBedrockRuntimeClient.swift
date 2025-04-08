@@ -70,7 +70,7 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
         default:
             throw AWSBedrockRuntime.ValidationException(
                 message: "Malformed input request, please reformat your input and try again."
-                // message: "Hier in de default! model: \(String(describing: model))"
+                    // message: "Hier in de default! model: \(String(describing: model))"
             )
         }
     }
