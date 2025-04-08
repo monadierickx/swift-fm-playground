@@ -589,4 +589,109 @@ struct BedrockServiceParameterTests {
             )
         }
     }
+
+    // Temperature
+    @Test(
+        "Continue conversation using a valid temperature",
+        arguments: validTemperature
+    )
+    func converseWithValidTemperature(temperature: Double) async throws {
+        let prompt = "This is a test"
+        let (output, _) = try await bedrock.converse(
+            with: BedrockModel.nova_micro,
+            prompt: prompt,
+            temperature: temperature
+        )
+        #expect(output == "Your prompt was: \(prompt)")
+    }
+
+    @Test(
+        "Continue conversation variation using an invalid temperature",
+        arguments: invalidTemperature
+    )
+    func converseWithInvalidTemperature(temperature: Double) async throws {
+        await #expect(throws: BedrockServiceError.self) {
+            let prompt = "This is a test"
+            let _ = try await bedrock.converse(
+                with: BedrockModel.nova_micro,
+                prompt: prompt,
+                temperature: temperature
+            )
+        }
+    }
+
+    // MaxTokens
+    @Test(
+        "Continue conversation using a valid maxTokens",
+        arguments: validMaxTokens
+    )
+    func converseWithValidMaxTokens(maxTokens: Int) async throws {
+        let prompt = "This is a test"
+        let (output, _) = try await bedrock.converse(
+            with: BedrockModel.nova_micro,
+            prompt: prompt,
+            maxTokens: maxTokens
+        )
+        #expect(output == "Your prompt was: \(prompt)")
+    }
+
+    @Test(
+        "Continue conversation variation using an invalid maxTokens",
+        arguments: invalidMaxTokens
+    )
+    func converseWithInvalidMaxTokens(maxTokens: Int) async throws {
+        await #expect(throws: BedrockServiceError.self) {
+            let prompt = "This is a test"
+            let _ = try await bedrock.converse(
+                with: BedrockModel.nova_micro,
+                prompt: prompt,
+                maxTokens: maxTokens
+            )
+        }
+    }
+
+    // TopP
+    @Test(
+        "Continue conversation using a valid temperature",
+        arguments: validTopP
+    )
+    func converseWithValidTopP(topP: Double) async throws {
+        let prompt = "This is a test"
+        let (output, _) = try await bedrock.converse(
+            with: BedrockModel.nova_micro,
+            prompt: prompt,
+            topP: topP
+        )
+        #expect(output == "Your prompt was: \(prompt)")
+    }
+
+    @Test(
+        "Continue conversation variation using an invalid temperature",
+        arguments: invalidTopP
+    )
+    func converseWithInvalidTopP(topP: Double) async throws {
+        await #expect(throws: BedrockServiceError.self) {
+            let prompt = "This is a test"
+            let _ = try await bedrock.converse(
+                with: BedrockModel.nova_micro,
+                prompt: prompt,
+                topP: topP
+            )
+        }
+    }
+
+    // StopSequences
+    @Test(
+        "Continue conversation using a valid stopSequences",
+        arguments: validStopSequences
+    )
+    func converseWithValidTopK(stopSequences: [String]) async throws {
+        let prompt = "This is a test"
+        let (output, _) = try await bedrock.converse(
+            with: BedrockModel.nova_micro,
+            prompt: prompt,
+            stopSequences: stopSequences
+        )
+        #expect(output == "Your prompt was: \(prompt)")
+    }
 }
