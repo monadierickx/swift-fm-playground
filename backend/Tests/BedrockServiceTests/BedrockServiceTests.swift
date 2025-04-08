@@ -57,7 +57,7 @@ struct BedrockServiceTests {
     //     "", " ", " \n  ", "\t"
     // ]
     static let textCompletionModels = [
-        BedrockModel.nova_micro,
+        BedrockModel.nova_micro
         // BedrockModel.titan_text_g1_lite,
         // BedrockModel.titan_text_g1_express,
         // BedrockModel.titan_text_g1_premier,
