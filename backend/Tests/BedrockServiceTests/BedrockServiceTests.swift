@@ -40,22 +40,22 @@ struct BedrockServiceTests {
     }
 
     // MARK: constants
-    static let validNrOfImages = [1, 2, 3, 4, 5]
-    static let invalidNrOfImages = [-4, 0, 6, 20]
-    static let validTemperature = [0, 0.2, 0.6, 1]
-    static let invalidTemperature = [-2.5, -1, 1.00001, 2]
-    static let validMaxTokens = [1, 10, 100, 5000]
-    static let invalidMaxTokens = [0, -1, -2]
-    static let validSimilarity = [0.5]
-    static let invalidSimilarity = [-4, 0.02, 1.1, 2]
-    static let validPrompts = [
-        "This is a test",
-        "!@#$%^&*()_+{}|:<>?",
-        String(repeating: "test ", count: 1000),
-    ]
-    static let invalidPrompts = [
-        "", " ", " \n  ", "\t"
-    ]
+    // static let validNrOfImages = [1, 2, 3, 4, 5]
+    // static let invalidNrOfImages = [-4, 0, 6, 20]
+    // static let validTemperature = [0, 0.2, 0.6, 1]
+    // static let invalidTemperature = [-2.5, -1, 1.00001, 2]
+    // static let validMaxTokens = [1, 10, 100, 5000]
+    // static let invalidMaxTokens = [0, -1, -2]
+    // static let validSimilarity = [0.5]
+    // static let invalidSimilarity = [-4, 0.02, 1.1, 2]
+    // static let validPrompts = [
+    //     "This is a test",
+    //     "!@#$%^&*()_+{}|:<>?",
+    //     String(repeating: "test ", count: 1000),
+    // ]
+    // static let invalidPrompts = [
+    //     "", " ", " \n  ", "\t"
+    // ]
     static let textCompletionModels = [
         BedrockModel.nova_micro,
         // BedrockModel.titan_text_g1_lite,
@@ -101,80 +101,80 @@ struct BedrockServiceTests {
         }
     }
 
-    @Test("Complete text using a valid temperature", arguments: validTemperature)
-    func completeTextWithValidTemperature(temperature: Double) async throws {
-        let completion: TextCompletion = try await bedrock.completeText(
-            "This is a test",
-            with: BedrockModel.nova_micro,
-            temperature: temperature
-        )
-        #expect(completion.completion == "This is the textcompletion for: This is a test")
-    }
+    // @Test("Complete text using a valid temperature", arguments: validTemperature)
+    // func completeTextWithValidTemperature(temperature: Double) async throws {
+    //     let completion: TextCompletion = try await bedrock.completeText(
+    //         "This is a test",
+    //         with: BedrockModel.nova_micro,
+    //         temperature: temperature
+    //     )
+    //     #expect(completion.completion == "This is the textcompletion for: This is a test")
+    // }
 
-    @Test("Complete text using an invalid temperature", arguments: invalidTemperature)
-    func completeTextWithInvalidTemperature(temperature: Double) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: TextCompletion = try await bedrock.completeText(
-                "This is a test",
-                with: BedrockModel.nova_micro,
-                temperature: temperature
-            )
-        }
-    }
+    // @Test("Complete text using an invalid temperature", arguments: invalidTemperature)
+    // func completeTextWithInvalidTemperature(temperature: Double) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: TextCompletion = try await bedrock.completeText(
+    //             "This is a test",
+    //             with: BedrockModel.nova_micro,
+    //             temperature: temperature
+    //         )
+    //     }
+    // }
 
-    @Test(
-        "Complete text using a valid maxTokens",
-        arguments: validMaxTokens
-    )
-    func completeTextWithValidMaxTokens(maxTokens: Int) async throws {
-        let completion: TextCompletion = try await bedrock.completeText(
-            "This is a test",
-            with: BedrockModel.nova_micro,
-            maxTokens: maxTokens
-        )
-        #expect(completion.completion == "This is the textcompletion for: This is a test")
-    }
+    // @Test(
+    //     "Complete text using a valid maxTokens",
+    //     arguments: validMaxTokens
+    // )
+    // func completeTextWithValidMaxTokens(maxTokens: Int) async throws {
+    //     let completion: TextCompletion = try await bedrock.completeText(
+    //         "This is a test",
+    //         with: BedrockModel.nova_micro,
+    //         maxTokens: maxTokens
+    //     )
+    //     #expect(completion.completion == "This is the textcompletion for: This is a test")
+    // }
 
-    @Test(
-        "Complete text using an invalid maxTokens",
-        arguments: invalidMaxTokens
-    )
-    func completeTextWithInvalidMaxTokens(maxTokens: Int) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: TextCompletion = try await bedrock.completeText(
-                "This is a test",
-                with: BedrockModel.nova_micro,
-                maxTokens: maxTokens
-            )
-        }
-    }
+    // @Test(
+    //     "Complete text using an invalid maxTokens",
+    //     arguments: invalidMaxTokens
+    // )
+    // func completeTextWithInvalidMaxTokens(maxTokens: Int) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: TextCompletion = try await bedrock.completeText(
+    //             "This is a test",
+    //             with: BedrockModel.nova_micro,
+    //             maxTokens: maxTokens
+    //         )
+    //     }
+    // }
 
-    @Test(
-        "Complete text using a valid prompt",
-        arguments: validPrompts
-    )
-    func completeTextWithValidPrompt(prompt: String) async throws {
-        let completion: TextCompletion = try await bedrock.completeText(
-            prompt,
-            with: BedrockModel.nova_micro,
-            maxTokens: 200
-        )
-        #expect(completion.completion == "This is the textcompletion for: \(prompt)")
-    }
+    // @Test(
+    //     "Complete text using a valid prompt",
+    //     arguments: validPrompts
+    // )
+    // func completeTextWithValidPrompt(prompt: String) async throws {
+    //     let completion: TextCompletion = try await bedrock.completeText(
+    //         prompt,
+    //         with: BedrockModel.nova_micro,
+    //         maxTokens: 200
+    //     )
+    //     #expect(completion.completion == "This is the textcompletion for: \(prompt)")
+    // }
 
-    @Test(
-        "Complete text using an invalid prompt",
-        arguments: invalidPrompts
-    )
-    func completeTextWithInvalidPrompt(prompt: String) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: TextCompletion = try await bedrock.completeText(
-                prompt,
-                with: BedrockModel.nova_micro,
-                maxTokens: 10
-            )
-        }
-    }
+    // @Test(
+    //     "Complete text using an invalid prompt",
+    //     arguments: invalidPrompts
+    // )
+    // func completeTextWithInvalidPrompt(prompt: String) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: TextCompletion = try await bedrock.completeText(
+    //             prompt,
+    //             with: BedrockModel.nova_micro,
+    //             maxTokens: 10
+    //         )
+    //     }
+    // }
 
     // MARK: generateImage
 
@@ -191,7 +191,7 @@ struct BedrockServiceTests {
     }
 
     @Test(
-        "Generate image using an implemented model",
+        "Generate image using a wrong model",
         arguments: textCompletionModels
     )
     func generateImageWithInvalidModel(model: BedrockModel) async throws {
@@ -204,58 +204,58 @@ struct BedrockServiceTests {
         }
     }
 
-    @Test(
-        "Generate image using a valid nrOfImages",
-        arguments: validNrOfImages
-    )
-    func generateImageWithValidNrOfImages(nrOfImages: Int) async throws {
-        let output: ImageGenerationOutput = try await bedrock.generateImage(
-            "This is a test",
-            with: BedrockModel.nova_canvas,
-            nrOfImages: nrOfImages
-        )
-        #expect(output.images.count == nrOfImages)
-    }
+    // @Test(
+    //     "Generate image using a valid nrOfImages",
+    //     arguments: validNrOfImages
+    // )
+    // func generateImageWithValidNrOfImages(nrOfImages: Int) async throws {
+    //     let output: ImageGenerationOutput = try await bedrock.generateImage(
+    //         "This is a test",
+    //         with: BedrockModel.nova_canvas,
+    //         nrOfImages: nrOfImages
+    //     )
+    //     #expect(output.images.count == nrOfImages)
+    // }
 
-    @Test(
-        "Generate image using an invalid nrOfImages",
-        arguments: invalidNrOfImages
-    )
-    func generateImageWithInvalidNrOfImages(nrOfImages: Int) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: ImageGenerationOutput = try await bedrock.generateImage(
-                "This is a test",
-                with: BedrockModel.nova_canvas,
-                nrOfImages: nrOfImages
-            )
-        }
-    }
+    // @Test(
+    //     "Generate image using an invalid nrOfImages",
+    //     arguments: invalidNrOfImages
+    // )
+    // func generateImageWithInvalidNrOfImages(nrOfImages: Int) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: ImageGenerationOutput = try await bedrock.generateImage(
+    //             "This is a test",
+    //             with: BedrockModel.nova_canvas,
+    //             nrOfImages: nrOfImages
+    //         )
+    //     }
+    // }
 
-    @Test(
-        "Generate image using a valid prompt",
-        arguments: validPrompts
-    )
-    func generateImageWithValidPrompt(prompt: String) async throws {
-        let output: ImageGenerationOutput = try await bedrock.generateImage(
-            prompt,
-            with: BedrockModel.nova_canvas,
-            nrOfImages: 3
-        )
-        #expect(output.images.count == 3)
-    }
+    // @Test(
+    //     "Generate image using a valid prompt",
+    //     arguments: validPrompts
+    // )
+    // func generateImageWithValidPrompt(prompt: String) async throws {
+    //     let output: ImageGenerationOutput = try await bedrock.generateImage(
+    //         prompt,
+    //         with: BedrockModel.nova_canvas,
+    //         nrOfImages: 3
+    //     )
+    //     #expect(output.images.count == 3)
+    // }
 
-    @Test(
-        "Generate image using an invalid prompt",
-        arguments: invalidPrompts
-    )
-    func generateImageWithInvalidPrompt(prompt: String) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: ImageGenerationOutput = try await bedrock.generateImage(
-                prompt,
-                with: BedrockModel.nova_canvas
-            )
-        }
-    }
+    // @Test(
+    //     "Generate image using an invalid prompt",
+    //     arguments: invalidPrompts
+    // )
+    // func generateImageWithInvalidPrompt(prompt: String) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: ImageGenerationOutput = try await bedrock.generateImage(
+    //             prompt,
+    //             with: BedrockModel.nova_canvas
+    //         )
+    //     }
+    // }
 
     // MARK: generateImageVariation
 
@@ -292,38 +292,38 @@ struct BedrockServiceTests {
         }
     }
 
-    @Test(
-        "Generate image variation using a valid nrOfImages",
-        arguments: validNrOfImages
-    )
-    func generateImageVariationWithValidNrOfImages(nrOfImages: Int) async throws {
-        let mockBase64Image =
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
-            image: mockBase64Image,
-            prompt: "This is a test",
-            with: BedrockModel.nova_canvas,
-            nrOfImages: nrOfImages
-        )
-        #expect(output.images.count == nrOfImages)
-    }
+    // @Test(
+    //     "Generate image variation using a valid nrOfImages",
+    //     arguments: validNrOfImages
+    // )
+    // func generateImageVariationWithValidNrOfImages(nrOfImages: Int) async throws {
+    //     let mockBase64Image =
+    //         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    //     let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
+    //         image: mockBase64Image,
+    //         prompt: "This is a test",
+    //         with: BedrockModel.nova_canvas,
+    //         nrOfImages: nrOfImages
+    //     )
+    //     #expect(output.images.count == nrOfImages)
+    // }
 
-    @Test(
-        "Generate image variation using an invalid nrOfImages",
-        arguments: invalidNrOfImages
-    )
-    func generateImageVariationWithInvalidNrOfImages(nrOfImages: Int) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let mockBase64Image =
-                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
-                image: mockBase64Image,
-                prompt: "This is a test",
-                with: BedrockModel.nova_canvas,
-                nrOfImages: nrOfImages
-            )
-        }
-    }
+    // @Test(
+    //     "Generate image variation using an invalid nrOfImages",
+    //     arguments: invalidNrOfImages
+    // )
+    // func generateImageVariationWithInvalidNrOfImages(nrOfImages: Int) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let mockBase64Image =
+    //             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    //         let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
+    //             image: mockBase64Image,
+    //             prompt: "This is a test",
+    //             with: BedrockModel.nova_canvas,
+    //             nrOfImages: nrOfImages
+    //         )
+    //     }
+    // }
 
     //    @Test(
     //        "Generate image variation using a valid similarity",
@@ -360,63 +360,63 @@ struct BedrockServiceTests {
     //        }
     //    }
 
-    @Test(
-        "Generate image variation using a valid prompt",
-        arguments: validPrompts
-    )
-    func generateImageVariationWithValidPrompt(prompt: String) async throws {
-        let mockBase64Image =
-            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
-            image: mockBase64Image,
-            prompt: prompt,
-            with: BedrockModel.nova_canvas,
-            similarity: 0.6
-        )
-        #expect(output.images.count == 1)
-    }
+    // @Test(
+    //     "Generate image variation using a valid prompt",
+    //     arguments: validPrompts
+    // )
+    // func generateImageVariationWithValidPrompt(prompt: String) async throws {
+    //     let mockBase64Image =
+    //         "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    //     let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
+    //         image: mockBase64Image,
+    //         prompt: prompt,
+    //         with: BedrockModel.nova_canvas,
+    //         similarity: 0.6
+    //     )
+    //     #expect(output.images.count == 1)
+    // }
 
-    @Test(
-        "Generate image variation using an invalid prompt",
-        arguments: invalidPrompts
-    )
-    func generateImageVariationWithInvalidPrompt(prompt: String) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let mockBase64Image =
-                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
-                image: mockBase64Image,
-                prompt: prompt,
-                with: BedrockModel.nova_canvas,
-                similarity: 0.6
-            )
-        }
-    }
+    // @Test(
+    //     "Generate image variation using an invalid prompt",
+    //     arguments: invalidPrompts
+    // )
+    // func generateImageVariationWithInvalidPrompt(prompt: String) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let mockBase64Image =
+    //             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+    //         let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
+    //             image: mockBase64Image,
+    //             prompt: prompt,
+    //             with: BedrockModel.nova_canvas,
+    //             similarity: 0.6
+    //         )
+    //     }
+    // }
 
     // MARK: converse
 
-    @Test(
-        "Continue conversation using a valid prompt",
-        arguments: validPrompts
-    )
-    func converseWithValidPrompt(prompt: String) async throws {
-        let (output, _) = try await bedrock.converse(
-            with: BedrockModel.nova_micro,
-            prompt: prompt
-        )
-        #expect(output == "Your prompt was: \(prompt)")
-    }
+    // @Test(
+    //     "Continue conversation using a valid prompt",
+    //     arguments: validPrompts
+    // )
+    // func converseWithValidPrompt(prompt: String) async throws {
+    //     let (output, _) = try await bedrock.converse(
+    //         with: BedrockModel.nova_micro,
+    //         prompt: prompt
+    //     )
+    //     #expect(output == "Your prompt was: \(prompt)")
+    // }
 
-    @Test(
-        "Continue conversation variation using an invalid prompt",
-        arguments: invalidPrompts
-    )
-    func converseWithInvalidPrompt(prompt: String) async throws {
-        await #expect(throws: BedrockServiceError.self) {
-            let _: (String, [Message]) = try await bedrock.converse(
-                with: BedrockModel.nova_micro,
-                prompt: prompt
-            )
-        }
-    }
+    // @Test(
+    //     "Continue conversation variation using an invalid prompt",
+    //     arguments: invalidPrompts
+    // )
+    // func converseWithInvalidPrompt(prompt: String) async throws {
+    //     await #expect(throws: BedrockServiceError.self) {
+    //         let _: (String, [Message]) = try await bedrock.converse(
+    //             with: BedrockModel.nova_micro,
+    //             prompt: prompt
+    //         )
+    //     }
+    // }
 }

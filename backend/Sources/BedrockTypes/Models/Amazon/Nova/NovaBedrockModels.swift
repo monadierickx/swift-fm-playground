@@ -90,7 +90,7 @@ extension BedrockModel {
                 similarity: Parameter(.similarity, minValue: 0, maxValue: 1.0, defaultValue: 0.7)
             ),
             imageVariationParameters: ImageVariationParameters(
-                images: Parameter(.images, minValue: 1, maxValue: 10, defaultValue: 1),
+                images: Parameter(.images, minValue: 1, maxValue: 5, defaultValue: 1),
                 maxPromptSize: 1024,
                 maxNegativePromptSize: 1024,
                 similarity: Parameter(.similarity, minValue: 0.2, maxValue: 1.0, defaultValue: 0.6)
