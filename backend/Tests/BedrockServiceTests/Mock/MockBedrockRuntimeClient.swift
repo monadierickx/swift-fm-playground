@@ -42,20 +42,24 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
     // MARK: invokeModel
 
     public func invokeModel(input: InvokeModelInput) async throws -> InvokeModelOutput {
+        print("checkpoint 1")
         guard let modelId = input.modelId else {
             throw AWSBedrockRuntime.ValidationException(
                 message: "Malformed input request, please reformat your input and try again."
             )
         }
+        print("checkpoint 2")
         guard let inputBody = input.body else {
             throw AWSBedrockRuntime.ValidationException(
                 message: "Malformed input request, please reformat your input and try again."
             )
         }
         let model: BedrockModel = BedrockModel(rawValue: modelId)!
+        print("checkpoint 3")
 
         switch model.modality.getName() {
         case "Amazon Image Generation":
+            print("checkpoint 3.1")
             return InvokeModelOutput(body: try getImageGeneration(body: inputBody))
         case "Nova Text Generation":
             return InvokeModelOutput(body: try invokeNovaModel(body: inputBody))
@@ -65,27 +69,29 @@ public struct MockBedrockRuntimeClient: BedrockRuntimeClientProtocol {
             return InvokeModelOutput(body: try invokeAnthropicModel(body: inputBody))
         default:
             throw AWSBedrockRuntime.ValidationException(
-                // message: "Malformed input request, please reformat your input and try again."
-                message: "Hier in de default! model: \(String(describing: model))"
+                message: "Malformed input request, please reformat your input and try again."
+                // message: "Hier in de default! model: \(String(describing: model))"
             )
         }
     }
 
     private func getImageGeneration(body: Data) throws -> Data {
+        print("Checking image generation input")
         guard
             let json: [String: Any] = try? JSONSerialization.jsonObject(
                 with: body,
                 options: []
             )
                 as? [String: Any],
-            let imageGenerationConfig = json["imageGenerationConfig"] as? [String: Any],
-            let nrOfImages = imageGenerationConfig["numberOfImages"] as? Int
+            let imageGenerationConfig = json["imageGenerationConfig"] as? [String: Any]
         else {
             throw AWSBedrockRuntime.ValidationException(
                 message: "Malformed input request, please reformat your input and try again."
             )
         }
+        print("Returning mockimage(s)")
 
+        let nrOfImages = imageGenerationConfig["numberOfImages"] as? Int ?? 1
         let mockBase64Image =
             "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
         let imageArray = Array(repeating: "\"\(mockBase64Image)\"", count: nrOfImages)

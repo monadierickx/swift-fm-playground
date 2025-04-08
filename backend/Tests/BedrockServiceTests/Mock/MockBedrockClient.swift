@@ -29,23 +29,39 @@ public struct MockBedrockClient: BedrockClientProtocol {
         -> ListFoundationModelsOutput
     {
         ListFoundationModelsOutput(
+            // customizationsSupported: [BedrockClientTypes.ModelCustomization]? = nil,
+            // inferenceTypesSupported: [BedrockClientTypes.InferenceType]? = nil,
+            // inputModalities: [BedrockClientTypes.ModelModality]? = nil,
+            // modelArn: Swift.String? = nil,
+            // modelId: Swift.String? = nil,
+            // modelLifecycle: BedrockClientTypes.FoundationModelLifecycle? = nil,
+            // modelName: Swift.String? = nil,
+            // outputModalities: [BedrockClientTypes.ModelModality]? = nil,
+            // providerName: Swift.String? = nil,
+            // responseStreamingSupported: Swift.Bool? = nil
             modelSummaries: [
                 BedrockClientTypes.FoundationModelSummary(
+                    modelArn: "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-instant-v1",
                     modelId: "anthropic.claude-instant-v1",
+                    modelLifecycle: BedrockClientTypes.FoundationModelLifecycle(status: .active),
                     modelName: "Claude Instant",
                     providerName: "Anthropic",
                     responseStreamingSupported: false
                 ),
                 BedrockClientTypes.FoundationModelSummary(
+                    modelArn: "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-instant-v2",
                     modelId: "anthropic.claude-instant-v2",
+                    modelLifecycle: BedrockClientTypes.FoundationModelLifecycle(status: .active),
                     modelName: "Claude Instant 2",
                     providerName: "Anthropic",
                     responseStreamingSupported: true
                 ),
                 BedrockClientTypes.FoundationModelSummary(
+                    modelArn: "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-instant-v3",
                     modelId: "unknownID",
+                    modelLifecycle: BedrockClientTypes.FoundationModelLifecycle(status: .active),
                     modelName: "Claude Instant 3",
-                    providerName: nil,
+                    providerName: "Anthropic",
                     responseStreamingSupported: false
                 ),
             ])

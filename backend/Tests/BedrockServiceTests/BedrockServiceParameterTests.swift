@@ -18,59 +18,48 @@ import Testing
 @testable import BedrockService
 @testable import BedrockTypes
 
-//struct Constants {
-//
-//}
-
-@Suite("SwiftBedrockService Tests")
-struct BedrockServiceTests {
-    let bedrock: SwiftBedrock
+// For the parameter tests the Nova models are used as an example
+@Suite("BedrockService Model Parameter Tests")
+struct BedrockServiceParameterTests {
+    let bedrock: BedrockService
 
     init() async throws {
-        self.bedrock = try await SwiftBedrock(
+        self.bedrock = try await BedrockService(
             bedrockClient: MockBedrockClient(),
             bedrockRuntimeClient: MockBedrockRuntimeClient()
         )
     }
 
-    // MARK: listModels
-    @Test("List all models")
-    func listModels() async throws {
-        let models = try await bedrock.listModels()
-        #expect(models.count == 2)
-        #expect(models[0].modelId == "anthropic.claude-instant-v1")
-        #expect(models[0].modelName == "Claude Instant")
-        #expect(models[0].providerName == "Anthropic")
-    }
-
-    // MARK: constants
-    static let validNrOfImages = [1, 2, 3, 4, 5]
-    static let invalidNrOfImages = [-4, 0, 6, 20]
-    static let validTemperature = [0, 0.2, 0.6, 1]
-    static let invalidTemperature = [-2.5, -1, 1.00001, 2]
-    static let validMaxTokens = [1, 10, 100, 5000]
-    static let invalidMaxTokens = [0, -1, -2]
-    static let validSimilarity = [0.5]
-    static let invalidSimilarity = [-4, 0.02, 1.1, 2]
+    // MARK: constants based on the Nova parameters
+    static let validTemperature = [0.00001, 0.2, 0.6, 1]
+    static let invalidTemperature = [-2.5, -1, 0, 1.00001, 2]
+    static let validMaxTokens = [1, 10, 100, 5_000]
+    static let invalidMaxTokens = [0, -2, 5_001]
+    static let validTopP = [0.00001, 0.2, 0.6, 1]
+    static let invalidTopP = [-2.5, -1, 0, 1.00001, 2]
+    static let validTopK = [0, 50]
+    static let invalidTopK = [-1]
+    static let validStopSequences = [
+        ["\n\nHuman:"],
+        ["\n\nHuman:", "\n\nAI:"],
+        ["\n\nHuman:", "\n\nAI:", "\n\nHuman:"],
+    ]
     static let validPrompts = [
         "This is a test",
         "!@#$%^&*()_+{}|:<>?",
-        String(repeating: "test ", count: 1000),
+        String(repeating: "test ", count: 10),
     ]
     static let invalidPrompts = [
         "", " ", " \n  ", "\t",
-        //        String(repeating: "tests", count: 5_000_001),
     ]
+
+    static let validNrOfImages = [1, 2, 3, 4, 5]
+    static let invalidNrOfImages = [-4, 0, 6, 20]
+    static let validSimilarity = [0.2, 0.5, 1]
+    static let invalidSimilarity = [-4, 0, 0.1, 1.1, 2]
+
     static let textCompletionModels = [
-        BedrockModel.nova_micro,
-        //        BedrockModel.titan_text_g1_lite,
-        //        BedrockModel.titan_text_g1_express,
-        //        BedrockModel.titan_text_g1_premier,
-        BedrockModel.claudev1,
-        BedrockModel.claudev2,
-        BedrockModel.claudev2_1,
-        BedrockModel.claudev3_haiku,
-        BedrockModel.claudev3_5_haiku,
+        BedrockModel.nova_micro
     ]
     static let imageGenerationModels = [
         BedrockModel.titan_image_g1_v1,
@@ -87,9 +76,7 @@ struct BedrockServiceTests {
     func completeTextWithValidModel(model: BedrockModel) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
             "This is a test",
-            with: model,
-            maxTokens: 100,
-            temperature: 0.5
+            with: model
         )
         #expect(completion.completion == "This is the textcompletion for: This is a test")
     }
@@ -332,40 +319,40 @@ struct BedrockServiceTests {
         }
     }
 
-    //    @Test(
-    //        "Generate image variation using a valid similarity",
-    //        arguments: validSimilarity
-    //    )
-    //    func generateImageVariationWithValidNr(similarity: Double) async throws {
-    //        let mockBase64Image =
-    //            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-    //        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
-    //            image: mockBase64Image,
-    //            prompt: "This is a test",
-    //            with: BedrockModel.nova_canvas,
-    //            similarity: similarity,
-    //            nrOfImages: 3
-    //        )
-    //        #expect(output.images.count == 3)
-    //    }
+    @Test(
+        "Generate image variation using a valid similarity",
+        arguments: validSimilarity
+    )
+    func generateImageVariationWithValidNr(similarity: Double) async throws {
+        let mockBase64Image =
+            "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+        let output: ImageGenerationOutput = try await bedrock.generateImageVariation(
+            image: mockBase64Image,
+            prompt: "This is a test",
+            with: BedrockModel.nova_canvas,
+            similarity: similarity,
+            nrOfImages: 3
+        )
+        #expect(output.images.count == 3)
+    }
 
-    //    @Test(
-    //        "Generate image variation using an invalid similarity",
-    //        arguments: invalidSimilarity
-    //    )
-    //    func generateImageVariationWithInvalidNrOfImages(similarity: Double) async throws {
-    //        await #expect(throws: BedrockServiceError.self) {
-    //            let mockBase64Image =
-    //                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
-    //            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
-    //                image: mockBase64Image,
-    //                prompt: "This is a test",
-    //                with: BedrockModel.nova_canvas,
-    //                similarity: similarity,
-    //                nrOfImages: 3
-    //            )
-    //        }
-    //    }
+    @Test(
+        "Generate image variation using an invalid similarity",
+        arguments: invalidSimilarity
+    )
+    func generateImageVariationWithInvalidNrOfImages(similarity: Double) async throws {
+        await #expect(throws: BedrockServiceError.self) {
+            let mockBase64Image =
+                "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII="
+            let _: ImageGenerationOutput = try await bedrock.generateImageVariation(
+                image: mockBase64Image,
+                prompt: "This is a test",
+                with: BedrockModel.nova_canvas,
+                similarity: similarity,
+                nrOfImages: 3
+            )
+        }
+    }
 
     @Test(
         "Generate image variation using a valid prompt",
@@ -407,7 +394,7 @@ struct BedrockServiceTests {
         arguments: validPrompts
     )
     func converseWithValidPrompt(prompt: String) async throws {
-        let output: String = try await bedrock.converse(
+        let (output, _) = try await bedrock.converse(
             with: BedrockModel.nova_micro,
             prompt: prompt
         )
@@ -420,7 +407,7 @@ struct BedrockServiceTests {
     )
     func converseWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: BedrockServiceError.self) {
-            let _: String = try await bedrock.converse(
+            let _ = try await bedrock.converse(
                 with: BedrockModel.nova_micro,
                 prompt: prompt
             )

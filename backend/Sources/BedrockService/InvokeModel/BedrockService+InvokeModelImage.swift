@@ -212,4 +212,48 @@ extension BedrockService {
             throw error
         }
     }
+
+    /// Generates 1 to 5 image variation(s) from reference images and a text prompt using a specific model
+    /// - Parameters:
+    ///   - image: A base64 encoded reference image to generate variations from
+    ///   - prompt: The text prompt describing desired modifications to the reference images
+    ///   - model: The BedrockModel that will be used to generate the variations
+    ///   - negativePrompt: Optional text describing what to avoid in the generated variations
+    ///   - similarity: Optional parameter controlling how closely variations should match reference (between 0.2 and 1.0)
+    ///   - nrOfImages: Optional number of variations to generate (must be between 1 and 5, default 3)
+    ///   - cfgScale: Optional classifier free guidance scale to control prompt adherence
+    ///   - seed: Optional seed for reproducible variation generation
+    ///   - quality: Optional parameter to control the quality of generated variations
+    ///   - resolution: Optional parameter to specify the desired image resolution
+    /// - Throws: BedrockServiceError.notSupported for parameters or functionalities that are not supported
+    ///           BedrockServiceError.invalidParameter for invalid parameters
+    ///           BedrockServiceError.invalidPrompt if the prompt is empty or too long
+    ///           BedrockServiceError.invalidModality for invalid modality from the selected model
+    ///           BedrockServiceError.invalidSDKResponse if the response body is missing
+    /// - Returns: An ImageGenerationOutput object containing an array of generated image variations
+    public func generateImageVariation(
+        image: String,
+        prompt: String,
+        with model: BedrockModel,
+        negativePrompt: String? = nil,
+        similarity: Double? = nil,
+        nrOfImages: Int? = nil,
+        cfgScale: Double? = nil,
+        seed: Int? = nil,
+        quality: ImageQuality? = nil,
+        resolution: ImageResolution? = nil
+    ) async throws -> ImageGenerationOutput {
+        try await generateImageVariation(
+            images: [image],
+            prompt: prompt,
+            with: model,
+            negativePrompt: negativePrompt,
+            similarity: similarity,
+            nrOfImages: nrOfImages,
+            cfgScale: cfgScale,
+            seed: seed,
+            quality: quality,
+            resolution: resolution
+        )
+    }
 }
