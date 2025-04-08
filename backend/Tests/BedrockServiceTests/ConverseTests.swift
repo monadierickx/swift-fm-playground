@@ -18,25 +18,8 @@ import Testing
 @testable import BedrockService
 @testable import BedrockTypes
 
-@Suite("SwiftBedrockService Tests")
-struct BedrockServiceTests {
-    let bedrock: BedrockService
+// Converse text
 
-    init() async throws {
-        self.bedrock = try await BedrockService(
-            bedrockClient: MockBedrockClient(),
-            bedrockRuntimeClient: MockBedrockRuntimeClient()
-        )
-    }
+extension BedrockServiceTests {
 
-    // MARK: listModels
-
-    @Test("List all models")
-    func listModels() async throws {
-        let models: [ModelSummary] = try await bedrock.listModels()
-        #expect(models.count == 3)
-        #expect(models[0].modelId == "anthropic.claude-instant-v1")
-        #expect(models[0].modelName == "Claude Instant")
-        #expect(models[0].providerName == "Anthropic")
-    }
 }

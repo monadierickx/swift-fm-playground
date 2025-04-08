@@ -31,51 +31,6 @@ struct BedrockServiceParameterTests {
     }
 
     // MARK: constants based on the Nova parameters
-    // tText generation
-    static let validTemperature = [0.00001, 0.2, 0.6, 1]
-    static let invalidTemperature = [-2.5, -1, 0, 1.00001, 2]
-    static let validMaxTokens = [1, 10, 100, 5_000]
-    static let invalidMaxTokens = [0, -2, 5_001]
-    static let validTopP = [0, 0.2, 0.6, 1]
-    static let invalidTopP = [-1, 1.00001, 2]
-    static let validTopK = [0, 50]
-    static let invalidTopK = [-1]
-    static let validStopSequences = [
-        ["\n\nHuman:"],
-        ["\n\nHuman:", "\n\nAI:"],
-        ["\n\nHuman:", "\n\nAI:", "\n\nHuman:"],
-    ]
-    static let validPrompts = [
-        "This is a test",
-        "!@#$%^&*()_+{}|:<>?",
-        String(repeating: "test ", count: 10),
-    ]
-    static let invalidPrompts = [
-        "", " ", " \n  ", "\t",
-    ]
-
-    // image generation
-    static let validNrOfImages = [1, 2, 3, 4, 5]
-    static let invalidNrOfImages = [-4, 0, 6, 20]
-    static let validCfgScale = [1.1, 6, 10]
-    static let invalidCfgScale = [-4, 0, 1.0, 11, 20]
-    static let validSeed = [0, 12, 900, 858_993_459]
-    static let invalidSeed = [-4, 1_000_000_000]
-    static let validImagePrompts = [
-        "This is a test",
-        "!@#$%^&*()_+{}|:<>?",
-        String(repeating: "x", count: 1_024),
-    ]
-    static let invalidImagePrompts = [
-        "", " ", " \n  ", "\t",
-        String(repeating: "x", count: 1_025),
-    ]
-
-    // image variation
-    static let validSimilarity = [0.2, 0.5, 1]
-    static let invalidSimilarity = [-4, 0, 0.1, 1.1, 2]
-    static let validNrOfReferenceImages = [1, 3, 5]
-    static let invalidNrOfReferenceImages = [0, 6, 10]
 
     // models
     static let textCompletionModels = [
@@ -91,6 +46,7 @@ struct BedrockServiceParameterTests {
 
     // MARK: completeText
 
+    // Models
     @Test(
         "Complete text using an implemented model",
         arguments: textCompletionModels
@@ -117,7 +73,38 @@ struct BedrockServiceParameterTests {
         }
     }
 
-    @Test("Complete text using a valid temperature", arguments: validTemperature)
+    // Parameter combinations
+    @Test(
+        "Complete text using an implemented model and a valid combination of parameters"
+    )
+    func completeTextWithValidModelValidParameters() async throws {
+        let completion: TextCompletion = try await bedrock.completeText(
+            "This is a test",
+            with: BedrockModel.nova_micro,
+            maxTokens: 512,
+            temperature: 0.5,
+            topK: 10,
+            stopSequences: ["END", "\n\nHuman:"]
+        )
+        #expect(completion.completion == "This is the textcompletion for: This is a test")
+    }
+
+    @Test(
+        "Complete text using an implemented model and an invalid combination of parameters"
+    )
+    func completeTextWithInvalidModelInvalidParameters() async throws {
+        await #expect(throws: BedrockServiceError.self) {
+            let _: TextCompletion = try await bedrock.completeText(
+                "This is a test",
+                with: BedrockModel.nova_lite,
+                temperature: 0.5,
+                topP: 0.5
+            )
+        }
+    }
+
+    // Temperature
+    @Test("Complete text using a valid temperature", arguments: NovaTestConstants.TextGeneration.validTemperature)
     func completeTextWithValidTemperature(temperature: Double) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
             "This is a test",
@@ -127,7 +114,7 @@ struct BedrockServiceParameterTests {
         #expect(completion.completion == "This is the textcompletion for: This is a test")
     }
 
-    @Test("Complete text using an invalid temperature", arguments: invalidTemperature)
+    @Test("Complete text using an invalid temperature", arguments: NovaTestConstants.TextGeneration.invalidTemperature)
     func completeTextWithInvalidTemperature(temperature: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
             let _: TextCompletion = try await bedrock.completeText(
@@ -138,9 +125,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // MaxTokens
     @Test(
         "Complete text using a valid maxTokens",
-        arguments: validMaxTokens
+        arguments: NovaTestConstants.TextGeneration.validMaxTokens
     )
     func completeTextWithValidMaxTokens(maxTokens: Int) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -153,7 +141,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Complete text using an invalid maxTokens",
-        arguments: invalidMaxTokens
+        arguments: NovaTestConstants.TextGeneration.invalidMaxTokens
     )
     func completeTextWithInvalidMaxTokens(maxTokens: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -165,9 +153,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // TopP
     @Test(
         "Complete text using a valid topP",
-        arguments: validTopP
+        arguments: NovaTestConstants.TextGeneration.validTopP
     )
     func completeTextWithValidTopP(topP: Double) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -180,7 +169,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Complete text using an invalid topP",
-        arguments: invalidTopP
+        arguments: NovaTestConstants.TextGeneration.invalidTopP
     )
     func completeTextWithInvalidMaxTokens(topP: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -192,9 +181,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // TopK
     @Test(
         "Complete text using a valid topK",
-        arguments: validTopK
+        arguments: NovaTestConstants.TextGeneration.validTopK
     )
     func completeTextWithValidTopK(topK: Int) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -207,7 +197,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Complete text using an invalid topK",
-        arguments: invalidTopK
+        arguments: NovaTestConstants.TextGeneration.invalidTopK
     )
     func completeTextWithInvalidTopK(topK: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -219,9 +209,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // StopSequences
     @Test(
         "Complete text using valid stopSequences",
-        arguments: validStopSequences
+        arguments: NovaTestConstants.TextGeneration.validStopSequences
     )
     func completeTextWithValidMaxTokens(stopSequences: [String]) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -232,9 +223,10 @@ struct BedrockServiceParameterTests {
         #expect(completion.completion == "This is the textcompletion for: This is a test")
     }
 
+    // Prompt
     @Test(
         "Complete text using a valid prompt",
-        arguments: validPrompts
+        arguments: NovaTestConstants.TextGeneration.validPrompts
     )
     func completeTextWithValidPrompt(prompt: String) async throws {
         let completion: TextCompletion = try await bedrock.completeText(
@@ -247,7 +239,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Complete text using an invalid prompt",
-        arguments: invalidPrompts
+        arguments: NovaTestConstants.TextGeneration.invalidPrompts
     )
     func completeTextWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -261,6 +253,7 @@ struct BedrockServiceParameterTests {
 
     // MARK: generateImage
 
+    // Models
     @Test(
         "Generate image using an implemented model",
         arguments: imageGenerationModels
@@ -287,9 +280,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // NrOfmages
     @Test(
         "Generate image using a valid nrOfImages",
-        arguments: validNrOfImages
+        arguments: NovaTestConstants.ImageGeneration.validNrOfImages
     )
     func generateImageWithValidNrOfImages(nrOfImages: Int) async throws {
         let output: ImageGenerationOutput = try await bedrock.generateImage(
@@ -302,7 +296,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image using an invalid nrOfImages",
-        arguments: invalidNrOfImages
+        arguments: NovaTestConstants.ImageGeneration.invalidNrOfImages
     )
     func generateImageWithInvalidNrOfImages(nrOfImages: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -314,9 +308,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // CfgScale
     @Test(
         "Generate image using a valid cfgScale",
-        arguments: validCfgScale
+        arguments: NovaTestConstants.ImageGeneration.validCfgScale
     )
     func generateImageWithValidCfgScale(cfgScale: Double) async throws {
         let output: ImageGenerationOutput = try await bedrock.generateImage(
@@ -329,7 +324,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image using an invalid cfgScale",
-        arguments: invalidCfgScale
+        arguments: NovaTestConstants.ImageGeneration.invalidCfgScale
     )
     func generateImageWithInvalidCfgScale(cfgScale: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -341,9 +336,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // Seed
     @Test(
         "Generate image using a valid seed",
-        arguments: validSeed
+        arguments: NovaTestConstants.ImageGeneration.validSeed
     )
     func generateImageWithValidSeed(seed: Int) async throws {
         let output: ImageGenerationOutput = try await bedrock.generateImage(
@@ -356,7 +352,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image using an invalid seed",
-        arguments: invalidSeed
+        arguments: NovaTestConstants.ImageGeneration.invalidSeed
     )
     func generateImageWithInvalidSeed(seed: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -368,9 +364,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // Prompt
     @Test(
         "Generate image using a valid prompt",
-        arguments: validImagePrompts
+        arguments: NovaTestConstants.ImageGeneration.validImagePrompts
     )
     func generateImageWithValidPrompt(prompt: String) async throws {
         let output: ImageGenerationOutput = try await bedrock.generateImage(
@@ -383,7 +380,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image using an invalid prompt",
-        arguments: invalidImagePrompts
+        arguments: NovaTestConstants.ImageGeneration.invalidImagePrompts
     )
     func generateImageWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -396,6 +393,7 @@ struct BedrockServiceParameterTests {
 
     // MARK: generateImageVariation
 
+    // Models
     @Test(
         "Generate image variation using an implemented model",
         arguments: imageGenerationModels
@@ -429,9 +427,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // NrOfImages
     @Test(
         "Generate image variation using a valid nrOfImages",
-        arguments: validNrOfImages
+        arguments: NovaTestConstants.ImageGeneration.validNrOfImages
     )
     func generateImageVariationWithValidNrOfImages(nrOfImages: Int) async throws {
         let mockBase64Image =
@@ -447,7 +446,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image variation using an invalid nrOfImages",
-        arguments: invalidNrOfImages
+        arguments: NovaTestConstants.ImageGeneration.invalidNrOfImages
     )
     func generateImageVariationWithInvalidNrOfImages(nrOfImages: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -462,9 +461,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // Similarity
     @Test(
         "Generate image variation using a valid similarity",
-        arguments: validSimilarity
+        arguments: NovaTestConstants.ImageVariation.validSimilarity
     )
     func generateImageVariationWithValidSimilarity(similarity: Double) async throws {
         let mockBase64Image =
@@ -481,7 +481,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image variation using an invalid similarity",
-        arguments: invalidSimilarity
+        arguments: NovaTestConstants.ImageVariation.invalidSimilarity
     )
     func generateImageVariationWithInvalidSimilarity(similarity: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -497,9 +497,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // Number of reference images
     @Test(
         "Generate image variation using a valid number of reference images",
-        arguments: validNrOfReferenceImages
+        arguments: NovaTestConstants.ImageVariation.validNrOfReferenceImages
     )
     func generateImageVariationWithValidNrOfReferenceImages(nrOfReferenceImages: Int) async throws {
         let mockBase64Image =
@@ -515,7 +516,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image variation using an invalid number of reference images",
-        arguments: invalidNrOfReferenceImages
+        arguments: NovaTestConstants.ImageVariation.invalidNrOfReferenceImages
     )
     func generateImageVariationWithInvalidNrOfReferenceImages(nrOfReferenceImages: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -530,9 +531,10 @@ struct BedrockServiceParameterTests {
         }
     }
 
+    // Prompt
     @Test(
         "Generate image variation using a valid prompt",
-        arguments: validImagePrompts
+        arguments: NovaTestConstants.ImageGeneration.validImagePrompts
     )
     func generateImageVariationWithValidPrompt(prompt: String) async throws {
         let mockBase64Image =
@@ -548,7 +550,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Generate image variation using an invalid prompt",
-        arguments: invalidImagePrompts
+        arguments: NovaTestConstants.ImageGeneration.invalidImagePrompts
     )
     func generateImageVariationWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -565,9 +567,10 @@ struct BedrockServiceParameterTests {
 
     // MARK: converse
 
+    // Prompt
     @Test(
         "Continue conversation using a valid prompt",
-        arguments: validPrompts
+        arguments: NovaTestConstants.TextGeneration.validPrompts
     )
     func converseWithValidPrompt(prompt: String) async throws {
         let (output, _) = try await bedrock.converse(
@@ -579,7 +582,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Continue conversation variation using an invalid prompt",
-        arguments: invalidPrompts
+        arguments: NovaTestConstants.TextGeneration.invalidPrompts
     )
     func converseWithInvalidPrompt(prompt: String) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -593,7 +596,7 @@ struct BedrockServiceParameterTests {
     // Temperature
     @Test(
         "Continue conversation using a valid temperature",
-        arguments: validTemperature
+        arguments: NovaTestConstants.TextGeneration.validTemperature
     )
     func converseWithValidTemperature(temperature: Double) async throws {
         let prompt = "This is a test"
@@ -607,7 +610,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Continue conversation variation using an invalid temperature",
-        arguments: invalidTemperature
+        arguments: NovaTestConstants.TextGeneration.invalidTemperature
     )
     func converseWithInvalidTemperature(temperature: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -623,7 +626,7 @@ struct BedrockServiceParameterTests {
     // MaxTokens
     @Test(
         "Continue conversation using a valid maxTokens",
-        arguments: validMaxTokens
+        arguments: NovaTestConstants.TextGeneration.validMaxTokens
     )
     func converseWithValidMaxTokens(maxTokens: Int) async throws {
         let prompt = "This is a test"
@@ -637,7 +640,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Continue conversation variation using an invalid maxTokens",
-        arguments: invalidMaxTokens
+        arguments: NovaTestConstants.TextGeneration.invalidMaxTokens
     )
     func converseWithInvalidMaxTokens(maxTokens: Int) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -653,7 +656,7 @@ struct BedrockServiceParameterTests {
     // TopP
     @Test(
         "Continue conversation using a valid temperature",
-        arguments: validTopP
+        arguments: NovaTestConstants.TextGeneration.validTopP
     )
     func converseWithValidTopP(topP: Double) async throws {
         let prompt = "This is a test"
@@ -667,7 +670,7 @@ struct BedrockServiceParameterTests {
 
     @Test(
         "Continue conversation variation using an invalid temperature",
-        arguments: invalidTopP
+        arguments: NovaTestConstants.TextGeneration.invalidTopP
     )
     func converseWithInvalidTopP(topP: Double) async throws {
         await #expect(throws: BedrockServiceError.self) {
@@ -683,7 +686,7 @@ struct BedrockServiceParameterTests {
     // StopSequences
     @Test(
         "Continue conversation using a valid stopSequences",
-        arguments: validStopSequences
+        arguments: NovaTestConstants.TextGeneration.validStopSequences
     )
     func converseWithValidTopK(stopSequences: [String]) async throws {
         let prompt = "This is a test"
