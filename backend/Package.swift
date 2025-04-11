@@ -7,7 +7,7 @@ let package = Package(
     name: "SwiftBedrock",
     platforms: [.macOS(.v15), .iOS(.v18), .tvOS(.v18)],
     products: [
-        .executable(name: "PlaygroundAPI", targets: ["PlaygroundAPI"]),
+        .executable(name: "PlaygroundAPI", targets: ["PlaygroundAPI"])
     ],
     dependencies: [
         .package(url: "https://github.com/hummingbird-project/hummingbird.git", from: "2.0.0"),
