@@ -17,7 +17,7 @@ import BedrockTypes
 import Foundation
 import Hummingbird
 
-extension ImageGenerationOutput: ResponseCodable {}
+extension ImageGenerationOutput: @retroactive ResponseCodable {}
 
 struct ImageGenerationInput: Codable {
     let prompt: String

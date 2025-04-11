@@ -17,4 +17,4 @@ import BedrockTypes
 import Foundation
 import Hummingbird
 
-extension ModelSummary: ResponseEncodable {}
+extension ModelSummary: @retroactive ResponseEncodable {}

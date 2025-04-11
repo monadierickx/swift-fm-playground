@@ -17,7 +17,7 @@ import BedrockTypes
 import Foundation
 import Hummingbird
 
-extension Message: ResponseCodable {}
+extension Message: @retroactive ResponseCodable {}
 
 struct ChatInput: Codable {
     let prompt: String?
@@ -33,7 +33,4 @@ struct ChatInput: Codable {
     let toolResult: ToolResultBlock?
 }
 
-struct ChatOutput: ResponseCodable {
-    let reply: String
-    let history: [Message]
-}
+extension ConverseReply: @retroactive ResponseCodable {}

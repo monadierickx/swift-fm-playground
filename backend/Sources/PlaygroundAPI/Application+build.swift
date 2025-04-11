@@ -161,7 +161,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // POST /foundation-models/chat/{modelId}
-    router.post("/foundation-models/chat/:modelId") { request, context -> ChatOutput in
+    router.post("/foundation-models/chat/:modelId") { request, context -> ConverseReply in
         do {
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
@@ -173,7 +173,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            let (reply, history) = try await bedrock.converse(
+            return try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
                 imageFormat: input.imageFormat ?? .jpeg,  // default to simplify frontend
@@ -187,7 +187,6 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 tools: input.tools,
                 toolResult: input.toolResult
             )
-            return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(
                 "An error occured while generating chat",

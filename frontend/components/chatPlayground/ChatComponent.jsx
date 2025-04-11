@@ -154,7 +154,7 @@ export default function ChatContainer() {
             await response.json().then(data => {
                 setConversation(prevConversation => [...prevConversation, {
                     sender: "Assistant",
-                    message: data.reply
+                    message: data.textReply
                 }]);
                 setHistory(data.history);
             });

@@ -17,7 +17,7 @@ import BedrockTypes
 import Foundation
 import Hummingbird
 
-extension TextCompletion: ResponseCodable {}
+extension TextCompletion: @retroactive ResponseCodable {}
 
 struct TextCompletionInput: Codable {
     let prompt: String
