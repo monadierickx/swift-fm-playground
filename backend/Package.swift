@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "SwiftBedrock",
-    platforms: [.macOS(.v14), .iOS(.v17), .tvOS(.v17)],
+    platforms: [.macOS(.v15), .iOS(.v18), .tvOS(.v18)],
     products: [
         .executable(name: "PlaygroundAPI", targets: ["PlaygroundAPI"]),
         .library(name: "BedrockService", targets: ["BedrockService"]),
@@ -16,8 +16,7 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.3.0"),
         .package(url: "https://github.com/awslabs/aws-sdk-swift", from: "1.2.54"),
         .package(url: "https://github.com/smithy-lang/smithy-swift", from: "0.118.0"),
-        .package(url: "https://github.com/swiftlang/swift-testing", branch: "main"),
-        .package(url: "https://github.com/apple/swift-log.git", from: "1.5.3"),
+        .package(url: "https://github.com/apple/swift-log.git", from: "1.5.0"),
     ],
     targets: [
         .executableTarget(
@@ -52,8 +51,7 @@ let package = Package(
         .testTarget(
             name: "BedrockServiceTests",
             dependencies: [
-                .target(name: "BedrockService"),
-                .product(name: "Testing", package: "swift-testing"),
+                .target(name: "BedrockService")
             ],
             path: "Tests/BedrockServiceTests"
         ),
