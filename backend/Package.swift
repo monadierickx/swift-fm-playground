@@ -45,6 +45,7 @@ let package = Package(
             name: "BedrockTypes",
             dependencies: [
                 .product(name: "AWSBedrockRuntime", package: "aws-sdk-swift"),
+                .product(name: "AWSBedrock", package: "aws-sdk-swift"),
                 .product(name: "Smithy", package: "smithy-swift"),
             ],
             path: "Sources/BedrockTypes"
