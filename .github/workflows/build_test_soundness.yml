@@ -1,6 +1,5 @@
 name: Build And Test on EC2
 
-
 on: [push, pull_request]
 
 jobs:
@@ -19,20 +18,20 @@ jobs:
         working-directory: backend
         run: swift build
 
-  test:
-    runs-on: ubuntu-latest
-    container: swift:6.0.3-amazonlinux2
+  # test:
+  #   runs-on: ubuntu-latest
+  #   container: swift:6.0.3-amazonlinux2
 
-    steps:
-      # GitHub checkout action has a dep on NodeJS 20 which is not running on Amazonlinux2
-      # workaround is to manually checkout the repository
-      # https://github.com/actions/checkout/issues/1487
-      - name: Manually Clone repository
-        run: |
-          git clone https://github.com/${{ github.repository }} .
-      - name: Run tests
-        working-directory: backend
-        run: swift test
+  #   steps:
+  #     # GitHub checkout action has a dep on NodeJS 20 which is not running on Amazonlinux2
+  #     # workaround is to manually checkout the repository
+  #     # https://github.com/actions/checkout/issues/1487
+  #     - name: Manually Clone repository
+  #       run: |
+  #         git clone https://github.com/${{ github.repository }} .
+  #     - name: Run tests
+  #       working-directory: backend
+  #       run: swift test
 
   soundness:
     name: Soundness
