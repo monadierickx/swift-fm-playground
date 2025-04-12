@@ -11,6 +11,7 @@ xcuserdata
 Package.resolved
 .serverless
 .vscode
+.env
 
 # backend
 backend/.DS_Store

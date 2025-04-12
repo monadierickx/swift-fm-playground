@@ -71,6 +71,24 @@
             "name": "Release SwiftBedrockService (backend)",
             "program": "${workspaceFolder:swift-bedrock-playground}/backend/.build/release/SwiftBedrockService",
             "preLaunchTask": "swift: Build Release SwiftBedrockService (backend)"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-fm-playground}/backend",
+            "name": "Debug PlaygroundAPI (backend)",
+            "program": "${workspaceFolder:swift-fm-playground}/backend/.build/debug/PlaygroundAPI",
+            "preLaunchTask": "swift: Build Debug PlaygroundAPI (backend)"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:swift-fm-playground}/backend",
+            "name": "Release PlaygroundAPI (backend)",
+            "program": "${workspaceFolder:swift-fm-playground}/backend/.build/release/PlaygroundAPI",
+            "preLaunchTask": "swift: Build Release PlaygroundAPI (backend)"
         }
     ]
 }

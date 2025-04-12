@@ -75,7 +75,7 @@ components:
                 type: string
                 enum: [user, assistant, unknown]
               content:
-                type: string # FIXME: will not always be a string
+                type: string    # FIXME: will not always be a string
                 enum: [text, unknown]
         maxTokens:
           type: integer
@@ -104,7 +104,7 @@ components:
                 type: string
                 enum: [user, assistant, unknown]
               content:
-                type: string # FIXME: will not always be a string
+                type: string    # FIXME: will not always be a string
                 enum: [text, unknown]
 
 paths:

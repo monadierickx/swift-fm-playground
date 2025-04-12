@@ -13,21 +13,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import BedrockTypes
 import Foundation
+import Hummingbird
 
-public struct DeepSeekResponseBody: ContainsTextCompletion {
-    private let choices: [Choice]
-
-    private struct Choice: Codable {
-        let text: String
-        let stop_reason: String
-    }
-
-    public func getTextCompletion() throws -> TextCompletion {
-        guard choices.count > 0 else {
-            throw BedrockServiceError.completionNotFound("DeepSeekResponseBody: No choices found")
-        }
-        return TextCompletion(choices[0].text)
-    }
-
-}
+extension ModelSummary: @retroactive ResponseEncodable {}

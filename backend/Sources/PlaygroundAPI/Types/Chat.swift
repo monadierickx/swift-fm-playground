@@ -13,9 +13,24 @@
 //
 //===----------------------------------------------------------------------===//
 
+import BedrockTypes
 import Foundation
+import Hummingbird
 
-public struct ImageResolution: Codable, Equatable, Sendable {
-    let width: Int
-    let height: Int
+extension Message: @retroactive ResponseCodable {}
+
+struct ChatInput: Codable {
+    let prompt: String?
+    let history: [Message]?
+    let imageFormat: ImageBlock.Format?
+    let imageBytes: String?
+    let maxTokens: Int?
+    let temperature: Double?
+    let topP: Double?
+    let stopSequences: [String]?
+    let systemPrompts: [String]?
+    let tools: [Tool]?
+    let toolResult: ToolResultBlock?
 }
+
+extension ConverseReply: @retroactive ResponseCodable {}

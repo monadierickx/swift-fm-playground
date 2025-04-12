@@ -13,12 +13,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+import BedrockTypes
 import Foundation
+import Hummingbird
 
-public struct TextCompletion: Codable {
-    let completion: String
+extension TextCompletion: @retroactive ResponseCodable {}
 
-    public init(_ completion: String) {
-        self.completion = completion
-    }
+struct TextCompletionInput: Codable {
+    let prompt: String
+    let maxTokens: Int?
+    let temperature: Double?
+    let topP: Double?
+    let topK: Int?
+    let stopSequences: [String]?
 }

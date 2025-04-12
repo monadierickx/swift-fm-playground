@@ -13,10 +13,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Hummingbird
-import Logging
 import BedrockService
 import BedrockTypes
+import Foundation
+import Hummingbird
+import Logging
 
 /// Application arguments protocol. We use a protocol so we can call
 /// `buildApplication` inside Tests as well as in the App executable.
@@ -160,7 +161,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // POST /foundation-models/chat/{modelId}
-    router.post("/foundation-models/chat/:modelId") { request, context -> ChatOutput in
+    router.post("/foundation-models/chat/:modelId") { request, context -> ConverseReply in
         do {
             guard let modelId = context.parameters.get("modelId") else {
                 throw HTTPError(.badRequest, message: "No modelId was given.")
@@ -168,20 +169,24 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
             guard let model = BedrockModel(rawValue: modelId) else {
                 throw HTTPError(.badRequest, message: "Invalid modelId: \(modelId).")
             }
-            guard model.hasTextModality() else {
-                throw HTTPError(.badRequest, message: "Model \(modelId) does not support text output.")
+            guard model.hasConverseModality() else {
+                throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            let (reply, history) = try await bedrock.converse(
+            return try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
-                history: input.history,
+                imageFormat: input.imageFormat ?? .jpeg,  // default to simplify frontend
+                imageBytes: input.imageBytes,
+                history: input.history ?? [],
                 maxTokens: input.maxTokens,
                 temperature: input.temperature,
                 topP: input.topP,
-                stopSequences: input.stopSequences
+                stopSequences: input.stopSequences,
+                systemPrompts: input.systemPrompts,
+                tools: input.tools,
+                toolResult: input.toolResult
             )
-            return ChatOutput(reply: reply, history: history)
         } catch {
             logger.info(
                 "An error occured while generating chat",

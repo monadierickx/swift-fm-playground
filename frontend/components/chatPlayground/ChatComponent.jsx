@@ -8,6 +8,7 @@ import GlobalConfig from "@/app/app.config";
 import ChatModelSelector from "./ChatModelSelector";
 import { defaultModel } from "@/helpers/modelData";
 import NumericInput from "../NumericInput";
+import Image from 'next/image';
 
 
 export default function ChatContainer() {
@@ -21,7 +22,8 @@ export default function ChatContainer() {
     const [topP, setTopP] = useState(0.9);
     const [stopSequences, setStopSequences] = useState([]);
     const [stopSequenceInput, setStopSequenceInput] = useState('');
-
+    const [referenceImage, setReferenceImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState('/placeholder.png');
 
     const endpoint = `/foundation-models/chat/${selectedModel.modelId}`;
     const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
@@ -66,6 +68,63 @@ export default function ChatContainer() {
         setHistory([]);
     };
 
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            // Create preview for the UI
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                setPreviewImage(e.target.result);
+            };
+            reader.readAsDataURL(file);
+
+            // Compress and store the image
+            const compressedBase64 = await compressImage(file);
+            console.log('Compressed image size:', compressedBase64.length);
+            setReferenceImage(compressedBase64);
+        }
+    };
+
+    const compressImage = (file) => {
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = document.createElement('img'); // Use regular img element instead of Next.js Image
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    // Reduce max dimensions to 512x512
+                    const maxSize = 512;
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height *= maxSize / width;
+                            width = maxSize;
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width *= maxSize / height;
+                            height = maxSize;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    // Increase compression by reducing quality to 0.5 (50%)
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
+                    resolve(compressedBase64.split(',')[1]);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    };
+
     const sendMessage = async () => {
         const newMessage = { sender: "Human", message: inputValue };
         setConversation(prevConversation => [...prevConversation, newMessage]);
@@ -80,6 +139,7 @@ export default function ChatContainer() {
                 body: JSON.stringify({
                     prompt: inputValue,
                     history: history,
+                    imageBytes: referenceImage,
                     maxTokens: parseInt(maxTokens, 10),
                     temperature: parseFloat(temperature),
                     topP: parseFloat(topP),
@@ -94,7 +154,7 @@ export default function ChatContainer() {
             await response.json().then(data => {
                 setConversation(prevConversation => [...prevConversation, {
                     sender: "Assistant",
-                    message: data.reply
+                    message: data.textReply
                 }]);
                 setHistory(data.history);
             });
@@ -236,6 +296,7 @@ export default function ChatContainer() {
             {/* Input window */}
             <div className="sticky bottom-0 bg-gray-100 py-4">
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+                    {/* Text input */}
                     <div className="flex-grow">
                         <div className="relative w-full">
                             <input
@@ -252,6 +313,22 @@ export default function ChatContainer() {
                             />
                         </div>
                     </div>
+                    {/* Reference image with preview */}
+                    <div className="flex items-center px-4">
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileUpload}
+                        />
+                        <Image
+                            src={previewImage}
+                            alt="Reference image"
+                            width="50"
+                            height="50"
+                        />
+                    </div>
+
+                    {/* Send button */}
                     <div className="ml-4">
                         <button
                             type="button"
@@ -277,6 +354,7 @@ export default function ChatContainer() {
                             </span>
                         </button>
                     </div>
+
                 </div>
             </div>
         </div>
