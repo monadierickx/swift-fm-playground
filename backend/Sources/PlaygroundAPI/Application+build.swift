@@ -28,6 +28,7 @@ public protocol AppArguments {
     var port: Int { get }
     var logLevel: Logger.Level? { get }
     var sso: Bool { get }
+    var profileName: String { get }
 }
 
 // Request context used by application
@@ -46,7 +47,7 @@ public func buildApplication(
         arguments.logLevel ?? environment.get("LOG_LEVEL").flatMap {
             Logger.Level(rawValue: $0)
         } ?? .info
-    let router = try await buildRouter(useSSO: arguments.sso, logger: logger)
+    let router = try await buildRouter(useSSO: arguments.sso, logger: logger, profileName: arguments.profileName)
     let app = Application(
         router: router,
         configuration: .init(
@@ -59,7 +60,7 @@ public func buildApplication(
 }
 
 /// Build router
-func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequestContext> {
+func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws -> Router<AppRequestContext> {
     let router = Router(context: AppRequestContext.self)
 
     // CORS
@@ -76,7 +77,7 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // SwiftBedrock
-    let bedrock = try await BedrockService(useSSO: useSSO)
+    let bedrock = try await BedrockService(useSSO: useSSO, profileName: profileName)
 
     // List models
     // GET /foundation-models lists all models
@@ -173,11 +174,14 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
+            var image: ImageBlock? = nil
+            if let imageBytes = input.imageBytes {
+                image = ImageBlock(format: input.imageFormat ?? .jpeg, source: imageBytes)
+            }
             return try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
-                imageFormat: input.imageFormat ?? .jpeg,  // default to simplify frontend
-                imageBytes: input.imageBytes,
+                image: image,
                 history: input.history ?? [],
                 maxTokens: input.maxTokens,
                 temperature: input.temperature,

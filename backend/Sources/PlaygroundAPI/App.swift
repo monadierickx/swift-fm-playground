@@ -28,7 +28,11 @@ struct AppCommand: AsyncParsableCommand, AppArguments {
     @Option(name: .shortAndLong)
     var logLevel: Logger.Level?
 
-    @Flag var sso = false
+    @Flag(name: .shortAndLong, help: "Use SSO authentication (default: false))")
+    var sso: Bool = false
+
+    @Option(name: [.customShort("n"), .long], help: "The name of the profile to use (default: default)")
+    var profileName: String = "default"
 
     func run() async throws {
         let app = try await buildApplication(self)
