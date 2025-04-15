@@ -24,6 +24,9 @@ struct ChatInput: Codable {
     let history: [Message]?
     let imageFormat: ImageBlock.Format?
     let imageBytes: String?
+    let documentName: String?
+    let documentFormat: DocumentBlock.Format?
+    let documentBytes: String?
     let maxTokens: Int?
     let temperature: Double?
     let topP: Double?

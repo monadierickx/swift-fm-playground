@@ -178,10 +178,15 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
             if let imageBytes = input.imageBytes {
                 image = ImageBlock(format: input.imageFormat ?? .jpeg, source: imageBytes)
             }
+            var document: DocumentBlock? = nil
+            if let documentBytes = input.documentBytes, let name = input.documentName {
+                document = try DocumentBlock(name: name, format: input.documentFormat ?? .pdf, source: documentBytes)
+            }
             return try await bedrock.converse(
                 with: model,
                 prompt: input.prompt,
                 image: image,
+                document: document,
                 history: input.history ?? [],
                 maxTokens: input.maxTokens,
                 temperature: input.temperature,
