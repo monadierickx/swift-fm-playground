@@ -24,6 +24,7 @@ export default function ChatContainer() {
     const [stopSequenceInput, setStopSequenceInput] = useState('');
     const [referenceImage, setReferenceImage] = useState(null);
     const [previewImage, setPreviewImage] = useState('/placeholder.png');
+    const fileInputRef = React.useRef(null);
 
     const endpoint = `/foundation-models/chat/${selectedModel.modelId}`;
     const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
@@ -34,6 +35,7 @@ export default function ChatContainer() {
 
     const onModelChange = (newModel) => {
         setSelectedModel(newModel);
+        clearChat()
     }
 
     const handleMaxTokensChange = (value) => {
@@ -126,9 +128,20 @@ export default function ChatContainer() {
     };
 
     const sendMessage = async () => {
-        const newMessage = { sender: "Human", message: inputValue };
+        const currentImage = previewImage !== '/placeholder.png' ? previewImage : null;
+        const newMessage = {
+            sender: "Human",
+            message: inputValue,
+            image: currentImage
+        };
         setConversation(prevConversation => [...prevConversation, newMessage]);
         setInputValue('');
+        setReferenceImage(null);
+        setPreviewImage('/placeholder.png');
+
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
 
         try {
             setIsLoading(true);
@@ -286,7 +299,7 @@ export default function ChatContainer() {
                         {conversation.map((item, i) => item.sender === "Assistant" ? (
                             <Assistant text={item.message} key={i} />
                         ) : (
-                            <Human text={item.message} key={i} />
+                            <Human text={item.message} image={item.image} key={i} />
                         ))}
                         {isLoading ? (<Loader />) : (<div></div>)}
                     </div>
@@ -315,17 +328,26 @@ export default function ChatContainer() {
                     </div>
                     {/* Reference image with preview */}
                     <div className="flex items-center px-4">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileUpload}
-                        />
-                        <Image
-                            src={previewImage}
-                            alt="Reference image"
-                            width="50"
-                            height="50"
-                        />
+                        <div className="relative">
+                            <label className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded cursor-pointer">
+                                Choose Image
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileUpload}
+                                    className="hidden"
+                                    ref={fileInputRef}
+                                />
+                            </label>
+                        </div>
+                        <div className="ml-2">
+                            <Image
+                                src={previewImage}
+                                alt="Reference image"
+                                width="50"
+                                height="50"
+                            />
+                        </div>
                     </div>
 
                     {/* Send button */}
