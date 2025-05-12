@@ -19,10 +19,14 @@ export default function Navigation() {
                       className="flex items-center px-6 py-2 mt-4 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                     <span className="mx-3">Chat Playground</span>
                 </Link>
-                <Link href="/text"
+                <Link href="/reasoning_chat"
+                      className="flex items-center px-6 py-2 mt-4 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
+                    <span className="mx-3">Reasoning Chat Playground</span>
+                </Link>
+                {/* <Link href="/text"
                       className="flex items-center px-6 py-2 mt-4 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                     <span className="mx-3">Text Playground</span>
-                </Link>
+                </Link> */}
                 <Link href="/image"
                       className="flex items-center px-6 py-2 mt-4 text-gray-400 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100">
                     <span className="mx-3">Image Playground</span>

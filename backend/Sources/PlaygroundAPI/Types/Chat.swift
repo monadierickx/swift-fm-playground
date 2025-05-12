@@ -34,6 +34,8 @@ struct ChatInput: Codable {
     let systemPrompts: [String]?
     let tools: [Tool]?
     let toolResult: ToolResultBlock?
+    let enableReasoning: Bool?
+    let maxReasoningTokens: Int?
 }
 
 extension ConverseReply: @retroactive ResponseCodable {}

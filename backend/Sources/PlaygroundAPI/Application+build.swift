@@ -77,7 +77,11 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
     }
 
     // SwiftBedrock
-    let bedrock = try await BedrockService(useSSO: useSSO, profileName: profileName)
+    var auth: BedrockAuthentication = .default
+    if useSSO {
+        auth = .sso(profileName: profileName)
+    }
+    let bedrock = try await BedrockService(authentication: auth)
 
     // List models
     // GET /foundation-models lists all models
@@ -176,26 +180,48 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
             let input = try await request.decode(as: ChatInput.self, context: context)
             var image: ImageBlock? = nil
             if let imageBytes = input.imageBytes {
-                image = ImageBlock(format: input.imageFormat ?? .jpeg, source: imageBytes)
+                image = try ImageBlock(format: input.imageFormat ?? .jpeg, source: imageBytes)
             }
             var document: DocumentBlock? = nil
             if let documentBytes = input.documentBytes, let name = input.documentName {
                 document = try DocumentBlock(name: name, format: input.documentFormat ?? .pdf, source: documentBytes)
             }
-            return try await bedrock.converse(
-                with: model,
-                prompt: input.prompt,
-                image: image,
-                document: document,
-                history: input.history ?? [],
-                maxTokens: input.maxTokens,
-                temperature: input.temperature,
-                topP: input.topP,
-                stopSequences: input.stopSequences,
-                systemPrompts: input.systemPrompts,
-                tools: input.tools,
-                toolResult: input.toolResult
-            )
+            var builder = try ConverseRequestBuilder(with: model)
+                .withHistory(input.history ?? [])
+                .withMaxTokens(input.maxTokens)
+                .withTemperature(input.temperature)
+                .withTopP(input.topP)
+
+            if let stopSequences = input.stopSequences,
+                !stopSequences.isEmpty
+            {
+                builder = try builder.withStopSequences(stopSequences)
+            }
+            if let systemPrompts = input.systemPrompts,
+                !systemPrompts.isEmpty
+            {
+                builder = try builder.withStopSequences(systemPrompts)
+            }
+            if let prompt = input.prompt {
+                builder = try builder.withPrompt(prompt)
+            }
+            if let tools = input.tools {
+                builder = try builder.withTools(tools)
+            }
+            if let toolResult = input.toolResult {
+                builder = try builder.withToolResult(toolResult)
+            }
+            if let document {
+                builder = try builder.withDocument(document)
+            }
+            if let image {
+                builder = try builder.withImage(image)
+            }
+            if let enableReasoning = input.enableReasoning, enableReasoning {
+                builder = try builder.withReasoning()
+                .withMaxReasoningTokens(input.maxReasoningTokens)
+            }
+            return try await bedrock.converse(with: builder)
         } catch {
             logger.info(
                 "An error occured while generating chat",
