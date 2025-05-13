@@ -83,6 +83,17 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
     }
     let bedrock = try await BedrockService(authentication: auth)
 
+    // Error handling
+    @Sendable func handleBedrockServiceError(_ error: Error, context: String) throws {
+        if let bedrockServiceError = error as? BedrockServiceError {
+            logger.trace("BedrockServiceError while \(context)", metadata: ["error": "\(error)"])
+            throw HTTPError(.badRequest, message: bedrockServiceError.message)
+        } else {
+            logger.trace("Error while \(context)", metadata: ["error": "\(error)"])
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
+        }
+    }
+
     // List models
     // GET /foundation-models lists all models
     router.get("/foundation-models") { request, _ -> [ModelSummary] in
@@ -227,6 +238,7 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
                 "An error occured while generating chat",
                 metadata: ["url": "/foundation-models/chat/:modelId", "error": "\(error)"]
             )
+            try handleBedrockServiceError(error, context: "/foundation-models/chat/:modelId")
             throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }

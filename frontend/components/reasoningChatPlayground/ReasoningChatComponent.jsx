@@ -25,6 +25,7 @@ export default function ChatContainer() {
     const [referenceImage, setReferenceImage] = useState(null);
     const [previewImage, setPreviewImage] = useState('/placeholder.png');
     const fileInputRef = React.useRef(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const endpoint = `/foundation-models/chat/${selectedModel.modelId}`;
     const api = `${GlobalConfig.apiHost}:${GlobalConfig.apiPort}${endpoint}`;
@@ -145,6 +146,7 @@ export default function ChatContainer() {
 
         try {
             setIsLoading(true);
+            setErrorMessage(null);
 
             const response = await fetch(api, {
                 method: 'POST',
@@ -158,12 +160,18 @@ export default function ChatContainer() {
                     topP: parseFloat(topP),
                     stopSequences: stopSequences,
                     enableReasoning: true,
-                    maxReasoningTokens: 1200
+                    maxReasoningTokens: 1200 // FIXME: add parmeter
                 })
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                await response.json().then(data => {
+                    console.log(data)
+                    console.log(data.error.message)
+                    let errorMsg = data.error.message
+                    setErrorMessage(errorMsg);
+                    throw new Error(errorMsg);
+                });
             }
 
             await response.json().then(data => {
@@ -178,7 +186,7 @@ export default function ChatContainer() {
             });
 
         } catch (error) {
-            console.error("Error sending message:", error);
+            console.error("Error sending message:", error.message);
         } finally {
             setIsLoading(false);
         }
@@ -213,10 +221,11 @@ export default function ChatContainer() {
                             className="relative w-20"
                             placeholder="1"
                             value={maxTokens}
-                            range={{ 
-                                min: defaultModel.maxTokenRange.min, 
-                                max: defaultModel.maxTokenRange.max, 
-                                default: defaultModel.maxTokenRange.default}}
+                            range={{
+                                min: defaultModel.maxTokenRange.min,
+                                max: defaultModel.maxTokenRange.max,
+                                default: defaultModel.maxTokenRange.default
+                            }}
                             disabled={isLoading}
                             callback={handleMaxTokensChange}
                         />
@@ -299,6 +308,20 @@ export default function ChatContainer() {
 
                 </div>
             </div>
+
+            {/* Error message display */}
+            {errorMessage && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
+                    <strong className="font-bold">Error: </strong>
+                    <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
+                    <button
+                        className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                        onClick={() => setErrorMessage(null)}
+                    >
+                        <span className="text-red-500">×</span>
+                    </button>
+                </div>
+            )}
 
             {/* Conversation window */}
             <div className="flex flex-col h-full overflow-x-auto mb-4">
