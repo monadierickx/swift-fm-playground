@@ -230,7 +230,7 @@ func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws
             }
             if let enableReasoning = input.enableReasoning, enableReasoning {
                 builder = try builder.withReasoning()
-                .withMaxReasoningTokens(input.maxReasoningTokens)
+                    .withMaxReasoningTokens(input.maxReasoningTokens)
             }
             return try await bedrock.converse(with: builder)
         } catch {
