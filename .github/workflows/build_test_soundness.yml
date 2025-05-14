@@ -1,4 +1,4 @@
-name: Build And Test on EC2
+name: Build And Test
 
 on: [push, pull_request]
 
@@ -17,6 +17,15 @@ jobs:
       - name: Build
         working-directory: backend
         run: swift build
+  
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run tests
+        working-directory: backend
+        run: swift test
 
   # test:
   #   runs-on: ubuntu-latest

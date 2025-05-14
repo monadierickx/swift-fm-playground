@@ -20,6 +20,11 @@ export const defaultModel = {
         min: 1,
         default: 8192,
         max: 8192
+    },
+    maxReasoningTokensRange: {
+        min: 1024,
+        default: 4096,
+        max: 8191
     }
 }
 

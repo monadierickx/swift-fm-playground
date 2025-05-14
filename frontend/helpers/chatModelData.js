@@ -285,25 +285,25 @@ export const chatModels = [
         }
     },
     // DeepSeek
-    {
-        modelName: "Deep Seek",
-        modelId: "us.deepseek.r1-v1:0",
-        topPRange: {
-            max: 1,
-            default: 1,
-            min: 0
-        },
-        temperatureRange: {
-            default: 1,
-            min: 0,
-            max: 1
-        },
-        maxTokenRange: {
-            max: 32768,
-            default: 32768,
-            min: 1
-        },
-    },
+    // {
+    //     modelName: "Deep Seek",
+    //     modelId: "us.deepseek.r1-v1:0",
+    //     topPRange: {
+    //         max: 1,
+    //         default: 1,
+    //         min: 0
+    //     },
+    //     temperatureRange: {
+    //         default: 1,
+    //         min: 0,
+    //         max: 1
+    //     },
+    //     maxTokenRange: {
+    //         max: 32768,
+    //         default: 32768,
+    //         min: 1
+    //     },
+    // },
 ]
 
 export const defaultPayload = {

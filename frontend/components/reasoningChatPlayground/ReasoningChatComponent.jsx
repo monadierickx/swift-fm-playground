@@ -18,8 +18,9 @@ export default function ChatContainer() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedModel, setSelectedModel] = useState(defaultModel);
     const [maxTokens, setMaxTokens] = useState(defaultModel.maxTokenRange.default);
+    const [maxReasoningTokens, setMaxReasoningTokens] = useState(defaultModel.maxReasoningTokensRange.default);
     const [temperature, setTemperature] = useState(defaultModel.temperatureRange.default);
-    const [topP, setTopP] = useState(defaultModel.topPRange.default);
+    // const [topP, setTopP] = useState(defaultModel.topPRange.default);
     const [stopSequences, setStopSequences] = useState([]);
     const [stopSequenceInput, setStopSequenceInput] = useState('');
     const [referenceImage, setReferenceImage] = useState(null);
@@ -43,13 +44,17 @@ export default function ChatContainer() {
         setMaxTokens(value);
     };
 
+    const handleMaxReasoningTokensChange = (value) => {
+        setMaxReasoningTokens(value);
+    };
+
     const handleTemperatureChange = (value) => {
         setTemperature(value);
     };
 
-    const handleTopPChange = (value) => {
-        setTopP(value);
-    };
+    // const handleTopPChange = (value) => {
+    //     setTopP(value);
+    // };
 
     const handleStopSequenceInputChange = (e) => {
         setStopSequenceInput(e.target.value);
@@ -157,10 +162,10 @@ export default function ChatContainer() {
                     imageBytes: referenceImage,
                     maxTokens: parseInt(maxTokens, 10),
                     temperature: parseFloat(temperature),
-                    topP: parseFloat(topP),
+                    // topP: parseFloat(topP),
                     stopSequences: stopSequences,
                     enableReasoning: true,
-                    maxReasoningTokens: 1200 // FIXME: add parmeter
+                    maxReasoningTokens: parseInt(maxReasoningTokens, 10)
                 })
             });
 
@@ -207,6 +212,20 @@ export default function ChatContainer() {
                     </button>
                 </div>
 
+                {/* Error message display */}
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
+                        <button
+                            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                            onClick={() => setErrorMessage(null)}
+                        >
+                            <span className="text-red-500">×</span>
+                        </button>
+                    </div>
+                )}
+
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 sticky">
                     {/* maxTokens */}
                     <div className="ml-4">
@@ -230,6 +249,28 @@ export default function ChatContainer() {
                             callback={handleMaxTokensChange}
                         />
                     </div>
+                    {/* maxReasoningTokens */}
+                    <div className="ml-4">
+                        <div className="relative">
+                            <label htmlFor="nrOfImages">
+                                Max. reasoning lenght:
+                            </label>
+                        </div>
+                    </div>
+                    <div className="ml-4">
+                        <NumericInput
+                            className="relative w-20"
+                            placeholder="1"
+                            value={maxReasoningTokens}
+                            range={{
+                                min: defaultModel.maxReasoningTokensRange.min,
+                                max: defaultModel.maxReasoningTokensRange.max,
+                                default: defaultModel.maxReasoningTokensRange.default
+                            }}
+                            disabled={isLoading}
+                            callback={handleMaxReasoningTokensChange}
+                        />
+                    </div>
                     {/* temperature */}
                     <div className="ml-4">
                         <div className="relative">
@@ -249,7 +290,7 @@ export default function ChatContainer() {
                         />
                     </div>
                     {/* topP */}
-                    <div className="ml-4">
+                    {/* <div className="ml-4">
                         <div className="relative">
                             <label htmlFor="TopP">
                                 TopP:
@@ -265,7 +306,7 @@ export default function ChatContainer() {
                             disabled={isLoading}
                             callback={handleTopPChange}
                         />
-                    </div>
+                    </div> */}
                     {/* Stop Sequences */}
                     <div className="ml-4">
                         <div className="relative">
@@ -308,20 +349,6 @@ export default function ChatContainer() {
 
                 </div>
             </div>
-
-            {/* Error message display */}
-            {errorMessage && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
-                    <strong className="font-bold">Error: </strong>
-                    <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
-                    <button
-                        className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                        onClick={() => setErrorMessage(null)}
-                    >
-                        <span className="text-red-500">×</span>
-                    </button>
-                </div>
-            )}
 
             {/* Conversation window */}
             <div className="flex flex-col h-full overflow-x-auto mb-4">

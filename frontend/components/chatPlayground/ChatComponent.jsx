@@ -147,7 +147,7 @@ export default function ChatContainer() {
         try {
             setIsLoading(true);
             setErrorMessage(null);
-            
+
             const response = await fetch(api, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -201,6 +201,20 @@ export default function ChatContainer() {
                         Clear Chat
                     </button>
                 </div>
+
+                {/* Error message display */}
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
+                        <button
+                            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                            onClick={() => setErrorMessage(null)}
+                        >
+                            <span className="text-red-500">×</span>
+                        </button>
+                    </div>
+                )}
 
                 <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4 sticky">
                     {/* maxTokens */}
@@ -299,20 +313,6 @@ export default function ChatContainer() {
 
                 </div>
             </div>
-
-            {/* Error message display */}
-            {errorMessage && (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
-                    <strong className="font-bold">Error: </strong>
-                    <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
-                    <button
-                        className="absolute top-0 bottom-0 right-0 px-4 py-3"
-                        onClick={() => setErrorMessage(null)}
-                    >
-                        <span className="text-red-500">×</span>
-                    </button>
-                </div>
-            )}
 
             {/* Conversation window */}
             <div className="flex flex-col h-full overflow-x-auto mb-4">
