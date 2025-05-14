@@ -3,21 +3,6 @@ name: Build And Soundness checks
 on: [push, pull_request]
 
 jobs:
-  # build:
-  #   runs-on: ubuntu-latest
-  #   container: swift:6.0.3-amazonlinux2
-
-  #   steps:
-  #     # GitHub checkout action has a dep on NodeJS 20 which is not running on Amazonlinux2
-  #     # workaround is to manually checkout the repository
-  #     # https://github.com/actions/checkout/issues/1487
-  #     - name: Manually Clone repository
-  #       run: |
-  #         git clone https://github.com/${{ github.repository }} .
-  #     - name: Build
-  #       working-directory: backend
-  #       run: swift build
-
   build:
     runs-on: ubuntu-latest
     steps:
