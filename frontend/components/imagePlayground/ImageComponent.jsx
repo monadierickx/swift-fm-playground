@@ -14,6 +14,7 @@ export default function ImageContainer() {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedModel, setSelectedModel] = useState(defaultImageModel);
     const [nrOfImages, setNrOfImages] = useState(1);
+    const [errorMessage, setErrorMessage] = useState(null);
 
 
     const onModelChange = (newModel) => {
@@ -40,6 +41,7 @@ export default function ImageContainer() {
         if (inputValue.trim() === '') { return; }
 
         setIsLoading(true);
+        setErrorMessage(null);
 
         // if (stylePreset === "no style") {
         //     setStylePreset("");
@@ -59,7 +61,13 @@ export default function ImageContainer() {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                await response.json().then(data => {
+                    console.log(data)
+                    console.log(data.error.message)
+                    let errorMsg = data.error.message
+                    setErrorMessage(errorMsg);
+                    throw new Error(errorMsg);
+                });
             }
 
             const body = await response.json();
@@ -141,6 +149,20 @@ export default function ImageContainer() {
                         </button>
                     </div>
                 </div>
+                {/* Error message display */}
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
+                        <button
+                            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                            onClick={() => setErrorMessage(null)}
+                        >
+                            <span className="text-red-500">×</span>
+                        </button>
+                    </div>
+                )}
+
                 {/* images */}
                 <div className="flex flex-col h-full overflow-x-auto mb-4">
                     <div className="flex flex-col h-full">

@@ -24,6 +24,9 @@ struct ChatInput: Codable {
     let history: [Message]?
     let imageFormat: ImageBlock.Format?
     let imageBytes: String?
+    let documentName: String?
+    let documentFormat: DocumentBlock.Format?
+    let documentBytes: String?
     let maxTokens: Int?
     let temperature: Double?
     let topP: Double?
@@ -31,6 +34,8 @@ struct ChatInput: Codable {
     let systemPrompts: [String]?
     let tools: [Tool]?
     let toolResult: ToolResultBlock?
+    let enableReasoning: Bool?
+    let maxReasoningTokens: Int?
 }
 
 extension ConverseReply: @retroactive ResponseCodable {}

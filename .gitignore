@@ -12,6 +12,7 @@ Package.resolved
 .serverless
 .vscode
 .env
+Makefile
 
 # backend
 backend/.DS_Store
@@ -27,6 +28,7 @@ backend/.env.*
 backend/.env
 backend/img/generated_images
 backend/.vscode
+backend/Makefile
 
 # frontend
 frontend/node_modules
@@ -54,3 +56,4 @@ frontend/.vercel
 
 frontend/*.tsbuildinfo
 frontend/next-env.d.ts
+frontend/Makefile

@@ -28,6 +28,7 @@ public protocol AppArguments {
     var port: Int { get }
     var logLevel: Logger.Level? { get }
     var sso: Bool { get }
+    var profileName: String { get }
 }
 
 // Request context used by application
@@ -46,7 +47,7 @@ public func buildApplication(
         arguments.logLevel ?? environment.get("LOG_LEVEL").flatMap {
             Logger.Level(rawValue: $0)
         } ?? .info
-    let router = try await buildRouter(useSSO: arguments.sso, logger: logger)
+    let router = try await buildRouter(useSSO: arguments.sso, logger: logger, profileName: arguments.profileName)
     let app = Application(
         router: router,
         configuration: .init(
@@ -59,7 +60,7 @@ public func buildApplication(
 }
 
 /// Build router
-func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequestContext> {
+func buildRouter(useSSO: Bool, logger: Logger, profileName: String) async throws -> Router<AppRequestContext> {
     let router = Router(context: AppRequestContext.self)
 
     // CORS
@@ -76,7 +77,22 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
     }
 
     // SwiftBedrock
-    let bedrock = try await BedrockService(useSSO: useSSO)
+    var auth: BedrockAuthentication = .default
+    if useSSO {
+        auth = .sso(profileName: profileName)
+    }
+    let bedrock = try await BedrockService(authentication: auth)
+
+    // Error handling
+    @Sendable func handleBedrockServiceError(_ error: Error, context: String) throws {
+        if let bedrockServiceError = error as? BedrockServiceError {
+            logger.trace("BedrockServiceError while \(context)", metadata: ["error": "\(error)"])
+            throw HTTPError(.badRequest, message: bedrockServiceError.message)
+        } else {
+            logger.trace("Error while \(context)", metadata: ["error": "\(error)"])
+            throw HTTPError(.internalServerError, message: "Error: \(error)")
+        }
+    }
 
     // List models
     // GET /foundation-models lists all models
@@ -173,25 +189,56 @@ func buildRouter(useSSO: Bool, logger: Logger) async throws -> Router<AppRequest
                 throw HTTPError(.badRequest, message: "Model \(modelId) does not support converse.")
             }
             let input = try await request.decode(as: ChatInput.self, context: context)
-            return try await bedrock.converse(
-                with: model,
-                prompt: input.prompt,
-                imageFormat: input.imageFormat ?? .jpeg,  // default to simplify frontend
-                imageBytes: input.imageBytes,
-                history: input.history ?? [],
-                maxTokens: input.maxTokens,
-                temperature: input.temperature,
-                topP: input.topP,
-                stopSequences: input.stopSequences,
-                systemPrompts: input.systemPrompts,
-                tools: input.tools,
-                toolResult: input.toolResult
-            )
+            var image: ImageBlock? = nil
+            if let imageBytes = input.imageBytes {
+                image = try ImageBlock(format: input.imageFormat ?? .jpeg, source: imageBytes)
+            }
+            var document: DocumentBlock? = nil
+            if let documentBytes = input.documentBytes, let name = input.documentName {
+                document = try DocumentBlock(name: name, format: input.documentFormat ?? .pdf, source: documentBytes)
+            }
+            var builder = try ConverseRequestBuilder(with: model)
+                .withHistory(input.history ?? [])
+                .withMaxTokens(input.maxTokens)
+                .withTemperature(input.temperature)
+                .withTopP(input.topP)
+
+            if let stopSequences = input.stopSequences,
+                !stopSequences.isEmpty
+            {
+                builder = try builder.withStopSequences(stopSequences)
+            }
+            if let systemPrompts = input.systemPrompts,
+                !systemPrompts.isEmpty
+            {
+                builder = try builder.withStopSequences(systemPrompts)
+            }
+            if let prompt = input.prompt {
+                builder = try builder.withPrompt(prompt)
+            }
+            if let tools = input.tools {
+                builder = try builder.withTools(tools)
+            }
+            if let toolResult = input.toolResult {
+                builder = try builder.withToolResult(toolResult)
+            }
+            if let document {
+                builder = try builder.withDocument(document)
+            }
+            if let image {
+                builder = try builder.withImage(image)
+            }
+            if let enableReasoning = input.enableReasoning, enableReasoning {
+                builder = try builder.withReasoning()
+                    .withMaxReasoningTokens(input.maxReasoningTokens)
+            }
+            return try await bedrock.converse(with: builder)
         } catch {
             logger.info(
                 "An error occured while generating chat",
                 metadata: ["url": "/foundation-models/chat/:modelId", "error": "\(error)"]
             )
+            try handleBedrockServiceError(error, context: "/foundation-models/chat/:modelId")
             throw HTTPError(.internalServerError, message: "Error: \(error)")
         }
     }

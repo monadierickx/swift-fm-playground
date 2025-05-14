@@ -1,12 +1,12 @@
 "use client";
 
-import Human from "@/components/chatPlayground/Human";
+import Human from "@/components/reasoningChatPlayground/Human";
 import React, { useState } from "react";
-import Assistant from "@/components/chatPlayground/Assistant";
-import Loader from "@/components/chatPlayground/Loader";
+import Assistant from "@/components/reasoningChatPlayground/Assistant";
+import Loader from "@/components/reasoningChatPlayground/Loader";
 import GlobalConfig from "@/app/app.config";
-import ChatModelSelector from "./ChatModelSelector";
-import { defaultModel } from "@/helpers/modelData";
+import ReasoningModelSelector from "./ReasoningModelSelector";
+import { defaultModel } from "@/helpers/reasoningModelData";
 import NumericInput from "../NumericInput";
 import Image from 'next/image';
 
@@ -17,9 +17,10 @@ export default function ChatContainer() {
     const [inputValue, setInputValue] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [selectedModel, setSelectedModel] = useState(defaultModel);
-    const [maxTokens, setMaxTokens] = useState(200);
-    const [temperature, setTemperature] = useState(0.5);
-    const [topP, setTopP] = useState(0.9);
+    const [maxTokens, setMaxTokens] = useState(defaultModel.maxTokenRange.default);
+    const [maxReasoningTokens, setMaxReasoningTokens] = useState(defaultModel.maxReasoningTokensRange.default);
+    const [temperature, setTemperature] = useState(defaultModel.temperatureRange.default);
+    // const [topP, setTopP] = useState(defaultModel.topPRange.default);
     const [stopSequences, setStopSequences] = useState([]);
     const [stopSequenceInput, setStopSequenceInput] = useState('');
     const [referenceImage, setReferenceImage] = useState(null);
@@ -43,13 +44,17 @@ export default function ChatContainer() {
         setMaxTokens(value);
     };
 
+    const handleMaxReasoningTokensChange = (value) => {
+        setMaxReasoningTokens(value);
+    };
+
     const handleTemperatureChange = (value) => {
         setTemperature(value);
     };
 
-    const handleTopPChange = (value) => {
-        setTopP(value);
-    };
+    // const handleTopPChange = (value) => {
+    //     setTopP(value);
+    // };
 
     const handleStopSequenceInputChange = (e) => {
         setStopSequenceInput(e.target.value);
@@ -157,8 +162,10 @@ export default function ChatContainer() {
                     imageBytes: referenceImage,
                     maxTokens: parseInt(maxTokens, 10),
                     temperature: parseFloat(temperature),
-                    topP: parseFloat(topP),
-                    stopSequences: stopSequences
+                    // topP: parseFloat(topP),
+                    stopSequences: stopSequences,
+                    enableReasoning: true,
+                    maxReasoningTokens: parseInt(maxReasoningTokens, 10)
                 })
             });
 
@@ -173,27 +180,30 @@ export default function ChatContainer() {
             }
 
             await response.json().then(data => {
+                const reasoning = data.reasoningBlock != undefined ? data.reasoningBlock.reasoning : "No reasoning found";
                 setConversation(prevConversation => [...prevConversation, {
                     sender: "Assistant",
-                    message: data.textReply
+                    message: data.textReply,
+                    reasoning: reasoning
                 }]);
                 setHistory(data.history);
+                console.log(history)
             });
 
         } catch (error) {
-            console.error("Error sending message:", error);
+            console.error("Error sending message:", error.message);
         } finally {
             setIsLoading(false);
         }
     };
 
     return <div className="flex flex-col flex-auto h-full p-6">
-        <h3 className="text-3xl font-medium text-gray-700">Chat Playground</h3>
+        <h3 className="text-3xl font-medium text-gray-700">Reasoning Chat Playground</h3>
         <div className="flex flex-col flex-auto flex-shrink-0 rounded-2xl bg-gray-100 p-4 mt-8">
             {/* model and parameter selection */}
             <div className="sticky top-0 z-10 bg-gray-100 py-4">
                 <div className="flex justify-between items-center mb-4">
-                    <ChatModelSelector model={selectedModel} onModelChange={onModelChange} />
+                    <ReasoningModelSelector model={selectedModel} onModelChange={onModelChange} />
                     <button
                         onClick={clearChat}
                         className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl"
@@ -230,9 +240,35 @@ export default function ChatContainer() {
                             className="relative w-20"
                             placeholder="1"
                             value={maxTokens}
-                            range={{ min: 1, max: 2000, default: 200 }}
+                            range={{
+                                min: defaultModel.maxTokenRange.min,
+                                max: defaultModel.maxTokenRange.max,
+                                default: defaultModel.maxTokenRange.default
+                            }}
                             disabled={isLoading}
                             callback={handleMaxTokensChange}
+                        />
+                    </div>
+                    {/* maxReasoningTokens */}
+                    <div className="ml-4">
+                        <div className="relative">
+                            <label htmlFor="nrOfImages">
+                                Max. reasoning lenght:
+                            </label>
+                        </div>
+                    </div>
+                    <div className="ml-4">
+                        <NumericInput
+                            className="relative w-20"
+                            placeholder="1"
+                            value={maxReasoningTokens}
+                            range={{
+                                min: defaultModel.maxReasoningTokensRange.min,
+                                max: defaultModel.maxReasoningTokensRange.max,
+                                default: defaultModel.maxReasoningTokensRange.default
+                            }}
+                            disabled={isLoading}
+                            callback={handleMaxReasoningTokensChange}
                         />
                     </div>
                     {/* temperature */}
@@ -254,7 +290,7 @@ export default function ChatContainer() {
                         />
                     </div>
                     {/* topP */}
-                    <div className="ml-4">
+                    {/* <div className="ml-4">
                         <div className="relative">
                             <label htmlFor="TopP">
                                 TopP:
@@ -270,7 +306,7 @@ export default function ChatContainer() {
                             disabled={isLoading}
                             callback={handleTopPChange}
                         />
-                    </div>
+                    </div> */}
                     {/* Stop Sequences */}
                     <div className="ml-4">
                         <div className="relative">
@@ -319,7 +355,7 @@ export default function ChatContainer() {
                 <div className="flex flex-col h-full">
                     <div className="grid grid-cols-12 gap-y-2">
                         {conversation.map((item, i) => item.sender === "Assistant" ? (
-                            <Assistant text={item.message} key={i} />
+                            <Assistant text={item.message} reasoning={item.reasoning} key={i} />
                         ) : (
                             <Human text={item.message} image={item.image} key={i} />
                         ))}

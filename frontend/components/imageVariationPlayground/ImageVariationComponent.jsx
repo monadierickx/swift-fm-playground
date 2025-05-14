@@ -15,6 +15,7 @@ export default function ImageVariationContainer() {
     const [selectedModel, setSelectedModel] = useState(defaultImageModel);
     const [nrOfImages, setNrOfImages] = useState(1);
     const [similarity, setSimilarity] = useState(0.5);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const compressImage = (file) => {
         return new Promise((resolve) => {
@@ -98,6 +99,7 @@ export default function ImageVariationContainer() {
         if (inputValue.trim() === '') { return; }
 
         setIsLoading(true);
+        setErrorMessage(null);
 
         const prompt = {
             prompt: inputValue.trim(),
@@ -114,7 +116,13 @@ export default function ImageVariationContainer() {
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                await response.json().then(data => {
+                    console.log(data)
+                    console.log(data.error.message)
+                    let errorMsg = data.error.message
+                    setErrorMessage(errorMsg);
+                    throw new Error(errorMsg);
+                });
             }
 
             const body = await response.json();
@@ -242,6 +250,20 @@ export default function ImageVariationContainer() {
                 {/* <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
                     
                 </div> */}
+                {/* Error message display */}
+                {errorMessage && (
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-xl mb-4 relative" role="alert">
+                        <strong className="font-bold">Error: </strong>
+                        <span className="block sm:inline whitespace-pre-wrap">{errorMessage}</span>
+                        <button
+                            className="absolute top-0 bottom-0 right-0 px-4 py-3"
+                            onClick={() => setErrorMessage(null)}
+                        >
+                            <span className="text-red-500">×</span>
+                        </button>
+                    </div>
+                )}
+
 
                 {/* images */}
                 <div className="flex flex-col h-full overflow-x-auto mb-4">
