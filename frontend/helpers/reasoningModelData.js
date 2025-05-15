@@ -1,5 +1,5 @@
 export const defaultModel = {
-    modelName: "Claude V3.7 Sonnet",
+    modelName: "Anthropic Claude V3.7 Sonnet",
     modelId: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
     topKRange: {
         max: 500,

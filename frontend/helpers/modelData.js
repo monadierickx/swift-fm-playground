@@ -16,6 +16,35 @@ export const defaultModel = {
 export const models = [
     defaultModel,
     // Antropic
+        {
+        modelName: "Anthropic Claude V3.7 Sonnet",
+        modelId: "us.anthropic.claude-3-7-sonnet-20250219-v1:0",
+        topKRange: {
+            max: 500,
+            default: 0,
+            min: 0
+        },
+        temperatureRange: {
+            min: 0,
+            max: 1,
+            default: 1
+        },
+        topPRange: {
+            min: 0,
+            default: 0.999,
+            max: 1
+        },
+        maxTokenRange: {
+            min: 1,
+            default: 8192,
+            max: 8192
+        },
+        maxReasoningTokensRange: {
+            min: 1024,
+            default: 4096,
+            max: 8191
+        }
+    },
     {
         modelName: "Anthropic Claude Instant",
         modelId: "anthropic.claude-instant-v1",
