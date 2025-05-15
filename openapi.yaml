@@ -87,6 +87,36 @@ components:
           type: array
           items:
             type: string
+        systemPrompts:
+          type: array
+          items:
+            type: string
+        tools:
+          type: array
+          items:
+            type: object
+            $ref: #/components/schemas/Tool""
+        imageFormat:
+          type: string
+          enum: [jpeg, png, webp, gif]
+        imageBytes:
+          type: string
+          format: base64
+        documentName:
+          type: string
+        documentFormat:
+          type: string
+          enum: [csv, pdf, doc, docx, pptx, xls, xlsx, txt, html, md]
+        documentBytes:
+          type: string
+          format: base64
+        toolResultBlock:
+          type: object
+          $ref: #/components/schemas/ToolResultBlock"
+        enableReasoning:
+          type: bool
+        maxReasoningTokens:
+          type: integer
       required:
         - prompt
         - history
@@ -106,6 +136,33 @@ components:
               content:
                 type: string    # FIXME: will not always be a string
                 enum: [text, unknown]
+    Tool:
+      type: object
+      properties:
+        name:
+          type: string
+        input:
+          type: object
+          properties:
+            value:
+              type: string    # FIXME: will not always be a string
+          description:
+            type: string
+      required:
+        - name
+        - input
+
+    ToolResultBlock:
+      type: object
+      properties:
+        id:
+          type: string
+        content:
+          string    # FIXME: will not always be a string
+        status:
+          type: string
+          enum: [success, error]
+        
 
 paths:
   /:
